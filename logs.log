@@ -1,0 +1,99 @@
+2023-10-03 11:53:29,388 logger_util -> WARNING: Test Start
+2023-10-03 11:53:29,389 logger_util -> DEBUG: Initializing Chrome WebDriver
+2023-10-03 11:53:30,178 selenium.webdriver.common.selenium_manager -> WARNING: The chromedriver version (115.0.5790.102) detected in PATH at C:\Users\ontvi\AppData\Local\Programs\Python\Python310\Scripts\chromedriver.exe might not be compatible with the detected chrome version (117.0.5938.132); currently, chromedriver 117.0.5938.92 is recommended for chrome 117.*, so it is advised to delete the driver in PATH and retry
+2023-10-03 11:53:33,485 logger_util -> ERROR: An error occurred: Message: session not created: This version of ChromeDriver only supports Chrome version 115
+Current browser version is 117.0.5938.132 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x00007FF7DC283E62+57250]
+	(No symbol) [0x00007FF7DC1FBC02]
+	(No symbol) [0x00007FF7DC0CE0BB]
+	(No symbol) [0x00007FF7DC0F9DCB]
+	(No symbol) [0x00007FF7DC0F4D7D]
+	(No symbol) [0x00007FF7DC0F2E9A]
+	(No symbol) [0x00007FF7DC12E1E7]
+	(No symbol) [0x00007FF7DC12DD50]
+	(No symbol) [0x00007FF7DC126583]
+	(No symbol) [0x00007FF7DC0FCC71]
+	(No symbol) [0x00007FF7DC0FDE54]
+	GetHandleVerifier [0x00007FF7DC534CF2+2879026]
+	GetHandleVerifier [0x00007FF7DC586F30+3215472]
+	GetHandleVerifier [0x00007FF7DC57FD4F+3186319]
+	GetHandleVerifier [0x00007FF7DC315505+652869]
+	(No symbol) [0x00007FF7DC207518]
+	(No symbol) [0x00007FF7DC2035F4]
+	(No symbol) [0x00007FF7DC2036EC]
+	(No symbol) [0x00007FF7DC1F38E3]
+	BaseThreadInitThunk [0x00007FFFA6867344+20]
+	RtlUserThreadStart [0x00007FFFA6D026B1+33]
+
+2023-10-03 11:53:33,485 logger_util -> ERROR: Message: session not created: This version of ChromeDriver only supports Chrome version 115
+Current browser version is 117.0.5938.132 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x00007FF7DC283E62+57250]
+	(No symbol) [0x00007FF7DC1FBC02]
+	(No symbol) [0x00007FF7DC0CE0BB]
+	(No symbol) [0x00007FF7DC0F9DCB]
+	(No symbol) [0x00007FF7DC0F4D7D]
+	(No symbol) [0x00007FF7DC0F2E9A]
+	(No symbol) [0x00007FF7DC12E1E7]
+	(No symbol) [0x00007FF7DC12DD50]
+	(No symbol) [0x00007FF7DC126583]
+	(No symbol) [0x00007FF7DC0FCC71]
+	(No symbol) [0x00007FF7DC0FDE54]
+	GetHandleVerifier [0x00007FF7DC534CF2+2879026]
+	GetHandleVerifier [0x00007FF7DC586F30+3215472]
+	GetHandleVerifier [0x00007FF7DC57FD4F+3186319]
+	GetHandleVerifier [0x00007FF7DC315505+652869]
+	(No symbol) [0x00007FF7DC207518]
+	(No symbol) [0x00007FF7DC2035F4]
+	(No symbol) [0x00007FF7DC2036EC]
+	(No symbol) [0x00007FF7DC1F38E3]
+	BaseThreadInitThunk [0x00007FFFA6867344+20]
+	RtlUserThreadStart [0x00007FFFA6D026B1+33]
+Traceback (most recent call last):
+  File "C:\Users\ontvi\PycharmProjects\optimise\setup.py", line 19, in get_driver
+    driver = webdriver.Chrome()
+  File "C:\Users\ontvi\PycharmProjects\optimise\venv\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 45, in __init__
+    super().__init__(
+  File "C:\Users\ontvi\PycharmProjects\optimise\venv\lib\site-packages\selenium\webdriver\chromium\webdriver.py", line 56, in __init__
+    super().__init__(
+  File "C:\Users\ontvi\PycharmProjects\optimise\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 206, in __init__
+    self.start_session(capabilities)
+  File "C:\Users\ontvi\PycharmProjects\optimise\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 290, in start_session
+    response = self.execute(Command.NEW_SESSION, caps)["value"]
+  File "C:\Users\ontvi\PycharmProjects\optimise\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 345, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\ontvi\PycharmProjects\optimise\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 229, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version 115
+Current browser version is 117.0.5938.132 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x00007FF7DC283E62+57250]
+	(No symbol) [0x00007FF7DC1FBC02]
+	(No symbol) [0x00007FF7DC0CE0BB]
+	(No symbol) [0x00007FF7DC0F9DCB]
+	(No symbol) [0x00007FF7DC0F4D7D]
+	(No symbol) [0x00007FF7DC0F2E9A]
+	(No symbol) [0x00007FF7DC12E1E7]
+	(No symbol) [0x00007FF7DC12DD50]
+	(No symbol) [0x00007FF7DC126583]
+	(No symbol) [0x00007FF7DC0FCC71]
+	(No symbol) [0x00007FF7DC0FDE54]
+	GetHandleVerifier [0x00007FF7DC534CF2+2879026]
+	GetHandleVerifier [0x00007FF7DC586F30+3215472]
+	GetHandleVerifier [0x00007FF7DC57FD4F+3186319]
+	GetHandleVerifier [0x00007FF7DC315505+652869]
+	(No symbol) [0x00007FF7DC207518]
+	(No symbol) [0x00007FF7DC2035F4]
+	(No symbol) [0x00007FF7DC2036EC]
+	(No symbol) [0x00007FF7DC1F38E3]
+	BaseThreadInitThunk [0x00007FFFA6867344+20]
+	RtlUserThreadStart [0x00007FFFA6D026B1+33]
+
+2023-10-03 11:53:33,487 logger_util -> DEBUG: Checking login status
+2023-10-03 11:53:33,487 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-10-03 11:53:33,487 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-10-03 11:53:33,487 logger_util -> ERROR: IPv4 not found: Renewing the interface
