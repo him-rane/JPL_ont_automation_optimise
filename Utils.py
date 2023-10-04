@@ -26,20 +26,12 @@ class Utils:
 
 
     def find_element(self, xpath_='',css_selector_='', id_=''):
-        # #logger.info("Selecting element -> " + xpath_+" "+id_+" "+css_selector_+" ")
-        # try:
-        #     return  self.driver.find_element(By.XPATH, xpath_)
-        # except:
-        #     try:
-        #         return self.driver.find_element(By.CSS_SELECTOR, css_selector_)
-        #     except:
-        #         return self.driver.find_element(By.ID, id_)
         locators = [
             (By.XPATH, xpath_),
             (By.CSS_SELECTOR, css_selector_),
             (By.ID, id_)
         ]
-
+        time.sleep(1)
         for locator_type, locator_value in locators:
             try:
                 element = self.driver.find_element(locator_type, locator_value)
@@ -102,11 +94,11 @@ class Utils:
     #LOGOUT USING WEBGUI
     def logout_gui(self):
         try:
-            self.find_element("//p[@class='dropbtn']").click()
-            self.find_element('//*[@id="tf1_logoutAnchor"]').click()
-            self.find_element('//*[@id="tf1_logOutContent"]/div/a[2]').click()
+            self.find_element(*locators.DashboardMenu_Logout_Dropdown).click()
+            self.find_element(*locators.DashboardMenu_Logout_Dropdown_Logout).click()
+            self.find_element(*locators.DashboardMenu_Logout_Dropdown_Logout_OK).click()
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     #CHECK FOR LOGIN IN WEBGUI
     def isLogin_webgui(self):

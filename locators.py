@@ -6,6 +6,11 @@ SecurityMenu='//*[@id="mainMenu4"]',"#mainMenu4","mainMenu4"
 AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
+# DashboardMenu
+DashboardMenu_Logout_Dropdown='//*[@id="main"]/div[1]/div[1]/p','.dropbtn'
+DashboardMenu_Logout_Dropdown_Logout='//*[@id="tf1_logoutAnchor"]','#tf1_logoutAnchor','tf1_logoutAnchor'
+DashboardMenu_Logout_Dropdown_Logout_OK='//*[@id="tf1_logOutContent"]/div/a[2]','body > div:nth-child(1) > div:nth-child(2) > form:nth-child(6) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)'
+
 #Administration >> Maintenance>>
 AdministrationMenu_MaintenanceSubMenu='//*[@id="tf1_administration_backupRestore"]','#tf1_administration_backupRestore','tf1_administration_backupRestore'
 

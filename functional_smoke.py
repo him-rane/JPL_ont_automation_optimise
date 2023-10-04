@@ -12,9 +12,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 class functional_smoke:
     def __init__(self, driver):
         self.driver = driver
-        self.utils = Utils(self.driver)
-        self.login=login(self.driver)
-        self.device_health=device_health(self.driver)
+        self.utils = Utils(driver)
+        self.login=login(driver)
+        self.device_health=device_health(driver)
 
     def TC_Functional_Smoke_002(self):
         logger.debug('Starting TC_Functional_Smoke_002: Validating MAC Address after Reboot and Reset')
@@ -139,7 +139,6 @@ class functional_smoke:
             logger.error("Error occurred while executing TC_Functional_Smoke_003: %s", str(e))
             return False
 
-
     def TC_Functional_Smoke_008(self):
         logger.info('Starting Test Case TC_Functional_Smoke_008')
         try:
@@ -184,33 +183,34 @@ class functional_smoke:
                 self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
                 self.utils.find_element(*locators.LoginPage_LoginButton).click()
 
-            logger.debug('Going to the Network menu')
-            self.utils.find_element(*locators.NetworkMenu).click()
-            self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
+            # logger.debug('Going to the Network menu')
+            # self.utils.find_element(*locators.NetworkMenu).click()
+            # self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
+            #
+            # get_ap_status = self.utils.find_element('//*[@id="1"]/td[1]').text
+            #
+            # edit_xpath = '//*[@id="1"]/td[2]'
+            # edit_ap = self.utils.find_element(edit_xpath)
+            # action = ActionChains(self.driver)
+            # action.context_click(edit_ap).perform()
+            # time.sleep(5)
+            #
+            # if get_ap_status.lower() == 'disabled':
+            #     logger.debug('Enabling Access Point')
+            #     self.utils.find_element('//*[@id="enableMenu"]').click()
+            # else:
+            #     logger.debug('Disabling Access Point')
+            #     self.utils.find_element('//*[@id="disableMenu"]').click()
+            # self.utils.accept_alert()
+            #
+            # message = ''
+            # try:
+            #     message = self.utils.find_element('//*[@id="main"]/div[6]/p').text
+            #     logger.info(f'Message: {message}')
+            # except Exception as E:
+            #     logger.error(str(E))
 
-            get_ap_status = self.utils.find_element('//*[@id="1"]/td[1]').text
-
-            edit_xpath = '//*[@id="1"]/td[2]'
-            edit_ap = self.utils.find_element(edit_xpath)
-            action = ActionChains(self.driver)
-            action.context_click(edit_ap).perform()
-            time.sleep(5)
-
-            if get_ap_status.lower() == 'disabled':
-                logger.debug('Enabling Access Point')
-                self.utils.find_element('//*[@id="enableMenu"]').click()
-            else:
-                logger.debug('Disabling Access Point')
-                self.utils.find_element('//*[@id="disableMenu"]').click()
-            self.utils.accept_alert()
-
-            message = ''
-            try:
-                message = self.utils.find_element('//*[@id="main"]/div[6]/p').text
-                logger.info(f'Message: {message}')
-            except Exception as E:
-                logger.error(str(E))
-
+            message = self.enable_disable_AP1()
 
             logger.debug('Going back to Administration menu')
             self.utils.find_element(*locators.AdministrationMenu).click()
@@ -247,7 +247,7 @@ class functional_smoke:
             return False
 
     def TC_Functional_Smoke_009(self):
-        print('Validating Guest User & Password management functionality')
+        logger.info('Validating Guest User & Password management functionality')
         if self.device_health.healh_check() == False:
             logger.error('Device health check failed. Exiting the test.')
             return False
@@ -278,11 +278,7 @@ class functional_smoke:
             button.click()
 
         self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
-
-        self.utils.find_element('//*[@id="main"]/div[1]/div[1]/p').click()
-        self.utils.find_element('//*[@id="tf1_logoutAnchor"]').click()
-        time.sleep(5)
-        self.utils.find_element('//*[@id="tf1_logOutContent"]/div/a[2]').click()
+        self.utils.logout_gui()
 
         try:
             self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.guest_username)
@@ -303,33 +299,7 @@ class functional_smoke:
                 pass
 
         # go to Network
-        self.utils.find_element(*locators.NetworkMenu).click()
-        self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
-
-        get_ap_status = self.utils.find_element( '//*[@id="1"]/td[1]').text
-
-        edit_ap = self.utils.find_element( '//*[@id="1"]/td[2]')
-        action = ActionChains(self.driver)
-        action.context_click(edit_ap).perform()
-        time.sleep(5)
-
-        if get_ap_status.lower() == 'disabled':
-            self.utils.find_element('//*[@id="enableMenu"]').click()
-            self.utils.accept_alert()
-        else:
-            # print('Disabling AP{}'.format(i))
-            self.utils.find_element('//*[@id="disableMenu"]').click()
-            self.utils.accept_alert()
-
-
-        message = ''
-        try:
-            message = self.utils.find_element( '//*[@id="main"]/div[6]/p').text
-            print(message)
-        except Exception as E:
-            print(E)
-
-
+        message = self.enable_disable_AP1()
 
         self.utils.find_element(*locators.AdministrationMenu).click()
         self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
@@ -346,7 +316,7 @@ class functional_smoke:
         action.context_click(user).perform()
         self.utils.find_element( '//*[@id="editMenu"]').click()
 
-        # Reverting password
+        logger.debug("Reverting password")
         self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.password)
         self.utils.find_element( *locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.password)
 
@@ -360,10 +330,117 @@ class functional_smoke:
         time.sleep(5)
 
         if 'succeeded' not in message:
-            print('Guest Rights are checked and Its working fine')
+            logger.info('Guest Rights are checked and It\'s working fine')
             return True
         else:
-            print('Test Case Failed')
+            logger.error('Test Case Failed')
             self.utils.get_dbglog()
             return False
+
+    def TC_Functional_Smoke_010_2(self):
+        logger.info('Validating Custom Guest User & Password management functionality')
+        if self.device_health.healh_check() == False:
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+
+        # go to Administration
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
+
+        try:
+            self.utils.find_element( '//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
+        except:
+            self.utils.find_element( '#main > div.contentMidArea > div > div.FR > input.btnAddNew').click()
+
+        new_user = 'newguest'
+        set_password = 'PR@shant2301'
+
+        self.utils.find_element( '//*[@id="tf1_txtUserName"]').send_keys(new_user)
+        self.utils.find_element( *locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(set_password)
+        self.utils.find_element( *locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(set_password)
+        
+        button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
+        button_src = button.get_attribute('src')
+
+        if 'button_off.png' in button_src:
+            button.click()
+            
+        time.sleep(5)
+        self.utils.find_element( '//*[@id="tf1_userDescription"]').send_keys('Test Guest')
+        self.utils.find_element( '//*[@id="tf1_loginTimeout"]').send_keys('10')
+        self.utils.find_element( '//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+
+        logger.info('New user with Guest rights is created')
+
+        self.utils.logout_gui()
+
+        try:
+            self.utils.find_element(*locators.LoginPage_UserName).send_keys(new_user)
+            self.utils.find_element(*locators.LoginPage_Password).send_keys(set_password)
+            self.utils.find_element(*locators.LoginPage_LoginButton).click()
+        except Exception as E:
+            self.utils.find_element(*locators.LoginPage_UserName).send_keys('admin')
+            self.utils.find_element(*locators.LoginPage_Password).send_keys('P@ssw0rd')
+            self.utils.find_element(*locators.LoginPage_LoginButton).click()
+
+        finally:
+            try:
+                time.sleep(5)
+                self.utils.find_element( '//*[@id="tf1_forcedLoginContent"]/div/a').click()
+                time.sleep(5)
+            except Exception as E:
+                pass
+
+        # go to Network Menu
+
+        message=self.enable_disable_AP1()
+
+
+
+
+        self.utils.logout_gui()
+
+        logger.debug('Removing New User after Test case is executed')
+        self.login.webgui_login()
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
+
+
+        new_user=self.utils.find_element('//*[@id="users4"]/td[1]')
+
+        action = ActionChains(self.driver)
+        action.context_click(new_user).perform()
+        self.utils.find_element( '//*[@id="deleteMenu"]').click()
+        time.sleep(5)
+
+        if 'succeeded' not in message:
+            logger.info('Guest Rights are checked and Its working fine')
+            return True
+        else:
+            logger.error('Test Case Failed')
+            self.utils.get_dbglog()
+            return False
+
+    def enable_disable_AP1(self):
+        self.utils.find_element(*locators.NetworkMenu).click()
+        self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
+
+        get_ap_status = self.utils.find_element('//*[@id="1"]/td[1]').text
+        edit_ap = self.utils.find_element('//*[@id="1"]/td[2]')
+        action = ActionChains(self.driver)
+        action.context_click(edit_ap).perform()
+        time.sleep(5)
+
+        if get_ap_status.lower() == 'disabled':
+            self.utils.find_element('//*[@id="enableMenu"]').click()
+            self.utils.accept_alert()
+        else:
+            self.utils.find_element('//*[@id="disableMenu"]').click()
+            self.utils.accept_alert()
+
+        try:
+            return self.utils.find_element('//*[@id="main"]/div[6]/p').text
+        except Exception as E:
+            logger.error(E)
+            return ""
 
