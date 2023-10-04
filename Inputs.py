@@ -1,7 +1,10 @@
 import subprocess
 
 username = 'admin'
+guest_username='guest'
+
 password = 'P@ssw0rd'
+temp_password='PR@shant2301'
 
 default_password = 'Jiocentrum'
 gateway="192.168.29.1"

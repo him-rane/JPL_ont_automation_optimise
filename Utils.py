@@ -195,7 +195,13 @@ class Utils:
         except Exception as e:
             logger.error("Error occurred while retrieving WAN Port Configuration: %s", str(e))
             return None
-
+    #accept the alert
+    def accept_alert(self):
+        try:
+            self.driver.switch_to.alert.accept()
+            time.sleep(5)
+        except Exception as E:
+            pass
     def get_serial_number(self):
         try:
             logger.debug("Getting Serial Number ")

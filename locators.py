@@ -6,6 +6,8 @@ SecurityMenu='//*[@id="mainMenu4"]',"#mainMenu4","mainMenu4"
 AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
+#Administration >> Maintenance>>
+AdministrationMenu_MaintenanceSubMenu='//*[@id="tf1_administration_backupRestore"]','#tf1_administration_backupRestore','tf1_administration_backupRestore'
 
 #Administration >> User>>
 AdministrationMenu_UserSubMenu= '//*[@id="tf1_administration_users"]', "#tf1_administration_users", "tf1_administration_users"
@@ -18,7 +20,12 @@ AdministrationMenu_UserSubMenu_Row2Col1='//*[@id="users1"]/td[1]',"tr[id='users1
 
 AdministrationMenu_UsersConfiguration_Pass='//*[@id="tf1_txtPwd"]','#tf1_txtPwd','tf1_txtPwd'
 AdministrationMenu_UsersConfiguration_CfmPass='//*[@id="tf1_txtCfmPwd"]','#tf1_txtCfmPwd','tf1_txtCfmPwd'
+AdministrationMenu_UsersConfiguration_ToggleBtn='//*[@id="tf1_disableGuestAccount"]','#tf1_disableGuestAccount','tf1_disableGuestAccount'
 AdministrationMenu_UsersConfiguration_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
+
+
+#Network Menu>>Wireless
+NetworkMenu_WirelessSubMenu = "//a[@id='tf1_network_accessPoints']","#tf1_network_accessPoints","tf1_network_accessPoints"
 
 #Login Page
 LoginPage_UserName= '//*[@id="tf1_userName"]', '#tf1_userName', 'tf1_userName'

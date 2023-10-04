@@ -36,9 +36,11 @@ obj=functional_smoke(driver)
 # obj.TC_Functional_Smoke_002()
 # obj.TC_Functional_Smoke_003()
 
-exlogger.log_result("TC_Functional_Smoke_002", obj.TC_Functional_Smoke_002())
-exlogger.log_result("TC_Functional_Smoke_003", obj.TC_Functional_Smoke_003())
-exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_008())
+# exlogger.log_result("TC_Functional_Smoke_002", obj.TC_Functional_Smoke_002())
+# exlogger.log_result("TC_Functional_Smoke_003", obj.TC_Functional_Smoke_003())
+#exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_008())
+
+obj.TC_Functional_Smoke_009()
 
 
 

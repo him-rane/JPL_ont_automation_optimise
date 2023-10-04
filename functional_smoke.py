@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 import Inputs
 import locators
 from logger_util import logger
@@ -27,8 +29,8 @@ class functional_smoke:
 
 
             # go to Administration >> Maintenance >> Reboot
-            self.utils.find_element('//*[@id="mainMenu5"]').click()
-            self.utils.find_element('//*[@id="tf1_administration_backupRestore"]').click()
+            self.utils.find_element(*locators.AdministrationMenu).click()
+            self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
             self.utils.find_element(*locators.Maintenance_BackupReboot_RebootButton).click()
 
             try:
@@ -57,7 +59,7 @@ class functional_smoke:
 
 
             self.utils.find_element(*locators.AdministrationMenu).click()
-            self.utils.find_element('//*[@id="tf1_administration_backupRestore"]').click()
+            self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
             self.utils.find_element(*locators.Maintenance_BackupReboot_DefaultButton).click()
 
 
@@ -115,9 +117,6 @@ class functional_smoke:
             changed_time = self.utils.find_element(*locators.DateTimeConfiguration_CurrentRouterTime).text
             logger.info(f'Changed Date and Time: {changed_time}')
 
-            # success = 0
-            # if current_time != changed_time:
-            #     success += 1
 
             # Change back to the current time zone
             logger.debug("Changing back to the current time zone")
@@ -165,34 +164,31 @@ class functional_smoke:
             action = ActionChains(self.driver)
             action.context_click(user).perform()
             self.utils.find_element('//*[@id="editMenu"]').click()
-
-            username = 'admin'
-            set_password = 'PR@shant2301'
+            #
+            # username = 'admin'
+            # set_password = 'PR@shant2301'
 
             logger.debug('Setting a new password')
-            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(set_password)
-            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(set_password)
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.temp_password)
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.temp_password)
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
 
             logger.debug('Logging in with the new password')
             try:
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
-                self.utils.find_element(*locators.LoginPage_Password).send_keys(set_password)
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.temp_password)
                 self.utils.find_element(*locators.LoginPage_LoginButton).click()
             except Exception as E:
                 logger.error('Login attempt failed. Using default credentials.')
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys('admin')
-                self.utils.find_element(*locators.LoginPage_Password).send_keys('P@ssw0rd')
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
                 self.utils.find_element(*locators.LoginPage_LoginButton).click()
-
-            time.sleep(5)
 
             logger.debug('Going to the Network menu')
             self.utils.find_element(*locators.NetworkMenu).click()
-            self.utils.find_element('//*[@id="tf1_network_accessPoints"]').click()
+            self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
 
-            xp_ = '//*[@id="1"]/td[1]'
-            get_ap_status = self.utils.find_element(xp_).text
+            get_ap_status = self.utils.find_element('//*[@id="1"]/td[1]').text
 
             edit_xpath = '//*[@id="1"]/td[2]'
             edit_ap = self.utils.find_element(edit_xpath)
@@ -203,22 +199,10 @@ class functional_smoke:
             if get_ap_status.lower() == 'disabled':
                 logger.debug('Enabling Access Point')
                 self.utils.find_element('//*[@id="enableMenu"]').click()
-                try:
-                    # Accept the alert for connection change
-                    self.driver.switch_to.alert.accept()
-                    time.sleep(5)
-                except Exception as E:
-                    pass
             else:
                 logger.debug('Disabling Access Point')
                 self.utils.find_element('//*[@id="disableMenu"]').click()
-                try:
-                    # Accept the alert for connection change
-                    self.driver.switch_to.alert.accept()
-                    time.sleep(5)
-                except Exception as E:
-                    pass
-
+            self.utils.accept_alert()
 
             message = ''
             try:
@@ -261,3 +245,125 @@ class functional_smoke:
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             return False
+
+    def TC_Functional_Smoke_009(self):
+        print('Validating Guest User & Password management functionality')
+        if self.device_health.healh_check() == False:
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
+
+
+        user_type = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row1Col2).text
+        if user_type.lower().strip() == 'guest':
+            user = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row1Col1)
+        else:
+            user_type = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row2Col2).text
+            if user_type.lower().strip() == 'guest':
+                user = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row2Col1)
+
+        action = ActionChains(self.driver)
+        action.context_click(user).perform()
+        self.utils.find_element('//*[@id="editMenu"]').click()
+
+        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.temp_password)
+        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.temp_password)
+
+        button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
+        button_src = button.get_attribute('src')
+
+        if 'button_off.png' in button_src:
+            button.click()
+
+        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
+
+        self.utils.find_element('//*[@id="main"]/div[1]/div[1]/p').click()
+        self.utils.find_element('//*[@id="tf1_logoutAnchor"]').click()
+        time.sleep(5)
+        self.utils.find_element('//*[@id="tf1_logOutContent"]/div/a[2]').click()
+
+        try:
+            self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.guest_username)
+            self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.temp_password)
+            self.utils.find_element(*locators.LoginPage_LoginButton).click()
+
+        except Exception as E:
+            self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.guest_username)
+            self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
+            self.utils.find_element(*locators.LoginPage_LoginButton).click()
+
+        finally:
+            try:
+                time.sleep(5)
+                self.utils.find_element( '//*[@id="tf1_forcedLoginContent"]/div/a').click()
+                time.sleep(5)
+            except Exception as E:
+                pass
+
+        # go to Network
+        self.utils.find_element(*locators.NetworkMenu).click()
+        self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
+
+        get_ap_status = self.utils.find_element( '//*[@id="1"]/td[1]').text
+
+        edit_ap = self.utils.find_element( '//*[@id="1"]/td[2]')
+        action = ActionChains(self.driver)
+        action.context_click(edit_ap).perform()
+        time.sleep(5)
+
+        if get_ap_status.lower() == 'disabled':
+            self.utils.find_element('//*[@id="enableMenu"]').click()
+            self.utils.accept_alert()
+        else:
+            # print('Disabling AP{}'.format(i))
+            self.utils.find_element('//*[@id="disableMenu"]').click()
+            self.utils.accept_alert()
+
+
+        message = ''
+        try:
+            message = self.utils.find_element( '//*[@id="main"]/div[6]/p').text
+            print(message)
+        except Exception as E:
+            print(E)
+
+
+
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
+
+        user_type = self.utils.find_element( '//*[@id="users2"]/td[2]').text
+        if user_type.lower().strip() == 'guest':
+            user = self.utils.find_element('//*[@id="users2"]/td[1]')
+        else:
+            user_type = self.utils.find_element( '//*[@id="users1"]/td[2]').text
+            if user_type.lower().strip() == 'guest':
+                user = self.utils.find_element('//*[@id="users1"]/td[1]')
+
+        action = ActionChains(self.driver)
+        action.context_click(user).perform()
+        self.utils.find_element( '//*[@id="editMenu"]').click()
+
+        # Reverting password
+        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.password)
+        self.utils.find_element( *locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.password)
+
+        button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
+        button_src = button.get_attribute('src')
+
+        if 'button_on.png' in button_src:
+            button.click()
+
+        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
+        time.sleep(5)
+
+        if 'succeeded' not in message:
+            print('Guest Rights are checked and Its working fine')
+            return True
+        else:
+            print('Test Case Failed')
+            self.utils.get_dbglog()
+            return False
+

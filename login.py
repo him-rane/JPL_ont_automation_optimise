@@ -9,14 +9,15 @@ class login:
         self.driver = driver
 
     def is_webgui_logged_in(self):
-        logger.debug("Checking login status")
-        try:
-            self.driver.find_element(By.XPATH, "//div[@class='nav-side-menu']")
-            logger.debug("Logged in to the web GUI: True")
-            return True
-        except:
-            logger.debug("Not logged in to the web GUI: False")
-            return False
+        return False
+        # logger.debug("Checking login status")
+        # try:
+        #     self.driver.find_element(By.XPATH, "//div[@class='nav-side-menu']")
+        #     logger.debug("Logged in to the web GUI: True")
+        #     return True
+        # except:
+        #     logger.debug("Not logged in to the web GUI: False")
+        #     return False
 
     def webgui_login(self, username='admin', password='P@ssw0rd'):
         if not self.is_webgui_logged_in():
@@ -24,12 +25,12 @@ class login:
                 logger.debug("Attempting to log in via WEBGUI")
 
                 # Attempt to renew the IPv4 interface if not available
-                try:
-                    self.driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div[2]/form/div")
-                except:
-                    logger.error("IPv4 not found: Renewing the interface")
-                    os.popen("ipconfig /renew")
-                    time.sleep(30)
+                # try:
+                #     self.driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div[2]/form/div")
+                # except:
+                #     logger.error("IPv4 not found: Renewing the interface")
+                #     os.popen("ipconfig /renew")
+                #     time.sleep(30)
 
                 # Enter username and password
                 self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
