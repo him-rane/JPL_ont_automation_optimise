@@ -164,26 +164,13 @@ class functional_smoke:
             action = ActionChains(self.driver)
             action.context_click(user).perform()
             self.utils.find_element('//*[@id="editMenu"]').click()
-            #
-            # username = 'admin'
-            # set_password = 'PR@shant2301'
 
             logger.debug('Setting a new password')
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.temp_password)
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.temp_password)
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
 
-            logger.debug('Logging in with the new password')
-            try:
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
-                self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.temp_password)
-                self.utils.find_element(*locators.LoginPage_LoginButton).click()
-            except Exception as E:
-                logger.error('Login attempt failed. Using default credentials.')
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
-                self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
-                self.utils.find_element(*locators.LoginPage_LoginButton).click()
-
+            self.login_as_new_user(Inputs.username, Inputs.temp_password)
             message = self.enable_disable_AP1()
 
             logger.debug('Going back to Administration menu')
@@ -254,23 +241,7 @@ class functional_smoke:
         self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
         self.utils.logout_gui()
 
-        try:
-            self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.guest)
-            self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.temp_password)
-            self.utils.find_element(*locators.LoginPage_LoginButton).click()
-
-        except Exception as E:
-            self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.new_guest)
-            self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
-            self.utils.find_element(*locators.LoginPage_LoginButton).click()
-
-        finally:
-            try:
-                time.sleep(5)
-                self.utils.find_element( '//*[@id="tf1_forcedLoginContent"]/div/a').click()
-                time.sleep(5)
-            except Exception as E:
-                pass
+        self.login.webgui_login(Inputs.guest, Inputs.temp_password)
 
         # go to Network
         message = self.enable_disable_AP1()
@@ -305,6 +276,7 @@ class functional_smoke:
 
         if 'succeeded' not in message:
             logger.info('Guest Rights are checked and It\'s working fine')
+            self.utils.logout_gui()
             return True
         else:
             logger.error('Test Case Failed')
@@ -312,7 +284,7 @@ class functional_smoke:
             return False
 
     def TC_Functional_Smoke_010_1(self):
-        logger.info('Validating Guest User & Password management functionality')
+        logger.info('Validating Custom Admin User & Password management functionality')
         try:
             if self.device_health.healh_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
@@ -331,35 +303,15 @@ class functional_smoke:
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Desc).send_keys('Test Admin')
             self.utils.find_element( *locators.AdministrationMenu_UsersConfiguration_TimeOut).send_keys('10')
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
-            print('New user with Admin rights is created')
+            logger.info('New user with Admin rights is created')
+
             self.utils.logout_gui()
-
-            try:
-                self.utils.find_element( *locators.LoginPage_UserName).send_keys(Inputs.new_admin)
-                self.utils.find_element( *locators.LoginPage_Password).send_keys(Inputs.temp_password)
-                self.utils.find_element( *locators.LoginPage_LoginButton).click()
-
-            except Exception as E:
-                self.utils.find_element( *locators.LoginPage_UserName).send_keys(Inputs.username)
-                self.utils.find_element( *locators.LoginPage_Password).send_keys(Inputs.password)
-                self.utils.find_element( *locators.LoginPage_LoginButton).click()
-
-            finally:
-                try:
-                    time.sleep(5)
-                    self.utils.find_element( '//*[@id="tf1_forcedLoginContent"]/div/a').click()
-                    time.sleep(5)
-                except Exception as E:
-                    pass
-
-
+            self.login.webgui_login(Inputs.new_admin, Inputs.temp_password)
             message=self.enable_disable_AP1()
-
             self.utils.logout_gui()
 
             logger.debug('Removing New User after Test case is executed')
             self.login.webgui_login()
-
 
             # go to Administration
             self.utils.find_element(*locators.AdministrationMenu).click()
@@ -369,6 +321,7 @@ class functional_smoke:
             action = ActionChains(self.driver)
             action.context_click(new_user).perform()
             self.utils.find_element( '//*[@id="deleteMenu"]').click()
+
 
             if 'succeeded' in message:
                 logger.info('Admin Rights are checked and Its working fine')
@@ -410,21 +363,7 @@ class functional_smoke:
             logger.info('New user with Guest rights is created')
 
             self.utils.logout_gui()
-
-            try:
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.new_guest)
-                self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.temp_password)
-                self.utils.find_element(*locators.LoginPage_LoginButton).click()
-            except Exception as E:
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
-                self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
-                self.utils.find_element(*locators.LoginPage_LoginButton).click()
-
-            finally:
-                try:
-                    self.utils.find_element( '//*[@id="tf1_forcedLoginContent"]/div/a').click()
-                except:
-                    pass
+            self.login_as_new_user(Inputs.new_guest,Inputs.temp_password)
 
             # go to Network Menu
             message=self.enable_disable_AP1()
@@ -499,4 +438,39 @@ class functional_smoke:
         except Exception as E:
             logger.error(E)
             return ""
+
+    def login_as_new_user(self, username, password):
+        try:
+            try:
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
+                self.utils.find_element(*locators.LoginPage_LoginButton).click()
+                time.sleep(5)  # Wait for the page to load
+
+            except Exception as e:
+                logger.error(f"Error occurred while logging in with provided credentials: {str(e)}")
+                try:
+                    # If there was an error, try logging in with default credentials (if available)
+                    self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
+                    self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
+                    self.utils.find_element(*locators.LoginPage_LoginButton).click()
+                    time.sleep(5)  # Wait for the page to load
+
+                except Exception as e:
+                    logger.error(f"Error occurred while logging in with default credentials: {str(e)}")
+
+            finally:
+                try:
+                    # Handle any pop-up or alert that may appear after login (regardless of success or failure)
+                    self.utils.find_element('//*[@id="tf1_forcedLoginContent"]/div/a').click()
+                    time.sleep(5)
+                except:
+                    logger.error("Error occurred while closing the login popup")
+
+            logger.info("Login completed")
+        except Exception as E:
+            logger.error(f"Error occurred while logging : {str(e)}")
+
+
+
 

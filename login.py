@@ -18,7 +18,7 @@ class login:
             logger.debug("Not logged in to the web GUI: False")
             return False
 
-    def webgui_login(self, username='admin', password='P@ssw0rd'):
+    def webgui_login(self, username=Inputs.username, password=Inputs.password):
         self.driver.implicitly_wait(15)
         if not self.is_webgui_logged_in():
             logger.debug("Attempting to log in via WEBGUI")
@@ -31,8 +31,8 @@ class login:
                     time.sleep(30)
 
                 # Enter username and password
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.password)
+                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
+                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
                 self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
 
                 # Handle invalid login attempts
@@ -61,6 +61,7 @@ class login:
                         self.driver.find_element(By.ID, 'tf1_password').send_keys('PR@shant2301')
                         self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
 
+                logger.info("Login Successful")
             except Exception as e:
                 logger.error("Error occurred while attempting to log in via WEBGUI: %s", str(e))
 
@@ -70,6 +71,6 @@ class login:
                 except Exception as e:
                     logger.error("Error occurred while closing the login popup")
 
-            logger.info("Login Successful")
+
             time.sleep(5)
             return False

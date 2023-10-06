@@ -18,8 +18,8 @@ logger.warning("Test Start")
 setup=setup.Setup()
 driver=setup.get_driver()
 
-login=login(driver)
-login.webgui_login()
+# login=login(driver)
+# login.webgui_login()
 
 
 
@@ -35,10 +35,11 @@ exlogger = ExcelLogger("test_results.xlsx")
 obj=functional_smoke(driver)
 # exlogger.log_result("TC_Functional_Smoke_002", obj.TC_Functional_Smoke_002())
 # exlogger.log_result("TC_Functional_Smoke_003", obj.TC_Functional_Smoke_003())
-# exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_008())
-# exlogger.log_result("TC_Functional_Smoke_003", obj.TC_Functional_Smoke_009())
-# exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_010_1())
-exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_009())
+exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_008())
+exlogger.log_result("TC_Functional_Smoke_003", obj.TC_Functional_Smoke_009())
+exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_010_1())
+exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_010_2())
+
 #exlogger.log_result("TC_Functional_Smoke_32", obj.TC_Functional_Smoke_32())
 
 
