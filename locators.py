@@ -23,10 +23,17 @@ AdministrationMenu_UserSubMenu_Row1Col1='//*[@id="users2"]/td[1]',"tr[id='users2
 AdministrationMenu_UserSubMenu_Row2Col2='//*[@id="users1"]/td[2]',"tr[id='users1'] td:nth-child(2)"
 AdministrationMenu_UserSubMenu_Row2Col1='//*[@id="users1"]/td[1]',"tr[id='users1'] td[class='gradeA sorting_1']"
 
+AdministrationMenu_AddNewUser='//*[@id="main"]/div[6]/div/div[4]/input[2]',"input[title='+ Add new']"
+
 AdministrationMenu_UsersConfiguration_Pass='//*[@id="tf1_txtPwd"]','#tf1_txtPwd','tf1_txtPwd'
 AdministrationMenu_UsersConfiguration_CfmPass='//*[@id="tf1_txtCfmPwd"]','#tf1_txtCfmPwd','tf1_txtCfmPwd'
 AdministrationMenu_UsersConfiguration_ToggleBtn='//*[@id="tf1_disableGuestAccount"]','#tf1_disableGuestAccount','tf1_disableGuestAccount'
 AdministrationMenu_UsersConfiguration_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
+AdministrationMenu_UsersConfiguration_Name='//*[@id="tf1_txtUserName"]','#tf1_txtUserName','tf1_txtUserName'
+AdministrationMenu_UsersConfiguration_Desc='//*[@id="tf1_userDescription"]','#tf1_userDescription','tf1_userDescription'
+AdministrationMenu_UsersConfiguration_TimeOut='//*[@id="tf1_loginTimeout"]','#tf1_loginTimeout','tf1_loginTimeout'
+
+
 
 
 #Network Menu>>Wireless

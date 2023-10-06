@@ -21,12 +21,10 @@ class login:
     def webgui_login(self, username='admin', password='P@ssw0rd'):
         self.driver.implicitly_wait(15)
         if not self.is_webgui_logged_in():
+            logger.debug("Attempting to log in via WEBGUI")
             try:
-                logger.debug("Attempting to log in via WEBGUI")
-
-                # Attempt to renew the IPv4 interface if not available
                 try:
-                    self.driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div[2]/form/div")
+                    self.driver.find_element(By.XPATH,"//div[@class='loginForm']")
                 except:
                     logger.error("IPv4 not found: Renewing the interface")
                     os.popen("ipconfig /renew")
@@ -70,7 +68,8 @@ class login:
                 try:
                     self.driver.find_element(By.XPATH, '//*[@id="tf1_forcedLoginContent"]/div/a').click()
                 except Exception as e:
-                    logger.error("Error occurred while closing the login popup: %s", str(e))
+                    logger.error("Error occurred while closing the login popup")
 
+            logger.info("Login Successful")
             time.sleep(5)
             return False

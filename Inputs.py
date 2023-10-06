@@ -1,7 +1,9 @@
 import subprocess
 
 username = 'admin'
-guest_username='guest'
+guest='guest'
+new_admin='newadmin'
+new_guest= 'newguest'
 
 password = 'P@ssw0rd'
 temp_password='PR@shant2301'

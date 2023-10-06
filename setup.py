@@ -18,12 +18,6 @@ class Setup:
 
         try:
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-            # from selenium import webdriver
-
-            # Correct way to initialize a WebDriver (e.g., for Chrome)
-            # driver = webdriver.Chrome('C:\\Users\\ontvi\\OneDrive\\Desktop\\chromedriver-win64\\chromedriver.exe')
-
-            # driver = webdriver.Chrome("")
             driver.implicitly_wait(15)
             driver.maximize_window()
             driver.get("http://192.168.29.1")
