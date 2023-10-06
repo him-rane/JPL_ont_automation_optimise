@@ -29,37 +29,40 @@ class login:
                     logger.error("IPv4 not found: Renewing the interface")
                     os.popen("ipconfig /renew")
                     time.sleep(30)
-
-                # Enter username and password
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
-                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
-
-                # Handle invalid login attempts
                 try:
-                    check_error = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
-                    if 'invalid' in check_error.lower():
-                        self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
-                        self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.default_password)
-                        self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
-                        self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').send_keys(
-                            Inputs.password)
-                        self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfAdminPassword"]').send_keys(
-                            Inputs.password)
-                        self.driver.find_element(By.XPATH, '//*[@id="tf1_guestPassword"]').send_keys(
-                            Inputs.password)
-                        self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfGuestPassword"]').send_keys(
-                            Inputs.password)
-                        self.driver.find_element(By.XPATH, '//*[@id="tf1_frmchangePassword"]/div[9]/input[1]').click()
-                        self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
-                        self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.password)
-                        self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
-                except:
-                    check_error = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
-                    if 'invalid' in check_error.lower():
-                        self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
-                        self.driver.find_element(By.ID, 'tf1_password').send_keys('PR@shant2301')
-                        self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                    # Enter username and password
+                    self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
+                    self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
+                    self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+
+                    # Handle invalid login attempts
+                    try:
+                        check_error = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
+                        if 'invalid' in check_error.lower():
+                            self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
+                            self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.default_password)
+                            self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                            self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').send_keys(
+                                Inputs.password)
+                            self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfAdminPassword"]').send_keys(
+                                Inputs.password)
+                            self.driver.find_element(By.XPATH, '//*[@id="tf1_guestPassword"]').send_keys(
+                                Inputs.password)
+                            self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfGuestPassword"]').send_keys(
+                                Inputs.password)
+                            self.driver.find_element(By.XPATH, '//*[@id="tf1_frmchangePassword"]/div[9]/input[1]').click()
+                            self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
+                            self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.password)
+                            self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                    except:
+                        check_error = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
+                        if 'invalid' in check_error.lower():
+                            self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
+                            self.driver.find_element(By.ID, 'tf1_password').send_keys('PR@shant2301')
+                            self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                    self.login.webgui_login
+                except Exception as e:
+                    logger.error(e)
 
                 logger.info("Login Successful")
             except Exception as e:

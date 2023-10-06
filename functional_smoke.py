@@ -170,7 +170,7 @@ class functional_smoke:
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.temp_password)
             self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
 
-            self.login_as_new_user(Inputs.username, Inputs.temp_password)
+            self.self.login.webgui_login(Inputs.username, Inputs.temp_password)
             message = self.enable_disable_AP1()
 
             logger.debug('Going back to Administration menu')
@@ -363,7 +363,7 @@ class functional_smoke:
             logger.info('New user with Guest rights is created')
 
             self.utils.logout_gui()
-            self.login_as_new_user(Inputs.new_guest,Inputs.temp_password)
+            self.login.webgui_login(Inputs.new_guest,Inputs.temp_password)
 
             # go to Network Menu
             message=self.enable_disable_AP1()
@@ -438,39 +438,5 @@ class functional_smoke:
         except Exception as E:
             logger.error(E)
             return ""
-
-    def login_as_new_user(self, username, password):
-        try:
-            try:
-                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
-                self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
-                self.utils.find_element(*locators.LoginPage_LoginButton).click()
-                time.sleep(5)  # Wait for the page to load
-
-            except Exception as e:
-                logger.error(f"Error occurred while logging in with provided credentials: {str(e)}")
-                try:
-                    # If there was an error, try logging in with default credentials (if available)
-                    self.utils.find_element(*locators.LoginPage_UserName).send_keys(Inputs.username)
-                    self.utils.find_element(*locators.LoginPage_Password).send_keys(Inputs.password)
-                    self.utils.find_element(*locators.LoginPage_LoginButton).click()
-                    time.sleep(5)  # Wait for the page to load
-
-                except Exception as e:
-                    logger.error(f"Error occurred while logging in with default credentials: {str(e)}")
-
-            finally:
-                try:
-                    # Handle any pop-up or alert that may appear after login (regardless of success or failure)
-                    self.utils.find_element('//*[@id="tf1_forcedLoginContent"]/div/a').click()
-                    time.sleep(5)
-                except:
-                    logger.error("Error occurred while closing the login popup")
-
-            logger.info("Login completed")
-        except Exception as E:
-            logger.error(f"Error occurred while logging : {str(e)}")
-
-
 
 
