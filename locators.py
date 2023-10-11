@@ -6,6 +6,25 @@ SecurityMenu='//*[@id="mainMenu4"]',"#mainMenu4","mainMenu4"
 AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
+SecurityMenu_FirewallSubMenu='//*[@id="tf1_security_defaultPolicy"]','#tf1_security_defaultPolicy','tf1_security_defaultPolicy'
+
+SecurityMenu_FirewallSubMenu_IPv4FirewallRules= "//a[normalize-space()='IPv4 Firewall Rules']","div[id='main'] li:nth-child(2) a:nth-child(1)"
+IPv4FirewallRules_AddNewBtn='//*[@id="main"]/div[6]/div/div[3]/input[2]',"input[title='+ Add new']"
+IPv4FirewallRulesConfiguration_Service='//*[@id="tf1_selSvrName"]','#tf1_selSvrName','tf1_selSvrName'
+IPv4FirewallRulesConfiguration_Action='//*[@id="tf1_selFwAction"]','#tf1_selFwAction','tf1_selFwAction'
+IPv4FirewallRulesConfiguration_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
+IPv4FirewallRules_Entries='//*[@id="recordsData_info"]','#recordsData_info','recordsData_info'
+IPv4FirewallRules_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'
+
+SecurityMenu_FirewallSubMenu_IPv6FirewallRules='//*[@id="main"]/div[7]/ul/li[3]/a',"div[id='main'] li:nth-child(3) a:nth-child(1)"
+IPv6FirewallRules_AddNewBtn='//*[@id="main"]/div[6]/div/div[3]/input[2]',"input[title='+ Add new']"
+IPv6FirewallRulesConfiguration_RuleType='//*[@id="tf1_direction"]','#tf1_direction','tf1_direction'
+IPv6FirewallRulesConfiguration_Service='//*[@id="tf1_selSvrName"]','#tf1_selSvrName','tf1_selSvrName'
+IPv6FirewallRulesConfiguration_Action='//*[@id="tf1_selFwAction"]','#tf1_selFwAction','tf1_selFwAction'
+IPv6FirewallRulesConfiguration_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
+
+IPv6FirewallRules_Entries='//*[@id="recordsData_info"]','#recordsData_info','recordsData_info'
+IPv6FirewallRules_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'
 # DashboardMenu
 DashboardMenu_Logout_Dropdown='//*[@id="main"]/div[1]/div[1]/p','.dropbtn'
 DashboardMenu_Logout_Dropdown_Logout='//*[@id="tf1_logoutAnchor"]','#tf1_logoutAnchor','tf1_logoutAnchor'
