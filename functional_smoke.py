@@ -629,7 +629,7 @@ class functional_smoke:
             self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn)
 
             # Modifying IPv6 Rule to Allow
-            self.utils.find_element(By.XPATH, '//*[@id="main"]/div[7]/ul/li[3]/a').click()
+            self.utils.find_element('//*[@id="main"]/div[7]/ul/li[3]/a').click()
             action = ActionChains(self.driver)
             total_rules_=self.utils.find_element(*locators.IPv4FirewallRules_Entries).text
 
@@ -649,76 +649,39 @@ class functional_smoke:
             self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
 
     def delete_firewall_rule(self,service_='HTTP'):
-
-        wait = WebDriverWait(self.driver, 60)
-
         self.login.webgui_login()
+        self.utils.find_element(*locators.DashboardMenu).click()
         self.utils.find_element(*locators.SecurityMenu).click()
+        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
 
         try:
-            self.utils.find_element(By.XPATH, '//*[@id="tf1_security_defaultPolicy"]').click()
-            self.utils.find_element(By.XPATH, '//*[@id="main"]/div[6]/ul/li[2]/a').click()
-            action = ActionChains(self.driver)
-
-            try:
-                total_rules_ = self.utils.find_element(By.XPATH, '//*[@id="recordsData_info"]').text
-            except:
-                total_rules_ = self.utils.find_element(By.ID, 'recordsData_info').text
-
+            logger.info("Deleting the IPv4 rules")
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
+            total_rules_ = self.utils.find_element(*locators.IPv4FirewallRules_Entries).text
             total_rules = int(total_rules_.split(' ')[-2])
-            # print(total_rules)
-            rule_path = ''
             for rule in range(total_rules):
-                firewall_rule = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1)).text
-                if service_ in firewall_rule:
-                    rule_path = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1))
+                firewall_rule = self.utils.find_element('//*[@id="firewallRules{}"]/td[2]'.format(rule + 1))
+                if service_ in firewall_rule.text:
+                    action = ActionChains(self.driver)
+                    action.context_click(firewall_rule).perform()
+                    self.utils.find_element(*locators.IPv4FirewallRules_DeleteMenu).click()
                     break
-
-            action.context_click(rule_path).perform()
-            self.utils.find_element(By.ID, 'deleteMenu').click()
-            time.sleep(10)
         except:
             print('We are not able to delete IPv4 Firewall Rule')
 
         try:
-            element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="mainMenu4"]')))
-            element.click()
-        except Exception as E:
-            # driver = webgui_login()
-            # driver.implicitly_wait(30)
-            self.login.webgui_login()
+            logger.info("Deleting the IPv6 rules")
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
 
-            wait = WebDriverWait(self.driver, 60)
-            try:
-                element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="mainMenu4"]')))
-                element.click()
-            except Exception as E:
-                print(E)
-                print('Security Menu Not Found')
-                self.utils.get_dbglog()
-                exit()
-
-        try:
-            self.utils.find_element(By.XPATH, '//*[@id="tf1_security_defaultPolicy"]').click()
-            self.utils.find_element(By.XPATH, '//*[@id="main"]/div[6]/ul/li[3]/a').click()
-            action = ActionChains(self.driver)
-
-            try:
-                total_rules_ = self.utils.find_element(By.XPATH, '//*[@id="recordsData_info"]').text
-            except:
-                total_rules_ = self.utils.find_element(By.ID, 'recordsData_info').text
-
+            total_rules_=self.utils.find_element(*locators.IPv6FirewallRules_Entries).text
             total_rules = int(total_rules_.split(' ')[-2])
-            # print(total_rules)
-            rule_path = ''
             for rule in range(total_rules):
-                firewall_rule = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1)).text
-                if service_ in firewall_rule:
-                    rule_path = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1))
+                firewall_rule = self.utils.find_element('//*[@id="{}"]/td[3]'.format(rule + 1))
+                if service_ in firewall_rule.text:
+                    action = ActionChains(self.driver)
+                    action.context_click(firewall_rule).perform()
+                    self.utils.find_element(*locators.IPv6FirewallRules_DeleteMenu).click()
                     break
-
-            action.context_click(rule_path).perform()
-            self.utils.find_element(By.ID, 'deleteMenu').click()
         except:
             print('We are not able to delete IPv6 Firewall Rule')
 

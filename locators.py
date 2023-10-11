@@ -15,6 +15,7 @@ IPv4FirewallRulesConfiguration_Action='//*[@id="tf1_selFwAction"]','#tf1_selFwAc
 IPv4FirewallRulesConfiguration_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
 IPv4FirewallRules_Entries='//*[@id="recordsData_info"]','#recordsData_info','recordsData_info'
 IPv4FirewallRules_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'
+IPv4FirewallRules_DeleteMenu="//li[@id='deleteMenu']",'#deleteMenu','deleteMenu'
 
 SecurityMenu_FirewallSubMenu_IPv6FirewallRules='//*[@id="main"]/div[7]/ul/li[3]/a',"div[id='main'] li:nth-child(3) a:nth-child(1)"
 IPv6FirewallRules_AddNewBtn='//*[@id="main"]/div[6]/div/div[3]/input[2]',"input[title='+ Add new']"
@@ -22,6 +23,7 @@ IPv6FirewallRulesConfiguration_RuleType='//*[@id="tf1_direction"]','#tf1_directi
 IPv6FirewallRulesConfiguration_Service='//*[@id="tf1_selSvrName"]','#tf1_selSvrName','tf1_selSvrName'
 IPv6FirewallRulesConfiguration_Action='//*[@id="tf1_selFwAction"]','#tf1_selFwAction','tf1_selFwAction'
 IPv6FirewallRulesConfiguration_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
+IPv6FirewallRules_DeleteMenu="//li[@id='deleteMenu']",'#deleteMenu','deleteMenu'
 
 IPv6FirewallRules_Entries='//*[@id="recordsData_info"]','#recordsData_info','recordsData_info'
 IPv6FirewallRules_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'

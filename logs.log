@@ -1,22 +1,36 @@
-2023-10-11 12:39:10,061 logger_util -> WARNING: Test Start
-2023-10-11 12:39:10,062 logger_util -> DEBUG: Initializing Chrome WebDriver
-2023-10-11 12:39:15,617 logger_util -> DEBUG: Checking login status
-2023-10-11 12:39:30,629 logger_util -> DEBUG: Not logged in to the web GUI: False
-2023-10-11 12:39:30,629 logger_util -> DEBUG: Attempting to log in via WEBGUI
-2023-10-11 12:39:37,740 logger_util -> ERROR: 'login' object has no attribute 'login'
-2023-10-11 12:39:37,740 logger_util -> INFO: Login Successful
-2023-10-11 12:39:42,803 logger_util -> DEBUG: Checking login status
-2023-10-11 12:39:44,651 logger_util -> DEBUG: Logged in to the web GUI: True
-2023-10-11 12:39:45,701 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
-2023-10-11 12:39:46,899 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
-2023-10-11 12:39:50,805 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
-2023-10-11 12:39:53,586 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
-2023-10-11 12:39:56,161 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
-2023-10-11 12:39:57,282 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
-2023-10-11 12:39:58,364 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
-2023-10-11 12:40:05,248 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
-2023-10-11 12:40:08,792 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
-2023-10-11 12:40:11,110 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_direction"]'
-2023-10-11 12:40:12,213 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
-2023-10-11 12:40:13,327 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
-2023-10-11 12:40:14,404 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-11 15:14:47,826 logger_util -> WARNING: Test Start
+2023-10-11 15:14:47,827 logger_util -> DEBUG: Initializing Chrome WebDriver
+2023-10-11 15:14:54,008 logger_util -> DEBUG: Checking login status
+2023-10-11 15:15:09,028 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-10-11 15:15:09,029 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-10-11 15:15:14,784 logger_util -> ERROR: 'login' object has no attribute 'login'
+2023-10-11 15:15:14,785 logger_util -> INFO: Login Successful
+2023-10-11 15:15:19,837 logger_util -> DEBUG: Checking login status
+2023-10-11 15:15:22,428 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-11 15:15:23,469 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-11 15:15:24,690 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-11 15:15:28,399 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-11 15:15:31,006 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
+2023-10-11 15:15:33,612 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
+2023-10-11 15:15:34,695 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-11 15:15:35,767 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-11 15:15:42,094 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-11 15:15:46,518 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
+2023-10-11 15:15:48,779 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_direction"]'
+2023-10-11 15:15:49,906 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
+2023-10-11 15:15:51,042 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-11 15:15:52,133 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-11 15:15:56,165 logger_util -> DEBUG: Checking login status
+2023-10-11 15:15:56,178 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-11 15:15:57,227 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-11 15:16:01,614 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-11 15:16:02,727 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-11 15:16:05,220 logger_util -> INFO: Deleting the IPv4 rules
+2023-10-11 15:16:06,253 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-11 15:16:09,696 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-11 15:16:10,772 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="firewallRules1"]/td[2]'
+2023-10-11 15:16:12,148 logger_util -> DEBUG: Element found using locator: xpath='//li[@id='deleteMenu']'
+2023-10-11 15:16:26,744 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-11 15:16:29,957 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-11 15:16:31,027 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[3]'
+2023-10-11 15:16:32,363 logger_util -> DEBUG: Element found using locator: xpath='//li[@id='deleteMenu']'
