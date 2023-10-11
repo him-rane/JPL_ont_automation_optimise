@@ -553,7 +553,8 @@ class functional_smoke:
         self.utils.accept_alert()
         time.sleep(300)
 
-    def https_website_check(self):
+
+    def website_check(self):
         from selenium import webdriver
         driver = webdriver.Chrome()
         driver.implicitly_wait(30)
@@ -578,77 +579,41 @@ class functional_smoke:
 
         if success_count > 0:
             print('HTTPS site access is successful for at least one website')
+            return True
         else:
             print('We are not able to access any HTTPS websites')
+            return False
 
-        return success_count
-
-    def add_firewall_rule(self,service_='HTTP', action_value_='DROP', modify_existing=0):
+    def add_firewall_rule(self, service_type='HTTP', action_type='DROP',rule_type='Outbound'):
         print("Adding Firewall Rule")
         self.login.webgui_login()
         self.utils.find_element(*locators.SecurityMenu).click()
         self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
         self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
 
-        if modify_existing == 0:
-            self.utils.find_element(*locators.IPv4FirewallRules_AddNewBtn).click()
-            select_service = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Service))
-            select_service.select_by_value(service_)
-            action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
-            action.select_by_value(action_value_)
-            self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn).click()
 
-            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
-            self.utils.find_element(*locators.IPv6FirewallRules_AddNewBtn).click()
-            rule_type = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_RuleType))
-            rule_type.select_by_value('Outbound')
+        self.utils.find_element(*locators.IPv4FirewallRules_AddNewBtn).click()
 
-            select_service = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Service))
-            select_service.select_by_value(service_)
-            action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
-            action.select_by_value(action_value_)
-            self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
-        if modify_existing == 1:
-            action = ActionChains(self.driver)
+        select_service = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Service))
+        select_service.select_by_value(service_type)
 
-            total_rules_=self.utils.find_element(*locators.IPv6FirewallRules_Entries).text
-            total_rules = int(total_rules_.split(' ')[-2])
+        action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
+        action.select_by_value(action_type)
 
-            rule_path = ''
-            for rule in range(total_rules):
-                firewall_rule = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1)).text
-                if service_ in firewall_rule:
-                    rule_path = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1))
-                    break
+        self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn).click()
 
-            action.context_click(rule_path).perform()
-            self.utils.find_element(*locators.IPv6FirewallRules_EditMenu)
+        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
+        self.utils.find_element(*locators.IPv6FirewallRules_AddNewBtn).click()
+        rule = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_RuleType))
+        rule.select_by_value(rule_type)
 
-            action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
-            action.select_by_value(action_value_)
-            self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn)
+        select_service = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Service))
+        select_service.select_by_value(service_type)
+        action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
+        action.select_by_value(action_type)
+        self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
 
-            # Modifying IPv6 Rule to Allow
-            self.utils.find_element('//*[@id="main"]/div[7]/ul/li[3]/a').click()
-            action = ActionChains(self.driver)
-            total_rules_=self.utils.find_element(*locators.IPv4FirewallRules_Entries).text
-
-            total_rules = int(total_rules_.split(' ')[-2])
-            # print(total_rules)
-            rule_path = ''
-            for rule in range(total_rules):
-                firewall_rule = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1)).text
-                if service_ in firewall_rule:
-                    rule_path = self.utils.find_element(By.XPATH, '//table/tbody/tr[{}]'.format(rule + 1))
-                    break
-
-            action.context_click(rule_path).perform()
-            self.utils.find_element(*locators.IPv4FirewallRules_EditMenu)
-            action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
-            action.select_by_value(action_value_)
-            self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
-
-    def delete_firewall_rule(self,service_='HTTP'):
+    def delete_firewall_rule(self, service_type='HTTP'):
         self.login.webgui_login()
         self.utils.find_element(*locators.DashboardMenu).click()
         self.utils.find_element(*locators.SecurityMenu).click()
@@ -661,7 +626,7 @@ class functional_smoke:
             total_rules = int(total_rules_.split(' ')[-2])
             for rule in range(total_rules):
                 firewall_rule = self.utils.find_element('//*[@id="firewallRules{}"]/td[2]'.format(rule + 1))
-                if service_ in firewall_rule.text:
+                if service_type in firewall_rule.text:
                     action = ActionChains(self.driver)
                     action.context_click(firewall_rule).perform()
                     self.utils.find_element(*locators.IPv4FirewallRules_DeleteMenu).click()
@@ -677,7 +642,7 @@ class functional_smoke:
             total_rules = int(total_rules_.split(' ')[-2])
             for rule in range(total_rules):
                 firewall_rule = self.utils.find_element('//*[@id="{}"]/td[3]'.format(rule + 1))
-                if service_ in firewall_rule.text:
+                if service_type in firewall_rule.text:
                     action = ActionChains(self.driver)
                     action.context_click(firewall_rule).perform()
                     self.utils.find_element(*locators.IPv6FirewallRules_DeleteMenu).click()
@@ -685,98 +650,74 @@ class functional_smoke:
         except:
             print('We are not able to delete IPv6 Firewall Rule')
 
-    def https_firewall_rule_check(self):
-        # if self.device_health.healh_check() == False:
-        #     logger.error('Device health check failed. Exiting the test.')
-        #     self.utils.get_dbglog()
-        #     return False
-        #
-        test_expected_check = [1, 0, 1]
-        test_actual_check = []
+    def edit_firewall_rule(self, service_type='HTTP', action_type='DROP'):
+        self.login.webgui_login()
+        self.utils.find_element(*locators.DashboardMenu).click()
+        self.utils.find_element(*locators.SecurityMenu).click()
+        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
+
+        try:
+            logger.info("Editing the IPv4 rules")
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
+            total_rules_ = self.utils.find_element(*locators.IPv4FirewallRules_Entries).text
+            total_rules = int(total_rules_.split(' ')[-2])
+            for rule in range(total_rules):
+                firewall_rule = self.utils.find_element('//*[@id="firewallRules{}"]/td[2]'.format(rule + 1))
+                if service_type in firewall_rule.text:
+                    action = ActionChains(self.driver)
+                    action.context_click(firewall_rule).perform()
+                    self.utils.find_element(*locators.IPv4FirewallRules_EditMenu).click()
+                    break
+
+            action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
+            action.select_by_value(action_type)
+            self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn)
+        except Exception as E:
+            logger.error(E)
 
 
+        try:
+            logger.info("Editing the IPv6 rules")
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
 
+            total_rules_=self.utils.find_element(*locators.IPv6FirewallRules_Entries).text
+            total_rules = int(total_rules_.split(' ')[-2])
+            for rule in range(total_rules):
+                firewall_rule = self.utils.find_element('//*[@id="{}"]/td[3]'.format(rule + 1))
+                if service_type in firewall_rule.text:
+                    action = ActionChains(self.driver)
+                    action.context_click(firewall_rule).perform()
+                    self.utils.find_element(*locators.IPv6FirewallRules_DeleteMenu).click()
+                    break
 
-        def https_website_check(self):
-            print('Check Point https_website_check ')
-            # setup = Setup()
-            # driver = setup.get_driver()
-            options = webdriver.ChromeOptions()
-            options.add_argument('ignore-certificate-errors')
-            options.add_argument("--start-maximized")
+            action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
+            action.select_by_value(action_type)
+            self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
+        except Exception as E:
+            logger.error(E)
 
-            driver = webdriver.Chrome(options=options)
-            driver.implicitly_wait(30)
-            tabs = ['https://accounts.google.com',
-                    'https://www.onlinesbi.sbi',
-                    'https://www.facebook.com']
+    def TC_Functional_Sanity_002_1(self):
+        print('Validating HTTPS Firewall Rule Functionality')
+        if self.device_health.healh_check() == False:
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+        if self.website_check()==True:
+            print('Default HTTPS Service is running fine')
+        else:
+            print('Default HTTPS Service is not running as expected')
 
-            time.sleep(10)
-            check = []
-            for url in tabs:
-                try:
-                    self.driver.execute_script("window.open('');")
-                    self.driver.switch_to.window(self.driver.window_handles[-1])
-                    self.driver.get(url)
-                    title_ = self.driver.title
-                    # print(title_)
-                    if title_ != '':
-                        check.append(1)
-                    else:
-                        check.append(0)
-
-                    time.sleep(20)
-                except Exception as E:
-                    pass
-
-            if any(check) == 1:
-                print('Http site access is successful for website')
-            else:
-                print('We are not able to access HTTP website')
-
-
-
-
-
-
-        # default_https_check = https_website_check()
-        # test_actual_check.append(default_https_check)
-        # # print(default_https_check)
-        # if default_https_check == 1:
-        #     print('Default HTTPS Service is running fine')
-        # else:
-        #     print('Default HTTPS Service is not running as expected')
-        #
         print('Adding HTTPS Block Firewall Rules')
-        add_firewall_rule(service_='HTTPS', action_value_='DROP')
-        time.sleep(30)
-        print("Check Point 1")
-        blocked_https_check = https_website_check(self)
-        test_actual_check.append(blocked_https_check)
-        if blocked_https_check == 0:
+        self.add_firewall_rule('HTTPS', 'DROP', 'Outbound')
+        if self.website_check() == False:
             print('Block Firewall Rule for HTTPS is working as expected')
         else:
             print('Block Firewall Rule for HTTPS is not working as expected')
             self.utils.get_dbglog()
-        #
-        # print('Rechecking HTTPS Service after Enabling firewall Rules')
-        # add_firewall_rule(service_='HTTPS', action_value_='ACCEPT', modify_existing=1)
-        # allowed_https_check = https_website_check()
-        # test_actual_check.append(allowed_https_check)
-        # if allowed_https_check == 1:
-        #     print('Allow Firewall Rule for HTTPS is working as expected')
-        # else:
-        #     print('Allow Firewall Rule for HTTPS is not working as expected')
-        #     get_dbglog()
-        #
-        print('Removing the existing Rule')
-        delete_firewall_rule('HTTPS')
-        #
-        # success = 0
-        # if test_expected_check == test_actual_check:
-        #     success = 1
-        #     print('Test Case is Pass')
-        # else:
-        #     print('Test Case is Fail')
-        # return success
+
+        self.delete_firewall_rule('HTTP')
+    # def https_firewall_rule_check(self):
+    #     print('Validating HTTPS Firewall Rule Functionality')
+    #     if self.device_health.healh_check() == False:
+    #         logger.error('Device health check failed. Exiting the test.')
+    #         return False
 

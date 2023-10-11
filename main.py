@@ -42,8 +42,10 @@ obj=functional_smoke(driver)
 # exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_010_1())
 # exlogger.log_result("TC_Functional_Smoke_008", obj.TC_Functional_Smoke_010_2())
 # exlogger.log_result("TC_Functional_Smoke_32", obj.TC_Functional_Smoke_32())
-obj.add_firewall_rule()
-obj.delete_firewall_rule()
+# obj.add_firewall_rule('FTP','DROP','Outbound')
+# obj.delete_firewall_rule('FTP')
+
+obj.TC_Functional_Sanity_002_1()
 # obj.static_wan_configuration();
 
 
