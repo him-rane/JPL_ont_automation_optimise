@@ -1,5 +1,8 @@
 import subprocess
+from ftplib import FTP
 from telnetlib import EC
+
+from pyotp import random
 from selenium import webdriver
 
 from selenium.webdriver.chrome import webdriver
@@ -407,7 +410,7 @@ class functional_smoke:
         logger.info("Reboot from WebGUI 5 Iterations")
         for i in range(5):
             # Your code here
-            print("Reboot Iteration ", i)
+            logger.debug("Reboot Iteration ", i)
 
             if self.device_health.healh_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
@@ -515,26 +518,26 @@ class functional_smoke:
         self.utils.accept_alert()
         time.sleep(300)
 
-        print('Checking IPv4 Connectivity with Ping')
+        logger.debug('Checking IPv4 Connectivity with Ping')
         command = 'cmd /c ping 20.15.10.2 -4 -n 10'
         success = 0
         cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         out = cmd.communicate()
         output = str(out[0])
-        # print(output)
+        # logger.debug(output)
 
         if 'time' and 'TTL' in output:
-            print('IPv4 Ping is successful')
+            logger.debug('IPv4 Ping is successful')
             success += 1
 
         else:
             ping_fail_check_1 = 'could not find host'
             ping_fail_check_2 = 'Request timed out'
             if ('time' not in output) and (ping_fail_check_1 in output) or (ping_fail_check_2 in output):
-                print('Ping IPv4 Failed')
+                logger.debug('Ping IPv4 Failed')
                 self.utils.get_dbglog()
 
-        print('Reverting back to 1015')
+        logger.debug('Reverting back to 1015')
         self.login.webgui_login()
 
         self.utils.search_gui('WAN IPv4 Configuration')
@@ -554,15 +557,11 @@ class functional_smoke:
         time.sleep(300)
 
 
-    def website_check(self):
+    def website_check(self,urls):
         from selenium import webdriver
         driver = webdriver.Chrome()
-        driver.implicitly_wait(30)
 
         success_count = 0
-        urls = ['https://accounts.google.com',
-                'https://www.onlinesbi.sbi',
-                'https://www.facebook.com']
 
         for url in urls:
             try:
@@ -574,44 +573,82 @@ class functional_smoke:
                 if title != '':
                     success_count += 1
 
+                time.sleep(10)
             except Exception as e:
                 pass
-
+        time.sleep(5)
         if success_count > 0:
-            print('HTTPS site access is successful for at least one website')
+            logger.info('URL access is successful for at least one website')
             return True
         else:
-            print('We are not able to access any HTTPS websites')
+            logger.error('Unable to access any of the URL')
             return False
 
+
+    def ftp_check(self):
+        ftp_files = []
+        test_ftp = 0
+        try:
+            ftp = FTP()
+            time.sleep(5)
+            ftp.connect(host='10.64.218.26', timeout=30)
+            time.sleep(5)
+            login_ = ftp.login(user='ftpuser', passwd='Jio@1234')
+            time.sleep(5)
+            print(login_)
+            ftp.retrlines('NLST', ftp_files.append)
+            time.sleep(5)
+            total_files = len(ftp_files)
+            file_index = random.randint(0, total_files)
+            fileName = ftp_files[file_index]
+            x = ftp.retrbinary("RETR " + fileName, open(fileName, 'wb').write)
+            logger.debug(x)
+            return True
+        except Exception as E:
+            logger.error(f"Error occurred while connecting FTP server")
+            if 'fail' in str(E):
+                return False
+
+
+
     def add_firewall_rule(self, service_type='HTTP', action_type='DROP',rule_type='Outbound'):
-        print("Adding Firewall Rule")
         self.login.webgui_login()
         self.utils.find_element(*locators.SecurityMenu).click()
         self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
-        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
+        try:
+            logger.debug(f"Adding IPv4 Firewall Rule for {service_type}")
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
+            self.utils.find_element(*locators.IPv4FirewallRules_AddNewBtn).click()
+
+            select_service = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Service))
+            select_service.select_by_value(service_type)
+
+            action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
+            action.select_by_value(action_type)
+
+            self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn).click()
+            logger.info(f"IPv4 Firewall Rule for {service_type} is added successfully")
+
+        except Exception as E:
+            logger.error(f"Error occurred while adding IPv4 rules for {service_type}: {str(E)}")
 
 
-        self.utils.find_element(*locators.IPv4FirewallRules_AddNewBtn).click()
+        try:
+            logger.debug(f"Adding IPv6 Firewall Rule for {service_type}")
 
-        select_service = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Service))
-        select_service.select_by_value(service_type)
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
+            self.utils.find_element(*locators.IPv6FirewallRules_AddNewBtn).click()
+            rule = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_RuleType))
+            rule.select_by_value(rule_type)
 
-        action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
-        action.select_by_value(action_type)
-
-        self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn).click()
-
-        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
-        self.utils.find_element(*locators.IPv6FirewallRules_AddNewBtn).click()
-        rule = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_RuleType))
-        rule.select_by_value(rule_type)
-
-        select_service = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Service))
-        select_service.select_by_value(service_type)
-        action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
-        action.select_by_value(action_type)
-        self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
+            select_service = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Service))
+            select_service.select_by_value(service_type)
+            action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
+            action.select_by_value(action_type)
+            self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
+            logger.info(f"IPv6 Firewall Rule for {service_type} is added successfully")
+        except Exception as E:
+            logger.error(f"Error occurred while adding IPv6 rules for {service_type}: {str(E)}")
 
     def delete_firewall_rule(self, service_type='HTTP'):
         self.login.webgui_login()
@@ -620,7 +657,7 @@ class functional_smoke:
         self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
 
         try:
-            logger.info("Deleting the IPv4 rules")
+            logger.debug(f"Deleting IPv4 Firewall Rule for {service_type}")
             self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
             total_rules_ = self.utils.find_element(*locators.IPv4FirewallRules_Entries).text
             total_rules = int(total_rules_.split(' ')[-2])
@@ -631,11 +668,12 @@ class functional_smoke:
                     action.context_click(firewall_rule).perform()
                     self.utils.find_element(*locators.IPv4FirewallRules_DeleteMenu).click()
                     break
-        except:
-            print('We are not able to delete IPv4 Firewall Rule')
+            logger.info(f"IPv4 Firewall Rule for {service_type} is deleted successfully")
+        except Exception as E:
+            logger.error(f"Error occurred while deleting IPv4 rules for {service_type}: {str(E)}")
 
         try:
-            logger.info("Deleting the IPv6 rules")
+            logger.debug(f"Deleting IPv6 Firewall Rule for {service_type}")
             self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
 
             total_rules_=self.utils.find_element(*locators.IPv6FirewallRules_Entries).text
@@ -647,17 +685,19 @@ class functional_smoke:
                     action.context_click(firewall_rule).perform()
                     self.utils.find_element(*locators.IPv6FirewallRules_DeleteMenu).click()
                     break
+            logger.info(f"IPv6 Firewall Rule for {service_type} is deleted successfully")
         except:
-            print('We are not able to delete IPv6 Firewall Rule')
+            logger.error(f"Error occurred while deleting IPv6 rules for {service_type}: {str(E)}")
 
     def edit_firewall_rule(self, service_type='HTTP', action_type='DROP'):
+
         self.login.webgui_login()
         self.utils.find_element(*locators.DashboardMenu).click()
         self.utils.find_element(*locators.SecurityMenu).click()
         self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
 
         try:
-            logger.info("Editing the IPv4 rules")
+            logger.debug(f"Editing IPv4 Firewall Rule for {service_type}")
             self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv4FirewallRules).click()
             total_rules_ = self.utils.find_element(*locators.IPv4FirewallRules_Entries).text
             total_rules = int(total_rules_.split(' ')[-2])
@@ -671,13 +711,14 @@ class functional_smoke:
 
             action = Select(self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_Action))
             action.select_by_value(action_type)
-            self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn)
+            self.utils.find_element(*locators.IPv4FirewallRulesConfiguration_SaveBtn).click()
+            logger.info(f"IPv4 Firewall Rule for {service_type} is edited successfully")
         except Exception as E:
-            logger.error(E)
+            logger.error(f"Error occurred while editing IPv4 rules for {service_type}: {str(E)}")
 
 
         try:
-            logger.info("Editing the IPv6 rules")
+            logger.debug(f"Editing IPv6 Firewall Rule for {service_type}")
             self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu_IPv6FirewallRules).click()
 
             total_rules_=self.utils.find_element(*locators.IPv6FirewallRules_Entries).text
@@ -687,37 +728,151 @@ class functional_smoke:
                 if service_type in firewall_rule.text:
                     action = ActionChains(self.driver)
                     action.context_click(firewall_rule).perform()
-                    self.utils.find_element(*locators.IPv6FirewallRules_DeleteMenu).click()
+                    self.utils.find_element(*locators.IPv6FirewallRules_EditMenu).click()
                     break
 
             action = Select(self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_Action))
             action.select_by_value(action_type)
             self.utils.find_element(*locators.IPv6FirewallRulesConfiguration_SaveBtn).click()
+            logger.info(f"IPv6 Firewall Rule for {service_type} is edited successfully")
+
         except Exception as E:
-            logger.error(E)
+            logger.error(f"Error occurred while editing IPv6 rules for {service_type}: {str(E)}")
 
     def TC_Functional_Sanity_002_1(self):
-        print('Validating HTTPS Firewall Rule Functionality')
-        if self.device_health.healh_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
+        logger.info('Validating HTTPS Firewall Rule Functionality')
+        try:
+            
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            
+            urls = ['https://accounts.google.com',
+                    'https://www.onlinesbi.sbi',
+                    'https://www.facebook.com']
+            failCount=0
+            if self.website_check(urls)==True:
+                logger.info('Default HTTPS Service is running fine')
+            else:
+                failCount+=1
+                logger.error('Default HTTPS Service is not running as expected')
+                self.utils.get_dbglog()
+    
+            logger.debug('Adding HTTPS Block Firewall Rules')
+            self.add_firewall_rule('HTTPS', 'DROP', 'Outbound')
+            if self.website_check(urls) == False:
+                logger.info('Block Firewall Rule for HTTPS is working as expected')
+            else:
+                failCount += 1
+                logger.error('Block Firewall Rule for HTTPS is not working as expected')
+                self.utils.get_dbglog()
+    
+            logger.debug('Rechecking HTTP Service after Enabling firewall Rules')
+            self.edit_firewall_rule('HTTPS', 'ACCEPT')
+    
+            if self.website_check(urls) == True:
+                logger.info('Allow Firewall Rule for HTTP is working as expected')
+            else:
+                failCount+=1
+                logger.error('Allow Firewall Rule for HTTP is not working as expected')
+                self.utils.get_dbglog()
+    
+            logger.debug('Removing the existing Rule')
+            self.delete_firewall_rule('HTTPS')
+            
+            if failCount==0:
+                return True
+            else:
+                return True
+            
+        except Exception as E:
+            logger.error(f"Error occurred while checking HTTPS rules: {str(E)}")
             return False
-        if self.website_check()==True:
-            print('Default HTTPS Service is running fine')
-        else:
-            print('Default HTTPS Service is not running as expected')
+    def TC_Functional_Sanity_002_2(self):
+        logger.debug('Validating HTTP Firewall Rule Functionality')
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            urls = ['http://testhtml5.vulnweb.com',
+                    'http://www.softwareqatest.com/qatweb1.html',
+                    'http://testasp.vulnweb.com	']
+            failCount=0
+            if self.website_check(urls) == True:
+                logger.debug('Default HTTP Service is running fine')
+            else:
+                failCount+=1
+                logger.debug('Default HTTP Service is not running as expected')
+                self.utils.get_dbglog()
+    
+            logger.debug('Adding HTTPS Block Firewall Rules')
+            self.add_firewall_rule('HTTP', 'DROP', 'Outbound')
+            if self.website_check(urls) == False:
+                logger.info('Block Firewall Rule for HTTP is working as expected')
+            else:
+                failCount+=1
+                logger.error('Block Firewall Rule for HTTP is not working as expected')
+                self.utils.get_dbglog()
+    
+            logger.debug('Rechecking HTTP Service after Enabling firewall Rules')
+            self.edit_firewall_rule('HTTP', 'ACCEPT')
+    
+            if self.website_check(urls) == True:
+                logger.info('Allow Firewall Rule for HTTP is working as expected')
+            else:
+                failCount+=1
+                logger.error('Allow Firewall Rule for HTTP is not working as expected')
+                self.utils.get_dbglog()
+    
+            logger.debug('Removing the existing Rule')
+            self.delete_firewall_rule('HTTP')
+    
+            if failCount == 0:
+                return True
+            else:
+                return True
+        except Exception as E:
+            logger.error(f"Error occurred while checking HTTP rules: {str(E)}")
+            return False
+            
 
-        print('Adding HTTPS Block Firewall Rules')
-        self.add_firewall_rule('HTTPS', 'DROP', 'Outbound')
-        if self.website_check() == False:
-            print('Block Firewall Rule for HTTPS is working as expected')
-        else:
-            print('Block Firewall Rule for HTTPS is not working as expected')
-            self.utils.get_dbglog()
+    def TC_Functional_Sanity_002_3(self):
+        logger.debug('Validating FTP Firewall Rule Functionality')
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
 
-        self.delete_firewall_rule('HTTP')
-    # def https_firewall_rule_check(self):
-    #     print('Validating HTTPS Firewall Rule Functionality')
-    #     if self.device_health.healh_check() == False:
-    #         logger.error('Device health check failed. Exiting the test.')
-    #         return False
+            failCount=0
+            if self.ftp_check() == True:
+                logger.debug('Default HTTP Service is running fine')
+            else:
+                failCount+=1
+                logger.debug('Default HTTP Service is not running as expected')
+                self.utils.get_dbglog()
+
+            logger.debug('Adding FTP Block Firewall Rules')
+            self.add_firewall_rule('FTP', 'DROP', 'Outbound')
+            if self.ftp_check() == False:
+                logger.debug('Block Firewall Rule for HTTP is working as expected')
+            else:
+                failCount+=1
+                logger.debug('Block Firewall Rule for HTTP is not working as expected')
+                self.utils.get_dbglog()
+
+            logger.debug('Rechecking FTP Service after Enabling firewall Rules')
+            self.edit_firewall_rule('FTP', 'ACCEPT')
+
+            if self.ftp_check() == True:
+                logger.debug('Allow Firewall Rule for HTTP is working as expected')
+            else:
+                failCount+=1
+                logger.debug('Allow Firewall Rule for HTTP is not working as expected')
+                self.utils.get_dbglog()
+
+            logger.debug('Removing the existing Rule')
+            self.delete_firewall_rule('FTP')
+        except Exception as E:
+            logger.error(f"Error occurred while checking FTP rules: {str(E)}")
+            return False
 

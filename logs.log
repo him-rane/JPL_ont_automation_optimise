@@ -1,56 +1,329 @@
-2023-10-11 17:57:27,022 logger_util -> WARNING: Test Start
-2023-10-11 17:57:27,023 logger_util -> DEBUG: Initializing Chrome WebDriver
-2023-10-11 17:57:32,923 logger_util -> DEBUG: Checking login status
-2023-10-11 17:57:47,944 logger_util -> DEBUG: Not logged in to the web GUI: False
-2023-10-11 17:57:47,944 logger_util -> DEBUG: Attempting to log in via WEBGUI
-2023-10-11 17:57:53,167 logger_util -> ERROR: 'login' object has no attribute 'login'
-2023-10-11 17:57:53,167 logger_util -> INFO: Login Successful
-2023-10-11 17:57:58,229 logger_util -> DEBUG: Checking login status
-2023-10-11 17:58:01,437 logger_util -> DEBUG: Logged in to the web GUI: True
-2023-10-11 17:58:01,437 logger_util -> DEBUG: Performing device health check...
-2023-10-11 17:58:01,437 logger_util -> DEBUG: Checking GPON status
-2023-10-11 17:58:01,438 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
-2023-10-11 17:58:02,486 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-11 17:58:09,522 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
-2023-10-11 17:58:10,564 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
-2023-10-11 17:58:10,578 logger_util -> INFO: GPON Status: O5
-2023-10-11 17:58:10,578 logger_util -> DEBUG: Checking WAN IPv4 Address
-2023-10-11 17:58:11,614 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-11 17:58:12,685 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-10-11 17:58:17,263 logger_util -> DEBUG: Checking WAN IPv4 Address
-2023-10-11 17:58:18,295 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-11 17:58:19,369 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
-2023-10-11 17:58:19,387 logger_util -> INFO: WAN IPv4 Address : 10.0.8.190
-2023-10-11 17:58:19,388 logger_util -> DEBUG: Checking WAN IPv6 Address
-2023-10-11 17:58:20,420 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-11 17:58:21,497 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
-2023-10-11 17:58:21,517 logger_util -> INFO: WAN IPv6 Address : 2405:201:0:1000:ad72:682b:28cd:4c86/128
-2023-10-11 17:58:21,518 logger_util -> DEBUG: Getting WAN Port Configuration
-2023-10-11 17:58:21,518 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
-2023-10-11 17:58:22,554 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-11 17:58:28,082 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
-2023-10-11 17:58:29,129 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
-2023-10-11 17:58:29,383 logger_util -> INFO: WAN Port Configuration found: 1015
-2023-10-11 17:58:29,383 logger_util -> DEBUG: Retrieving Firmware Version...
-2023-10-11 17:58:30,400 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-11 17:58:31,443 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-10-11 17:58:35,972 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
-2023-10-11 17:58:35,988 logger_util -> INFO: Firmware Version SKYWTF1_JCOW407_D2.52
-2023-10-11 17:58:35,988 logger_util -> INFO: Device health check completed successfully.
-2023-10-11 17:58:45,211 logger_util -> DEBUG: Checking login status
-2023-10-11 17:58:45,240 logger_util -> DEBUG: Logged in to the web GUI: True
-2023-10-11 17:58:46,287 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
-2023-10-11 17:58:47,375 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
-2023-10-11 17:58:52,025 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
-2023-10-11 17:58:55,527 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
-2023-10-11 17:58:57,800 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
-2023-10-11 17:58:58,948 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
-2023-10-11 17:59:00,036 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
-2023-10-11 17:59:04,920 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
-2023-10-11 17:59:07,734 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
-2023-10-11 17:59:10,078 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_direction"]'
-2023-10-11 17:59:11,164 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
-2023-10-11 17:59:12,292 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
-2023-10-11 17:59:13,374 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
-2023-10-11 17:59:24,929 logger_util -> ERROR: Taking DBG log after an issue
-2023-10-11 17:59:52,175 logger_util -> DEBUG: dbglog taken at: 2023-10-11 17:59:52.175783
+2023-10-12 16:18:31,989 logger_util -> WARNING: Test Start
+2023-10-12 16:18:31,989 logger_util -> DEBUG: Initializing Chrome WebDriver
+2023-10-12 16:18:38,549 logger_util -> DEBUG: Checking login status
+2023-10-12 16:18:53,761 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-10-12 16:18:53,761 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-10-12 16:19:03,414 logger_util -> ERROR: 'login' object has no attribute 'login'
+2023-10-12 16:19:03,414 logger_util -> INFO: Login Successful
+2023-10-12 16:19:08,474 logger_util -> INFO: Validating HTTPS Firewall Rule Functionality
+2023-10-12 16:19:08,479 logger_util -> DEBUG: Checking login status
+2023-10-12 16:19:08,505 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:19:08,505 logger_util -> DEBUG: Performing device health check...
+2023-10-12 16:19:08,506 logger_util -> DEBUG: Checking GPON status
+2023-10-12 16:19:08,506 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
+2023-10-12 16:19:17,272 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-12 16:19:17,286 logger_util -> ERROR: Error occurred while searching for the keyword: 'WAN Information': Message: stale element reference: stale element not found
+  (Session info: chrome=117.0.5938.152); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00CDCFE3+45267]
+	(No symbol) [0x00C69741]
+	(No symbol) [0x00B5BE1D]
+	(No symbol) [0x00B65C7F]
+	(No symbol) [0x00B5FCC6]
+	(No symbol) [0x00B5EE4D]
+	(No symbol) [0x00B60D6A]
+	(No symbol) [0x00B60E10]
+	(No symbol) [0x00B905B0]
+	(No symbol) [0x00B8830D]
+	(No symbol) [0x00BAB03C]
+	(No symbol) [0x00B87F96]
+	(No symbol) [0x00BAB2B4]
+	(No symbol) [0x00BBDDDA]
+	(No symbol) [0x00BAAE36]
+	(No symbol) [0x00B8674E]
+	(No symbol) [0x00B878ED]
+	GetHandleVerifier [0x00F95659+2897737]
+	GetHandleVerifier [0x00FDE78B+3197051]
+	GetHandleVerifier [0x00FD8571+3171937]
+	GetHandleVerifier [0x00D65E40+606000]
+	(No symbol) [0x00C7338C]
+	(No symbol) [0x00C6F508]
+	(No symbol) [0x00C6F62F]
+	(No symbol) [0x00C61D27]
+	BaseThreadInitThunk [0x76E0FCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x77CB7B1E+286]
+	RtlGetAppContainerNamedObjectPath [0x77CB7AEE+238]
+
+2023-10-12 16:19:33,351 logger_util -> ERROR: Element not found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p': Message: no such element: Unable to locate element: {"method":"xpath","selector":"//*[@id="main"]/div[6]/div[1]/div/div[17]/p"}
+  (Session info: chrome=117.0.5938.152); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00CDCFE3+45267]
+	(No symbol) [0x00C69741]
+	(No symbol) [0x00B5BE1D]
+	(No symbol) [0x00B8ED30]
+	(No symbol) [0x00B8F1FB]
+	(No symbol) [0x00BBF772]
+	(No symbol) [0x00BAB084]
+	(No symbol) [0x00BBDDDA]
+	(No symbol) [0x00BAAE36]
+	(No symbol) [0x00B8674E]
+	(No symbol) [0x00B878ED]
+	GetHandleVerifier [0x00F95659+2897737]
+	GetHandleVerifier [0x00FDE78B+3197051]
+	GetHandleVerifier [0x00FD8571+3171937]
+	GetHandleVerifier [0x00D65E40+606000]
+	(No symbol) [0x00C7338C]
+	(No symbol) [0x00C6F508]
+	(No symbol) [0x00C6F62F]
+	(No symbol) [0x00C61D27]
+	BaseThreadInitThunk [0x76E0FCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x77CB7B1E+286]
+	RtlGetAppContainerNamedObjectPath [0x77CB7AEE+238]
+
+2023-10-12 16:19:48,378 logger_util -> ERROR: Element not found using locator: css selector='body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(18) > p:nth-child(2)': Message: no such element: Unable to locate element: {"method":"css selector","selector":"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(18) > p:nth-child(2)"}
+  (Session info: chrome=117.0.5938.152); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00CDCFE3+45267]
+	(No symbol) [0x00C69741]
+	(No symbol) [0x00B5BE1D]
+	(No symbol) [0x00B8ED30]
+	(No symbol) [0x00B8F1FB]
+	(No symbol) [0x00BBF772]
+	(No symbol) [0x00BAB084]
+	(No symbol) [0x00BBDDDA]
+	(No symbol) [0x00BAAE36]
+	(No symbol) [0x00B8674E]
+	(No symbol) [0x00B878ED]
+	GetHandleVerifier [0x00F95659+2897737]
+	GetHandleVerifier [0x00FDE78B+3197051]
+	GetHandleVerifier [0x00FD8571+3171937]
+	GetHandleVerifier [0x00D65E40+606000]
+	(No symbol) [0x00C7338C]
+	(No symbol) [0x00C6F508]
+	(No symbol) [0x00C6F62F]
+	(No symbol) [0x00C61D27]
+	BaseThreadInitThunk [0x76E0FCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x77CB7B1E+286]
+	RtlGetAppContainerNamedObjectPath [0x77CB7AEE+238]
+
+2023-10-12 16:20:03,395 logger_util -> ERROR: Element not found using locator: id='': Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id=""]"}
+  (Session info: chrome=117.0.5938.152); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00CDCFE3+45267]
+	(No symbol) [0x00C69741]
+	(No symbol) [0x00B5BE1D]
+	(No symbol) [0x00B8ED30]
+	(No symbol) [0x00B8F1FB]
+	(No symbol) [0x00BBF772]
+	(No symbol) [0x00BAB084]
+	(No symbol) [0x00BBDDDA]
+	(No symbol) [0x00BAAE36]
+	(No symbol) [0x00B8674E]
+	(No symbol) [0x00B878ED]
+	GetHandleVerifier [0x00F95659+2897737]
+	GetHandleVerifier [0x00FDE78B+3197051]
+	GetHandleVerifier [0x00FD8571+3171937]
+	GetHandleVerifier [0x00D65E40+606000]
+	(No symbol) [0x00C7338C]
+	(No symbol) [0x00C6F508]
+	(No symbol) [0x00C6F62F]
+	(No symbol) [0x00C61D27]
+	BaseThreadInitThunk [0x76E0FCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x77CB7B1E+286]
+	RtlGetAppContainerNamedObjectPath [0x77CB7AEE+238]
+
+2023-10-12 16:20:03,396 logger_util -> WARNING: Element not found using any of the provided locators: xpath=//*[@id="main"]/div[6]/div[1]/div/div[17]/p, css selector=body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(18) > p:nth-child(2), id=
+2023-10-12 16:20:03,397 logger_util -> ERROR: Error occurred while checking GPON status: 'NoneType' object has no attribute 'text'
+2023-10-12 16:20:03,398 logger_util -> ERROR: Error occurred while checking HTTPS rules: argument of type 'int' is not iterable
+2023-10-12 16:20:03,398 logger_util -> DEBUG: Validating HTTP Firewall Rule Functionality
+2023-10-12 16:20:03,402 logger_util -> DEBUG: Checking login status
+2023-10-12 16:20:03,429 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:20:03,429 logger_util -> DEBUG: Performing device health check...
+2023-10-12 16:20:03,430 logger_util -> DEBUG: Checking GPON status
+2023-10-12 16:20:03,430 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
+2023-10-12 16:20:04,490 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-12 16:20:11,310 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
+2023-10-12 16:20:12,369 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
+2023-10-12 16:20:12,389 logger_util -> INFO: GPON Status: O5
+2023-10-12 16:20:12,389 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-10-12 16:20:13,461 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:20:14,549 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:20:17,864 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-10-12 16:20:18,900 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:20:19,975 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
+2023-10-12 16:20:19,994 logger_util -> INFO: WAN IPv4 Address : 10.0.8.190
+2023-10-12 16:20:19,995 logger_util -> DEBUG: Checking WAN IPv6 Address
+2023-10-12 16:20:21,048 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:20:22,120 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
+2023-10-12 16:20:22,136 logger_util -> INFO: WAN IPv6 Address : 2405:201:0:1000:ad72:682b:28cd:4c86/128
+2023-10-12 16:20:22,137 logger_util -> DEBUG: Getting WAN Port Configuration
+2023-10-12 16:20:22,137 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
+2023-10-12 16:20:23,194 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-12 16:20:28,943 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
+2023-10-12 16:20:30,008 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-10-12 16:20:30,040 logger_util -> INFO: WAN Port Configuration found: 1015
+2023-10-12 16:20:30,041 logger_util -> DEBUG: Retrieving Firmware Version...
+2023-10-12 16:20:31,095 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:20:32,172 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:20:37,982 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
+2023-10-12 16:20:38,004 logger_util -> INFO: Firmware Version SKYWTF1_JCOW407_D2.52
+2023-10-12 16:20:38,005 logger_util -> INFO: Device health check completed successfully.
+2023-10-12 16:21:25,676 logger_util -> INFO: URL access is successful for at least one website
+2023-10-12 16:21:27,820 logger_util -> DEBUG: Default HTTP Service is running fine
+2023-10-12 16:21:27,821 logger_util -> DEBUG: Adding HTTPS Block Firewall Rules
+2023-10-12 16:21:27,825 logger_util -> DEBUG: Checking login status
+2023-10-12 16:21:27,853 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:21:28,923 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-12 16:21:30,053 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-12 16:21:32,585 logger_util -> DEBUG: Adding IPv4 Firewall Rule for HTTP
+2023-10-12 16:21:33,660 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-12 16:21:36,558 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
+2023-10-12 16:21:38,861 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
+2023-10-12 16:21:40,029 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:21:41,120 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:21:44,866 logger_util -> INFO: IPv4 Firewall Rule for HTTP is added successfully
+2023-10-12 16:21:44,866 logger_util -> DEBUG: Adding IPv6 Firewall Rule for HTTP
+2023-10-12 16:21:45,933 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-12 16:21:48,742 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
+2023-10-12 16:21:51,108 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_direction"]'
+2023-10-12 16:21:52,222 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
+2023-10-12 16:21:53,385 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:21:54,488 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:21:57,562 logger_util -> INFO: IPv6 Firewall Rule for HTTP is added successfully
+2023-10-12 16:24:31,447 logger_util -> ERROR: Unable to access any of the URL
+2023-10-12 16:24:33,493 logger_util -> INFO: Block Firewall Rule for HTTP is working as expected
+2023-10-12 16:24:33,495 logger_util -> DEBUG: Rechecking HTTP Service after Enabling firewall Rules
+2023-10-12 16:24:33,498 logger_util -> DEBUG: Checking login status
+2023-10-12 16:24:33,526 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:24:34,562 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:24:40,666 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-12 16:24:41,766 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-12 16:24:45,140 logger_util -> DEBUG: Editing IPv4 Firewall Rule for HTTP
+2023-10-12 16:24:46,192 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-12 16:24:48,572 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:24:49,647 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="firewallRules1"]/td[2]'
+2023-10-12 16:24:51,024 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="editMenu"]'
+2023-10-12 16:24:53,342 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:24:54,496 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:24:58,273 logger_util -> INFO: IPv4 Firewall Rule for HTTP is edited successfully
+2023-10-12 16:24:58,273 logger_util -> DEBUG: Editing IPv6 Firewall Rule for HTTP
+2023-10-12 16:24:59,331 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-12 16:25:02,240 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:25:03,311 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[3]'
+2023-10-12 16:25:04,670 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="editMenu"]'
+2023-10-12 16:25:07,304 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:25:08,419 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:25:12,328 logger_util -> INFO: IPv6 Firewall Rule for HTTP is edited successfully
+2023-10-12 16:25:58,619 logger_util -> INFO: URL access is successful for at least one website
+2023-10-12 16:26:00,744 logger_util -> INFO: Allow Firewall Rule for HTTP is working as expected
+2023-10-12 16:26:00,744 logger_util -> DEBUG: Removing the existing Rule
+2023-10-12 16:26:00,748 logger_util -> DEBUG: Checking login status
+2023-10-12 16:26:00,793 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:26:01,874 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:26:09,935 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-12 16:26:11,060 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-12 16:26:13,610 logger_util -> DEBUG: Deleting IPv4 Firewall Rule for HTTP
+2023-10-12 16:26:14,679 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-12 16:26:17,529 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:26:18,627 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="firewallRules1"]/td[2]'
+2023-10-12 16:26:20,030 logger_util -> DEBUG: Element found using locator: xpath='//li[@id='deleteMenu']'
+2023-10-12 16:26:24,449 logger_util -> INFO: IPv4 Firewall Rule for HTTP is deleted successfully
+2023-10-12 16:26:24,449 logger_util -> DEBUG: Deleting IPv6 Firewall Rule for HTTP
+2023-10-12 16:26:25,523 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-12 16:26:27,919 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:26:29,015 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[3]'
+2023-10-12 16:26:30,390 logger_util -> DEBUG: Element found using locator: xpath='//li[@id='deleteMenu']'
+2023-10-12 16:26:33,137 logger_util -> INFO: IPv6 Firewall Rule for HTTP is deleted successfully
+2023-10-12 16:26:33,137 logger_util -> DEBUG: Validating FTP Firewall Rule Functionality
+2023-10-12 16:26:33,138 logger_util -> DEBUG: Checking login status
+2023-10-12 16:26:33,149 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:26:33,150 logger_util -> DEBUG: Performing device health check...
+2023-10-12 16:26:33,150 logger_util -> DEBUG: Checking GPON status
+2023-10-12 16:26:33,150 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
+2023-10-12 16:26:34,170 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-12 16:26:39,042 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
+2023-10-12 16:26:40,087 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
+2023-10-12 16:26:40,100 logger_util -> INFO: GPON Status: O5
+2023-10-12 16:26:40,100 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-10-12 16:26:41,166 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:26:42,247 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:26:45,899 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-10-12 16:26:46,945 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:26:48,028 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
+2023-10-12 16:26:48,045 logger_util -> INFO: WAN IPv4 Address : 10.0.8.190
+2023-10-12 16:26:48,045 logger_util -> DEBUG: Checking WAN IPv6 Address
+2023-10-12 16:26:49,111 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:26:50,189 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
+2023-10-12 16:26:50,206 logger_util -> INFO: WAN IPv6 Address : 2405:201:0:1000:ad72:682b:28cd:4c86/128
+2023-10-12 16:26:50,207 logger_util -> DEBUG: Getting WAN Port Configuration
+2023-10-12 16:26:50,207 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
+2023-10-12 16:26:51,270 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-12 16:26:57,798 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
+2023-10-12 16:26:58,873 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-10-12 16:26:58,903 logger_util -> INFO: WAN Port Configuration found: 1015
+2023-10-12 16:26:58,904 logger_util -> DEBUG: Retrieving Firmware Version...
+2023-10-12 16:26:59,962 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-12 16:27:01,007 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:27:07,852 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
+2023-10-12 16:27:07,869 logger_util -> INFO: Firmware Version SKYWTF1_JCOW407_D2.52
+2023-10-12 16:27:07,870 logger_util -> INFO: Device health check completed successfully.
+2023-10-12 16:27:33,907 logger_util -> ERROR: Error occurred while connecting FTP server
+2023-10-12 16:27:33,909 logger_util -> DEBUG: Default HTTP Service is not running as expected
+2023-10-12 16:27:33,909 logger_util -> ERROR: Taking DBG log after an issue
+2023-10-12 16:28:02,649 logger_util -> DEBUG: dbglog taken at: 2023-10-12 16:28:02.649695
+2023-10-12 16:28:47,651 logger_util -> DEBUG: Adding FTP Block Firewall Rules
+2023-10-12 16:28:47,655 logger_util -> DEBUG: Checking login status
+2023-10-12 16:28:47,684 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:28:48,753 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-12 16:28:49,888 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-12 16:28:52,827 logger_util -> DEBUG: Adding IPv4 Firewall Rule for FTP
+2023-10-12 16:28:53,884 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-12 16:28:56,313 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
+2023-10-12 16:28:58,745 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
+2023-10-12 16:28:59,908 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:29:01,023 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:29:04,916 logger_util -> INFO: IPv4 Firewall Rule for FTP is added successfully
+2023-10-12 16:29:04,916 logger_util -> DEBUG: Adding IPv6 Firewall Rule for FTP
+2023-10-12 16:29:05,992 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-12 16:29:09,075 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[3]/input[2]'
+2023-10-12 16:29:11,748 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_direction"]'
+2023-10-12 16:29:12,890 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selSvrName"]'
+2023-10-12 16:29:14,021 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:29:15,114 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:29:19,966 logger_util -> INFO: IPv6 Firewall Rule for FTP is added successfully
+2023-10-12 16:29:46,014 logger_util -> ERROR: Error occurred while connecting FTP server
+2023-10-12 16:29:46,015 logger_util -> DEBUG: Block Firewall Rule for HTTP is working as expected
+2023-10-12 16:29:46,016 logger_util -> DEBUG: Rechecking FTP Service after Enabling firewall Rules
+2023-10-12 16:29:46,020 logger_util -> DEBUG: Checking login status
+2023-10-12 16:29:46,050 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:29:47,120 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:29:54,266 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-12 16:29:55,374 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-12 16:29:57,838 logger_util -> DEBUG: Editing IPv4 Firewall Rule for FTP
+2023-10-12 16:29:58,904 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-12 16:30:01,260 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:30:02,354 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="firewallRules1"]/td[2]'
+2023-10-12 16:30:03,687 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="editMenu"]'
+2023-10-12 16:30:08,144 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:30:09,283 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:30:13,131 logger_util -> INFO: IPv4 Firewall Rule for FTP is edited successfully
+2023-10-12 16:30:13,131 logger_util -> DEBUG: Editing IPv6 Firewall Rule for FTP
+2023-10-12 16:30:14,182 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-12 16:30:17,010 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:30:18,093 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[3]'
+2023-10-12 16:30:19,436 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="editMenu"]'
+2023-10-12 16:30:21,742 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_selFwAction"]'
+2023-10-12 16:30:22,874 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-12 16:30:26,002 logger_util -> INFO: IPv6 Firewall Rule for FTP is edited successfully
+2023-10-12 16:30:52,059 logger_util -> ERROR: Error occurred while connecting FTP server
+2023-10-12 16:30:52,060 logger_util -> DEBUG: Allow Firewall Rule for HTTP is not working as expected
+2023-10-12 16:30:52,060 logger_util -> ERROR: Taking DBG log after an issue
+2023-10-12 16:31:20,990 logger_util -> DEBUG: dbglog taken at: 2023-10-12 16:31:20.990460
+2023-10-12 16:32:05,997 logger_util -> DEBUG: Removing the existing Rule
+2023-10-12 16:32:06,001 logger_util -> DEBUG: Checking login status
+2023-10-12 16:32:06,032 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-12 16:32:07,111 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-12 16:32:13,986 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu4"]'
+2023-10-12 16:32:15,098 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_security_defaultPolicy"]'
+2023-10-12 16:32:18,927 logger_util -> DEBUG: Deleting IPv4 Firewall Rule for FTP
+2023-10-12 16:32:20,002 logger_util -> DEBUG: Element found using locator: xpath='//a[normalize-space()='IPv4 Firewall Rules']'
+2023-10-12 16:32:22,379 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:32:23,478 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="firewallRules1"]/td[2]'
+2023-10-12 16:32:24,874 logger_util -> DEBUG: Element found using locator: xpath='//li[@id='deleteMenu']'
+2023-10-12 16:32:29,846 logger_util -> INFO: IPv4 Firewall Rule for FTP is deleted successfully
+2023-10-12 16:32:29,847 logger_util -> DEBUG: Deleting IPv6 Firewall Rule for FTP
+2023-10-12 16:32:30,908 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[7]/ul/li[3]/a'
+2023-10-12 16:32:34,491 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="recordsData_info"]'
+2023-10-12 16:32:35,575 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[3]'
+2023-10-12 16:32:36,937 logger_util -> DEBUG: Element found using locator: xpath='//li[@id='deleteMenu']'
+2023-10-12 16:32:41,872 logger_util -> INFO: IPv6 Firewall Rule for FTP is deleted successfully

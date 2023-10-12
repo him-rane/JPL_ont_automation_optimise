@@ -46,6 +46,10 @@ obj=functional_smoke(driver)
 # obj.delete_firewall_rule('FTP')
 
 obj.TC_Functional_Sanity_002_1()
+obj.TC_Functional_Sanity_002_2()
+obj.TC_Functional_Sanity_002_3()
+
+# obj.ftp_check()
 # obj.static_wan_configuration();
 
 

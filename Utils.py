@@ -13,6 +13,7 @@ import os
 
 import locators
 from logger_util import logger
+from login import login
 
 class Utils:
 
@@ -32,6 +33,14 @@ class Utils:
             (By.ID, id_)
         ]
         time.sleep(1)
+        try:
+            self.driver.find_element(By.XPATH, "//div[@class='nav-side-menu']")
+        except:
+            logger.error("Login status : FALSE")
+            logger.warning("Try To Login Again")
+            obj=login(self.driver)
+            obj.webgui_login()
+
         for locator_type, locator_value in locators:
             try:
                 element = self.driver.find_element(locator_type, locator_value)
