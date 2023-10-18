@@ -28,9 +28,10 @@ IPv6FirewallRules_DeleteMenu="//li[@id='deleteMenu']",'#deleteMenu','deleteMenu'
 IPv6FirewallRules_Entries='//*[@id="recordsData_info"]','#recordsData_info','recordsData_info'
 IPv6FirewallRules_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'
 # DashboardMenu
-DashboardMenu_Logout_Dropdown='//*[@id="main"]/div[1]/div[1]/p','.dropbtn'
-DashboardMenu_Logout_Dropdown_Logout='//*[@id="tf1_logoutAnchor"]','#tf1_logoutAnchor','tf1_logoutAnchor'
-DashboardMenu_Logout_Dropdown_Logout_OK='//*[@id="tf1_logOutContent"]/div/a[2]','body > div:nth-child(1) > div:nth-child(2) > form:nth-child(6) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)'
+
+DashboardMenu_Logout_Dropdown="//p[@class='dropbtn']",'.dropbtn'
+DashboardMenu_Logout_Dropdown_Logout="//div[@class='dropdown-content']",'.dropdown-content','tf1_logoutAnchor'
+DashboardMenu_Logout_Dropdown_Logout_OK="//a[normalize-space()='OK']",'body > div:nth-child(1) > div:nth-child(2) > form:nth-child(6) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)'
 
 #Administration >> Maintenance>>
 AdministrationMenu_MaintenanceSubMenu='//*[@id="tf1_administration_backupRestore"]','#tf1_administration_backupRestore','tf1_administration_backupRestore'
@@ -59,7 +60,11 @@ AdministrationMenu_UsersConfiguration_TimeOut='//*[@id="tf1_loginTimeout"]','#tf
 
 #Network Menu>>Wireless
 NetworkMenu_WirelessSubMenu = "//a[@id='tf1_network_accessPoints']","#tf1_network_accessPoints","tf1_network_accessPoints"
-
+NetworkMenu_LanSubMenu="//a[@id='tf1_network_lanIPv4Config']",'#tf1_network_lanIPv4Config','tf1_network_lanIPv4Config'
+LANIPv4Config_StartIP="//input[@id='tf1_dhcpStartIp']",'#tf1_dhcpStartIp','tf1_dhcpStartIp'
+LANIPv4Config_EndIP="//input[@id='tf1_dhcpEndIp']",'#tf1_dhcpEndIp','tf1_dhcpEndIp'
+LANIPv4Config_DomainName="//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName'
+LANIPv4Config_SaveBtn="//input[@title='Save']","input[title='Save']"
 #Login Page
 LoginPage_UserName= '//*[@id="tf1_userName"]', '#tf1_userName', 'tf1_userName'
 LoginPage_Password= '//*[@id="tf1_password"]', '#tf1_password', 'tf1_password'

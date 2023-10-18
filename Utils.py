@@ -33,13 +33,13 @@ class Utils:
             (By.ID, id_)
         ]
         time.sleep(1)
-        try:
-            self.driver.find_element(By.XPATH, "//div[@class='nav-side-menu']")
-        except:
-            logger.error("Login status : FALSE")
-            logger.warning("Try To Login Again")
-            obj=login(self.driver)
-            obj.webgui_login()
+        # try:
+        #     self.driver.find_element(By.XPATH, "//div[@class='nav-side-menu']")
+        # except:
+        #     logger.error("Login status : FALSE")
+        #     logger.warning("Try To Login Again")
+        #     obj=login(self.driver)
+        #     obj.webgui_login()
 
         for locator_type, locator_value in locators:
             try:
@@ -223,3 +223,88 @@ class Utils:
         self.driver.get('http://192.168.29.1/dbglog.cgi')
         logger.debug('dbglog taken at: {}'.format(datetime.datetime.now()))
         time.sleep(45)
+
+    def website_check(self):
+        logger.debug('Checking Internet Connectivity')
+        from selenium import webdriver
+        tempDriver = webdriver.Chrome()
+
+        success_count = 0
+
+        urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
+                'http://www.softwareqatest.com/qatweb1.html',
+                'https://www.facebook.com']
+
+        for url in urls:
+            try:
+                tempDriver.execute_script("window.open('');")
+                tempDriver.switch_to.window(tempDriver.window_handles[-1])
+                tempDriver.get(url)
+                title = tempDriver.title
+
+                if title != '':
+                    success_count += 1
+                if "youtube.com" in url:
+                    body_element = tempDriver.find_element(By.XPATH,"//body")
+                    body_element.send_keys(Keys.SPACE)
+                time.sleep(10)
+            except Exception as e:
+                logger.error(f"An error occurred while checking website: {str(e)}")
+
+        time.sleep(5)
+        if success_count > 0:
+            logger.info('Internet access is successful for at least one website')
+            return True
+        else:
+            logger.error('Unable to access the Internet')
+            return False
+
+
+    def ping_ipv4_from_lan_client(self):
+        logger.debug('Checking IPv4 Connectivity with Ping')
+        command = 'cmd /c ping google.com -4 -n 10'
+        ipv4 = 0
+
+        try:
+            cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            out = cmd.communicate()
+            output = str(out[0])
+
+            if 'time' and 'TTL' in output:
+                logger.info('IPv4 Ping is successful')
+                return True
+            else:
+                ping_fail_check_1 = 'could not find host'
+                ping_fail_check_2 = 'Request timed out'
+                if ('time' not in output) and (ping_fail_check_1 in output or ping_fail_check_2 in output):
+                    logger.error('Ping IPv4 Failed')
+                    return False
+
+        except Exception as e:
+            logger.error(f'Error: {str(e)}')
+            return False
+
+    def ping_ipv6_from_lan_client(self):
+        logger.info('Checking IPv6 Connectivity with Ping')
+        command = 'cmd /c ping google.com -6 -n 10'
+
+        try:
+            cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            out = cmd.communicate()
+            output = str(out[0])
+
+            if 'time' in output and 'ms' in output:
+                logger.info('IPv6 Ping is successful')
+                return True
+            else:
+                ping_fail_check_1 = 'unreachable'
+                ping_fail_check_2 = 'Request timed out'
+                ping_fail_check_3 = 'could not find'
+                if ('time' not in output) and (ping_fail_check_1 in output or ping_fail_check_2 in output or ping_fail_check_3 in output):
+                    logger.error('Ping IPv6 Failed')
+                    return False
+
+        except Exception as e:
+            logger.error(f'Error: {str(e)}')
+            return False
+

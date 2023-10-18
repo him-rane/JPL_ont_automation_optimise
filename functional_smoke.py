@@ -410,8 +410,7 @@ class functional_smoke:
         logger.info("Reboot from WebGUI 5 Iterations")
         for i in range(5):
             # Your code here
-            logger.debug("Reboot Iteration ", i)
-
+            logger.debug(f"Reboot Iteration {i}")
             if self.device_health.healh_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
@@ -688,7 +687,6 @@ class functional_smoke:
             logger.info(f"IPv6 Firewall Rule for {service_type} is deleted successfully")
         except:
             logger.error(f"Error occurred while deleting IPv6 rules for {service_type}: {str(E)}")
-
     def edit_firewall_rule(self, service_type='HTTP', action_type='DROP'):
 
         self.login.webgui_login()
@@ -738,7 +736,6 @@ class functional_smoke:
 
         except Exception as E:
             logger.error(f"Error occurred while editing IPv6 rules for {service_type}: {str(E)}")
-
     def TC_Functional_Sanity_002_1(self):
         logger.info('Validating HTTPS Firewall Rule Functionality')
         try:
@@ -834,8 +831,6 @@ class functional_smoke:
         except Exception as E:
             logger.error(f"Error occurred while checking HTTP rules: {str(E)}")
             return False
-            
-
     def TC_Functional_Sanity_002_3(self):
         logger.debug('Validating FTP Firewall Rule Functionality')
         try:
@@ -875,4 +870,75 @@ class functional_smoke:
         except Exception as E:
             logger.error(f"Error occurred while checking FTP rules: {str(E)}")
             return False
+
+    def TC_Functional_Sanity_005(self):
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            def get_lan_client_ip():
+                command = 'cmd /c ipconfig'
+                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                out = cmd.communicate()
+                output = str(out[0])
+                data = output.split('\\r\\n')
+                lan_client_ip = ''
+                for ip in data:
+                    if 'IPv4 Address' in ip:
+                        lan_client_ip = ip.split(':')[-1].strip()
+
+                return lan_client_ip
+
+            ip = get_lan_client_ip()
+            last_number = ip.split('.')[-1]
+
+            end_ip = int(last_number) - 5
+            if end_ip < 15:
+                end_ip = 100
+
+            start_ip = end_ip - 10
+
+            start_ip_address = '192.168.29.{}'.format(start_ip)
+            end_ip_address = '192.168.29.{}'.format(end_ip)
+
+            self.login.webgui_login()
+            logger.debug('Configuring Limit for LAN IP')
+            # go to Network Menu
+            self.utils.find_element(*locators.NetworkMenu).click()
+            self.utils.find_element(*locators.NetworkMenu_LanSubMenu).click()
+
+            self.utils.find_element(*locators.LANIPv4Config_StartIP).clear()
+            self.utils.find_element(*locators.LANIPv4Config_StartIP).send_keys(start_ip_address)
+
+            self.utils.find_element(*locators.LANIPv4Config_EndIP).clear()
+            self.utils.find_element(*locators.LANIPv4Config_EndIP).send_keys(end_ip_address)
+
+            self.utils.find_element(*locators.LANIPv4Config_DomainName).clear()
+            self.utils.find_element(*locators.LANIPv4Config_DomainName).send_keys('TestRange')
+
+            self.utils.find_element(*locators.LANIPv4Config_SaveBtn).click()
+
+            logger.debug('Releasing LAN Client Ip and Renewing IP')
+            command = 'cmd /c ipconfig /renew'
+            cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+
+            time.sleep(30)
+            new_ip_address = get_lan_client_ip()
+            if new_ip_address == '':
+                command = 'cmd /c ipconfig /renew'
+                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                new_ip_address = get_lan_client_ip()
+
+            new_ip = int(new_ip_address.split('.')[-1])
+            if end_ip > new_ip > start_ip:
+                logger.info('LAN IP Limit is successfully validated')
+                return True
+            else:
+                logger.error('LAN Client IP is outside configured limit')
+                self.utils.get_dbglog()
+                return False
+        except Exception as E:
+            logger.error(f"Error occur while configuring limit for LAN IP : {str(E)}")
+
+
 
