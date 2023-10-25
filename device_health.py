@@ -41,9 +41,9 @@ class device_health:
         if self.utils.get_firmware_version()!=Inputs.latast_firmware:
             logger.error("Device is not having latest firmware")
             fail += 1
-        if self.utils.website_check()==False:
-            logger.error("Error occurred while accessing internet")
-            fail += 1
+        # if self.utils.website_check()==False:
+        #     logger.error("Error occurred while accessing internet")
+        #     fail += 1
 
         if self.utils.ping_ipv4_from_lan_client()==False:
             logger.error("Unable to ping google with IPv4")

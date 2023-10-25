@@ -60,7 +60,6 @@ class login:
                             self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
                             self.driver.find_element(By.ID, 'tf1_password').send_keys('PR@shant2301')
                             self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
-                    self.login.webgui_login
                 except Exception as e:
                     logger.error(e)
 
@@ -72,7 +71,7 @@ class login:
                 try:
                     self.driver.find_element(By.XPATH, '//*[@id="tf1_forcedLoginContent"]/div/a').click()
                 except Exception as e:
-                    logger.error("Error occurred while closing the login popup")
+                    logger.warning("Error occurred while closing the login popup")
 
 
             time.sleep(5)

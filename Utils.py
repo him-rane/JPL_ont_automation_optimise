@@ -285,7 +285,7 @@ class Utils:
             return False
 
     def ping_ipv6_from_lan_client(self):
-        logger.info('Checking IPv6 Connectivity with Ping')
+        logger.debug('Checking IPv6 Connectivity with Ping')
         command = 'cmd /c ping google.com -6 -n 10'
 
         try:
