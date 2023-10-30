@@ -32,8 +32,8 @@ class functional_smoke:
         self.login = login(driver)
         self.device_health = device_health(driver)
 
-    def TC_Functional_Smoke_002(self):
-        logger.debug('Starting TC_Functional_Smoke_002: Validating MAC Address after Reboot and Reset')
+    def TC_Functional_Smoke_4(self):
+        logger.debug('Validating MAC Address after Reboot and Reset')
         try:
             if self.device_health.healh_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
@@ -101,8 +101,78 @@ class functional_smoke:
         except Exception as e:
             logger.error("Error occurred while executing TC_Functional_Smoke_002: %s", str(e))
             return False
+    def TC_Functional_Sanity_5(self):
+        logger.info("DHCP: Validate Functionality of dhcp server with limit IP address pool")
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
 
-    def TC_Finctional_Smoke_09(self):
+            def get_lan_client_ip():
+                command = 'cmd /c ipconfig'
+                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                out = cmd.communicate()
+                output = str(out[0])
+                data = output.split('\\r\\n')
+                lan_client_ip = ''
+                for ip in data:
+                    if 'IPv4 Address' in ip:
+                        lan_client_ip = ip.split(':')[-1].strip()
+
+                return lan_client_ip
+
+            ip = get_lan_client_ip()
+            last_number = ip.split('.')[-1]
+
+            end_ip = int(last_number) - 5
+            if end_ip < 15:
+                end_ip = 100
+
+            start_ip = end_ip - 10
+
+            start_ip_address = '192.168.29.{}'.format(start_ip)
+            end_ip_address = '192.168.29.{}'.format(end_ip)
+
+            self.login.webgui_login()
+            logger.debug('Configuring Limit for LAN IP')
+            # go to Network Menu
+            self.utils.find_element(*locators.NetworkMenu).click()
+            self.utils.find_element(*locators.NetworkMenu_LanSubMenu).click()
+
+            self.utils.find_element(*locators.LANIPv4Config_StartIP).clear()
+            self.utils.find_element(*locators.LANIPv4Config_StartIP).send_keys(start_ip_address)
+
+            self.utils.find_element(*locators.LANIPv4Config_EndIP).clear()
+            self.utils.find_element(*locators.LANIPv4Config_EndIP).send_keys(end_ip_address)
+
+            self.utils.find_element(*locators.LANIPv4Config_DomainName).clear()
+            self.utils.find_element(*locators.LANIPv4Config_DomainName).send_keys('TestRange')
+
+            self.utils.find_element(*locators.LANIPv4Config_SaveBtn).click()
+
+            logger.debug('Releasing LAN Client Ip and Renewing IP')
+            command = 'cmd /c ipconfig /renew'
+            cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+
+            time.sleep(30)
+            new_ip_address = get_lan_client_ip()
+            if new_ip_address == '':
+                command = 'cmd /c ipconfig /renew'
+                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                new_ip_address = get_lan_client_ip()
+
+            new_ip = int(new_ip_address.split('.')[-1])
+            if end_ip > new_ip > start_ip:
+                logger.info('LAN IP Limit is successfully validated')
+                return True
+            else:
+                logger.error('LAN Client IP is outside configured limit')
+                self.utils.get_dbglog()
+                return False
+        except Exception as E:
+            logger.error(f"Error occur while configuring limit for LAN IP : {str(E)}")
+            return False
+    def TC_Finctional_Smoke_9(self):
         logger.info("Validate 'Logout' button functionality in web GUI")
         try:
             if self.device_health.healh_check() == False:
@@ -119,7 +189,6 @@ class functional_smoke:
         except Exception as E:
             logger.error("Error occurred while executing TC_Functional_Smoke_09: %s", str(E))
             return False
-
     def TC_Functional_Smoke_10(self):
         logger.info('Validating Date & Time functionality in HG')
         try:
@@ -163,12 +232,11 @@ class functional_smoke:
 
             return current_time != changed_time
 
-        except Exception as e:
-            logger.error("Error occurred while executing TC_Functional_Smoke_003: %s", str(e))
+        except Exception as E:
+            logger.error("Error occurred while executing TC_Functional_Smoke_003: %s", str(E))
             return False
-
-    def TC_Functional_Smoke_008(self):
-        logger.info('Starting Test Case TC_Functional_Smoke_008')
+    def TC_Functional_Smoke_26(self):
+        logger.info('Validate Administration User Password management functionality in HG')
         try:
             if not self.device_health.healh_check():
                 logger.error('Device health check failed. Exiting the test.')
@@ -230,86 +298,88 @@ class functional_smoke:
                 logger.error('Test Case Failed')
                 self.utils.get_dbglog()
                 return False
-        except Exception as e:
-            logger.error(f"An error occurred: {str(e)}")
+        except Exception as E:
+            logger.error("Error occurred while executing TC_Functional_Smoke_26: %s", str(E))
             return False
-
-    def TC_Functional_Smoke_009(self):
+    def TC_Functional_Smoke_27(self):
         logger.info('Validating Guest User & Password management functionality')
-        if self.device_health.healh_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
-            return False
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
 
-        self.utils.find_element(*locators.AdministrationMenu).click()
-        self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
+            self.utils.find_element(*locators.AdministrationMenu).click()
+            self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
 
-        user_type = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row1Col2).text
-        if user_type.lower().strip() == 'guest':
-            user = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row1Col1)
-        else:
-            user_type = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row2Col2).text
+            user_type = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row1Col2).text
             if user_type.lower().strip() == 'guest':
-                user = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row2Col1)
+                user = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row1Col1)
+            else:
+                user_type = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row2Col2).text
+                if user_type.lower().strip() == 'guest':
+                    user = self.utils.find_element(*locators.AdministrationMenu_UserSubMenu_Row2Col1)
 
-        action = ActionChains(self.driver)
-        action.context_click(user).perform()
-        self.utils.find_element('//*[@id="editMenu"]').click()
+            action = ActionChains(self.driver)
+            action.context_click(user).perform()
+            self.utils.find_element('//*[@id="editMenu"]').click()
 
-        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.temp_password)
-        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.temp_password)
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.temp_password)
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.temp_password)
 
-        button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
-        button_src = button.get_attribute('src')
+            button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
+            button_src = button.get_attribute('src')
 
-        if 'button_off.png' in button_src:
-            button.click()
+            if 'button_off.png' in button_src:
+                button.click()
 
-        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
-        self.utils.logout_gui()
-
-        self.login_as_new_user(Inputs.guest, Inputs.temp_password)
-
-        # go to Network
-        message = self.enable_disable_AP1()
-
-        self.utils.find_element(*locators.AdministrationMenu).click()
-        self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
-
-        user_type = self.utils.find_element('//*[@id="users2"]/td[2]').text
-        if user_type.lower().strip() == 'guest':
-            user = self.utils.find_element('//*[@id="users2"]/td[1]')
-        else:
-            user_type = self.utils.find_element('//*[@id="users1"]/td[2]').text
-            if user_type.lower().strip() == 'guest':
-                user = self.utils.find_element('//*[@id="users1"]/td[1]')
-
-        action = ActionChains(self.driver)
-        action.context_click(user).perform()
-        self.utils.find_element('//*[@id="editMenu"]').click()
-
-        logger.debug("Reverting password")
-        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.password)
-        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.password)
-
-        button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
-        button_src = button.get_attribute('src')
-
-        if 'button_on.png' in button_src:
-            button.click()
-
-        self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
-        time.sleep(5)
-
-        if 'succeeded' not in message:
-            logger.info('Guest Rights are checked and It\'s working fine')
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
             self.utils.logout_gui()
-            return True
-        else:
-            logger.error('Test Case Failed')
-            self.utils.get_dbglog()
-            return False
 
-    def TC_Functional_Smoke_010_1(self):
+            self.login_as_new_user(Inputs.guest, Inputs.temp_password)
+
+            # go to Network
+            message = self.enable_disable_AP1()
+
+            self.utils.find_element(*locators.AdministrationMenu).click()
+            self.utils.find_element(*locators.AdministrationMenu_UserSubMenu).click()
+
+            user_type = self.utils.find_element('//*[@id="users2"]/td[2]').text
+            if user_type.lower().strip() == 'guest':
+                user = self.utils.find_element('//*[@id="users2"]/td[1]')
+            else:
+                user_type = self.utils.find_element('//*[@id="users1"]/td[2]').text
+                if user_type.lower().strip() == 'guest':
+                    user = self.utils.find_element('//*[@id="users1"]/td[1]')
+
+            action = ActionChains(self.driver)
+            action.context_click(user).perform()
+            self.utils.find_element('//*[@id="editMenu"]').click()
+
+            logger.debug("Reverting password")
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_Pass).send_keys(Inputs.password)
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_CfmPass).send_keys(Inputs.password)
+
+            button = self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_ToggleBtn)
+            button_src = button.get_attribute('src')
+
+            if 'button_on.png' in button_src:
+                button.click()
+
+            self.utils.find_element(*locators.AdministrationMenu_UsersConfiguration_SaveBtn).click()
+            time.sleep(5)
+
+            if 'succeeded' not in message:
+                logger.info('Guest Rights are checked and It\'s working fine')
+                self.utils.logout_gui()
+                return True
+            else:
+                logger.error('Test Case Failed')
+                self.utils.get_dbglog()
+                return False
+        except Exception as E:
+            logger.error("Error occurred while executing TC_Functional_Smoke_27: %s", str(E))
+            return False
+    def TC_Functional_Smoke_28_1(self):
         logger.info('Validating Custom Admin User & Password management functionality')
         try:
             if self.device_health.healh_check() == False:
@@ -357,10 +427,9 @@ class functional_smoke:
                 self.utils.get_dbglog()
                 return False
         except Exception as e:
-            logger.error("Error occurred while executing TC_Functional_Smoke_010_1: %s", str(e))
+            logger.error("Error occurred while executing TC_Functional_Smoke_28_1: %s", str(e))
             return False
-
-    def TC_Functional_Smoke_010_2(self):
+    def TC_Functional_Smoke_28_2(self):
         logger.info('Validating Custom Guest User & Password management functionality')
         try:
             if self.device_health.healh_check() == False:
@@ -417,29 +486,31 @@ class functional_smoke:
                 self.utils.get_dbglog()
                 return False
         except Exception as e:
-            logger.error("Error occurred while executing TC_Functional_Smoke_010_2: %s", str(e))
+            logger.error("Error occurred while executing TC_Functional_Smoke_28_2: %s", str(e))
             return False
+    def TC_Functional_Smoke_32(self):
+        logger.info("Validate the maintenance functionality like Reboot from Web GUI - 5 Iterations")
+        try:
+            for i in range(5):
+                # Your code here
+                logger.debug(f"Reboot Iteration {i}")
+                if self.device_health.healh_check() == False:
+                    logger.error('Device health check failed. Exiting the test.')
+                    return False
 
-    def TC_Functional_Smoke_018(self):
-        logger.info("Reboot from WebGUI 5 Iterations")
-        for i in range(5):
-            # Your code here
-            logger.debug(f"Reboot Iteration {i}")
-            if self.device_health.healh_check() == False:
-                logger.error('Device health check failed. Exiting the test.')
-                return False
+                    # go to Administration >> Maintenance >> Reboot
+                self.utils.find_element(*locators.AdministrationMenu).click()
+                self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+                self.utils.find_element(*locators.Maintenance_BackupReboot_RebootButton).click()
 
-                # go to Administration >> Maintenance >> Reboot
-            self.utils.find_element(*locators.AdministrationMenu).click()
-            self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
-            self.utils.find_element(*locators.Maintenance_BackupReboot_RebootButton).click()
+                self.utils.accept_alert()
 
-            self.utils.accept_alert()
-
-            logger.debug('Reseting Device (Estimated Time: 200 Seconds)')
-            time.sleep(200)
-
-            self.login.webgui_login()
+                logger.debug('Reseting Device (Estimated Time: 200 Seconds)')
+                time.sleep(200)
+                # self.login.webgui_login()
+        except Exception as e:
+            logger.error("Error occurred while executing TC_Functional_Smoke_32: %s", str(e))
+            return False
 
     def enable_disable_AP1(self):
         self.utils.find_element(*locators.NetworkMenu).click()
@@ -621,63 +692,68 @@ class functional_smoke:
             if 'fail' in str(E):
                 return False
 
-    def TC_Functional_Smoke_018(self):
-        if self.device_health.healh_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
-            return False
+    def TC_Functional_Smoke_39(self):
+        logger.info("Validate default firewall functionality ")
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
 
-        self.utils.find_element(*locators.SecurityMenu).click()
-        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
-        self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[3]/p/input').click()
-        self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[5]/input[1]').click()
+            self.utils.find_element(*locators.SecurityMenu).click()
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
+            self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[3]/p/input').click()
+            self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[5]/input[1]').click()
 
-        if self.utils.ping_ipv4_from_lan_client() == False and self.utils.ping_ipv6_from_lan_client() == False:
-            logger.info('Block Always functionality is working fine with ping ipv4 and Ipv6')
+            if self.utils.ping_ipv4_from_lan_client() == False and self.utils.ping_ipv6_from_lan_client() == False:
+                logger.info('Block Always functionality is working fine with ping ipv4 and Ipv6')
 
-        logger.debug('Checking Block Always functionality')
+            logger.debug('Checking Block Always functionality')
 
-        fails = 0
-        urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
-                'https://www.onlinesbi.sbi',
-                'https://www.facebook.com']
-        if not self.website_check(urls):
-            logger.info(' Block Always functioanality with Youtube streamingn working fine')
-        else:
-            fails += 1
+            fails = 0
+            urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
+                    'https://www.onlinesbi.sbi',
+                    'https://www.facebook.com']
+            if not self.website_check(urls):
+                logger.info(' Block Always functioanality with Youtube streamingn working fine')
+            else:
+                fails += 1
 
-        logger.debug("Reverting back the changes to Allow Always")
-        self.driver.refresh()
-        self.utils.find_element("/html/body/div/div/h1/a").click()
-        self.login.webgui_login()
+            logger.debug("Reverting back the changes to Allow Always")
+            self.driver.refresh()
+            self.utils.find_element("/html/body/div/div/h1/a").click()
+            self.login.webgui_login()
 
-        self.utils.find_element(*locators.SecurityMenu).click()
-        self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
+            self.utils.find_element(*locators.SecurityMenu).click()
+            self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
 
-        self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[1]/p/input').click()
+            self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[1]/p/input').click()
 
-        self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[5]/input[1]').click()
+            self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[5]/input[1]').click()
 
-        logger.debug('Checking Allow Always functionality')
-        if self.utils.ping_ipv4_from_lan_client() == True:
-            logger.info('Allow Always functionality is working fine with ping ipv4')
-        else:
-            fails += 1
-        if self.utils.ping_ipv6_from_lan_client() == True:
-            logger.info('Allow Always functionality is working fine with ping Ipv6')
-        else:
-            fails += 1
+            logger.debug('Checking Allow Always functionality')
+            if self.utils.ping_ipv4_from_lan_client() == True:
+                logger.info('Allow Always functionality is working fine with ping ipv4')
+            else:
+                fails += 1
+            if self.utils.ping_ipv6_from_lan_client() == True:
+                logger.info('Allow Always functionality is working fine with ping Ipv6')
+            else:
+                fails += 1
 
-        urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
-                'https://www.onlinesbi.sbi',
-                'https://www.facebook.com']
-        if self.website_check(urls):
-            logger.info(' Allow Always functionality working fine')
-        else:
-            fails += 1
+            urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
+                    'https://www.onlinesbi.sbi',
+                    'https://www.facebook.com']
+            if self.website_check(urls):
+                logger.info(' Allow Always functionality working fine')
+            else:
+                fails += 1
 
-        if fails==0:
-            return True
-        else:
+            if fails==0:
+                return True
+            else:
+                return False
+        except Exception as e:
+            logger.error("Error occurred while executing TC_Functional_Smoke_39: %s", str(e))
             return False
 
     def add_firewall_rule(self, service_type='HTTP', action_type='DROP', rule_type='Outbound'):
@@ -943,76 +1019,7 @@ class functional_smoke:
             logger.error(f"Error occurred while checking FTP rules: {str(E)}")
             return False
 
-    def TC_Functional_Sanity_005(self):
-        logger.info("DHCP: Validate Functionality of dhcp server with limit IP address pool")
-        try:
-            if self.device_health.healh_check() == False:
-                logger.error('Device health check failed. Exiting the test.')
-                return False
 
-            def get_lan_client_ip():
-                command = 'cmd /c ipconfig'
-                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                out = cmd.communicate()
-                output = str(out[0])
-                data = output.split('\\r\\n')
-                lan_client_ip = ''
-                for ip in data:
-                    if 'IPv4 Address' in ip:
-                        lan_client_ip = ip.split(':')[-1].strip()
-
-                return lan_client_ip
-
-            ip = get_lan_client_ip()
-            last_number = ip.split('.')[-1]
-
-            end_ip = int(last_number) - 5
-            if end_ip < 15:
-                end_ip = 100
-
-            start_ip = end_ip - 10
-
-            start_ip_address = '192.168.29.{}'.format(start_ip)
-            end_ip_address = '192.168.29.{}'.format(end_ip)
-
-            self.login.webgui_login()
-            logger.debug('Configuring Limit for LAN IP')
-            # go to Network Menu
-            self.utils.find_element(*locators.NetworkMenu).click()
-            self.utils.find_element(*locators.NetworkMenu_LanSubMenu).click()
-
-            self.utils.find_element(*locators.LANIPv4Config_StartIP).clear()
-            self.utils.find_element(*locators.LANIPv4Config_StartIP).send_keys(start_ip_address)
-
-            self.utils.find_element(*locators.LANIPv4Config_EndIP).clear()
-            self.utils.find_element(*locators.LANIPv4Config_EndIP).send_keys(end_ip_address)
-
-            self.utils.find_element(*locators.LANIPv4Config_DomainName).clear()
-            self.utils.find_element(*locators.LANIPv4Config_DomainName).send_keys('TestRange')
-
-            self.utils.find_element(*locators.LANIPv4Config_SaveBtn).click()
-
-            logger.debug('Releasing LAN Client Ip and Renewing IP')
-            command = 'cmd /c ipconfig /renew'
-            cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-
-            time.sleep(30)
-            new_ip_address = get_lan_client_ip()
-            if new_ip_address == '':
-                command = 'cmd /c ipconfig /renew'
-                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                new_ip_address = get_lan_client_ip()
-
-            new_ip = int(new_ip_address.split('.')[-1])
-            if end_ip > new_ip > start_ip:
-                logger.info('LAN IP Limit is successfully validated')
-                return True
-            else:
-                logger.error('LAN Client IP is outside configured limit')
-                self.utils.get_dbglog()
-                return False
-        except Exception as E:
-            logger.error(f"Error occur while configuring limit for LAN IP : {str(E)}")
 
     def TC_Functional_Smoke_021(self):
         if self.device_health.healh_check() == False:
@@ -1058,109 +1065,295 @@ class functional_smoke:
         return success  # suceess should be 1 for assertion
 
     def TC_Functional_Smoke_029(self):
+        logger.info("Verify the dashboard page information of ONT")
+        try:
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            success_count = 0
+
+            get_firmware_version = self.utils.get_firmware_version()
+            if get_firmware_version == Inputs.latast_firmware:
+                logger.info('Firmware version is verified on Dashboard successfully')
+                success_count += 1
+            else:
+                logger.error('Firmware Version is not same as required\n Please check Input File details or Firmware in device')
+
+
+            get_model = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p','#main > div.contentMidArea > div.mainContentDBord > div.diviceStatusBlock > div.diviceStatus > div:nth-child(5) > p').text
+
+
+            model_ = Inputs.latast_firmware.split('_')[1]
+            if get_model == model_:
+                logger.info('Model Name is verified on Dashboard successfully')
+                success_count += 1
+            else:
+                logger.error('Model name is not same as required')
+
+            get_serial_number = self.utils.get_serial_number()
+            if len(get_serial_number) == 15 and get_serial_number != '000000000000000':
+                logger.info('Serial Number is verified on Dashboard successfully')
+                success_count += 1
+            else:
+                logger.error('Serial number is invalid')
+
+            get_ap1_ssid = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[7]/p').text
+            get_ap4_ssid = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[8]/p').text
+
+            if get_ap1_ssid != '' and get_ap4_ssid != '':
+                logger.info('Primary AP SSID Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.info('Primary AP SSID Information is missing on Dashboard')
+
+            wan_mac_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p').text
+
+            if wan_mac_address != '' and len(wan_mac_address) == 17:
+                logger.info('WAN MAC Address Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('WAN MAC Address Information is missing on Dashboard')
+
+            lan_mac_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[10]/p').text
+
+            if lan_mac_address != '' and len(lan_mac_address) == 17:
+                logger.info('LAN MAC Address Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('LAN MAC Address Information is missing on Dashboard')
+
+            wan_ip_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p').text
+            lan_ip_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[11]/p').text
+
+            if wan_ip_address != '0.0.0.0' and lan_ip_address != '0.0.0.0' and wan_ip_address != '' and lan_ip_address != '':
+                logger.info('WAN and LAN IP Address Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('WAN and LAN Address Information are missing on Dashboard')
+
+            wan_status = self.utils.find_element('//body[1]/div[1]/div[2]/div[6]/div[2]/div[4]/div[3]/div[6]/p[1]/span[1]')
+            lan_status = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[12]/p/span')
+            if wan_status.get_attribute('class') == 'yesNo' and lan_status.get_attribute('class') == 'yesNo':
+                logger.info('WAN and LAN Status Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('WAN and LAN Status Information are missing on Dashboard')
+
+            tr69_status = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[2]/div[5]/p/span')
+            if tr69_status.get_attribute('class') == 'yesNo':
+                logger.info('TR-069 Status Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('TR-069 Status Information is missing on Dashboard')
+
+            wan_ipv6_1 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]').text
+            wan_ipv6_2 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]').text
+
+            if wan_ipv6_1 != '' and wan_ipv6_2 != '':
+                logger.info('WAN IPv6 Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('WAN IPv6 Information are missing on Dashboard')
+
+            lan_ipv6_1 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[1]').text
+            lan_ipv6_2 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[2]').text
+
+            if lan_ipv6_1 != '' and lan_ipv6_2 != '':
+                logger.info('LAN IPv6 Information exist on Dashboard')
+                success_count += 1
+            else:
+                logger.error('LAN IPv6 Information are missing on Dashboard')
+
+            if success_count != 11:
+                return False
+                self.utils.get_dbglog()
+
+            return True
+        except Exception as e:
+            logger.error("Error occurred while executing TC_Functional_Smoke_029: %s", str(e))
+            return False
+
+    def TC_Functional_Sanity_007(self):
+        logger.info("Validate the static IP allocation functionalitu to WAN side of the ONT")
         if self.device_health.healh_check() == False:
             logger.error('Device health check failed. Exiting the test.')
             return False
-        success_count = 0
 
-        get_firmware_version = self.utils.get_firmware_version()
-        if get_firmware_version == Inputs.latast_firmware:
-            logger.info('Firmware version is verified on Dashboard successfully')
-            success_count += 1
+        # Configuring Static WAN IP
+        # logger.info('Configuring Static WAN IPv4')
+        # time.sleep(10)
+        # driver.find_element(By.XPATH, '//*[@id="menu1"]').send_keys('wan')
+        # time.sleep(2)
+        # driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi1"]').click()
+        # time.sleep(2)
+
+
+        self.utils.search_gui('WAN IPv4 Configuration')
+        wan = Select(self.utils.find_element("//select[@id='tf1_ispType']"))
+        wan.select_by_value('1')
+
+        # Configuring Static IPv4
+        logger.info('Configuring IP type to Static')
+        static_wan_address = '20.15.10.17'
+        subnet = '255.255.255.0'
+        gateway = '20.15.10.1'
+        primary_dns = '1.2.3.4'
+        secondary_dns = '1.2.3.5'
+        self.utils.find_element( '//*[@id="tf1_stIpAddr"]').send_keys(static_wan_address)
+        self.utils.find_element( '//*[@id="tf1_stIpSnetMask"]').send_keys(subnet)
+        self.utils.find_element( '//*[@id="tf1_stGwIpAddr"]').send_keys(gateway)
+        self.utils.find_element( '//*[@id="tf1_primaryDns"]').clear()
+        self.utils.find_element( '//*[@id="tf1_primaryDns"]').send_keys(primary_dns)
+        self.utils.find_element( '//*[@id="tf1_secDns"]').clear()
+        self.utils.find_element( '//*[@id="tf1_secDns"]').send_keys(secondary_dns)
+        self.utils.find_element( '//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]').click()
+
+        self.utils.accept_alert()
+
+        time.sleep(10)
+        # self.utils.find_element("Configuring Static IPv6")
+        # print('Configuring Static WAN IPv6')
+        # driver.find_element(By.XPATH, '//*[@id="menu1"]').send_keys('wan')
+        # time.sleep(2)
+        # driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi2"]').click()
+        # time.sleep(2)
+
+        self.utils.search_gui('WAN IPv6 Configuration')
+        wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
+        wan.select_by_value('ifStatic6')
+        static_wan_address_v6 = 'fd00::65'
+        prefix = '64'
+        gateway_v6 = 'fd00::64'
+        primary_dns_v6 = 'fd00::63'
+        secondary_dns_v6 = 'fd00::62'
+        self.utils.find_element( '//*[@id="tf1_ipV6Addr"]').send_keys(static_wan_address_v6)
+        self.utils.find_element( '//*[@id="tf1_ipV6AddrPrefixLength"]').send_keys(prefix)
+        self.utils.find_element( '//*[@id="tf1_ipV6AddrGateway"]').send_keys(gateway_v6)
+        self.utils.find_element( '//*[@id="tf1_staticPrimaryDns"]').clear()
+        self.utils.find_element( '//*[@id="tf1_staticPrimaryDns"]').send_keys(primary_dns_v6)
+        self.utils.find_element( '//*[@id="tf1_staticSecondaryDns"]').clear()
+        self.utils.find_element( '//*[@id="tf1_staticSecondaryDns"]').send_keys(secondary_dns_v6)
+        self.utils.find_element( '//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]').click()
+        self.utils.accept_alert()
+
+        # time.sleep(60)
+
+        # go to Status Menu
+        self.utils.find_element(*locators.StatusMenu).click()
+
+        self.utils.find_element( '//*[@id="tf1_status_devStatus"]').click()
+        time.sleep(5)
+        self.utils.find_element( '//*[@id="main"]/div[6]/ul/li[3]/a').click()
+        ipv4_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
+        static_ipv4 = ipv4_after_change.split(' ')[0]
+
+        try:
+            ipv6_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+        except:
+            ipv6_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+
+        static_ipv6 = ipv6_after_change.split(' ')[0]
+
+        if static_wan_address_v6 in static_ipv6:
+            pass
         else:
-            logger.error('Firmware Version is not same as required\n Please check Input File details or Firmware in device')
+            ipv6_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
 
+        logger.info(ipv6_after_change)
 
-        get_model = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p','#main > div.contentMidArea > div.mainContentDBord > div.diviceStatusBlock > div.diviceStatus > div:nth-child(5) > p').text
+        # print(static_ipv4)
+        # print(static_ipv6)
 
-
-        model_ = Inputs.latast_firmware.split('_')[1]
-        if get_model == model_:
-            logger.info('Model Name is verified on Dashboard successfully')
-            success_count += 1
+        if static_ipv4 == static_wan_address:
+            logger.info('Static WAN IPv4 Configured Successfully')
         else:
-            logger.error('Model name is not same as required')
+            logger.error('Static WAN IPv4 Configuration Failed')
 
-        get_serial_number = self.utils.get_serial_number()
-        if len(get_serial_number) == 15 and get_serial_number != '000000000000000':
-            logger.info('Serial Number is verified on Dashboard successfully')
-            success_count += 1
+        if (static_wan_address_v6 in ipv6_after_change):
+            logger.info('Static WAN IPv6 Configured Successfully')
         else:
-            logger.error('Serial number is invalid')
+            logger.error('Static WAN IPv6 Configuration Failed')
 
-        get_ap1_ssid = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[7]/p').text
-        get_ap4_ssid = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[8]/p').text
+        ont_state = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[17]/p').text
+        # print('ONT State : {}'.format(ont_state))
 
-        if get_ap1_ssid != '' and get_ap4_ssid != '':
-            logger.info('Primary AP SSID Information exist on Dashboard')
-            success_count += 1
+        # Configuring Dynamic WAN IP
+        self.utils.search_gui('WAN IPv4 Configuration')
+        wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
+        wan.select_by_value('0')
+        dns = Select(self.driver.find_element(By.ID, 'tf1_dnsServerSource'))
+        dns.select_by_value('1')
+        self.utils.find_element( '//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]').click()
+        time.sleep(10)
+
+        # Configuring Dynamic IPv6
+        logger.debug('Configuring IP type to Dynamic')
+        self.utils.search_gui('WAN IPv6 Configuration')
+
+        wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
+        wan.select_by_value('dhcp6c')
+        self.utils.find_element( '//*[@id="tf1_dhcpV6SatelessMode2"]').click()
+        self.utils.find_element( '//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]').click()
+        time.sleep(10)
+
+        # waiting for changes
+        time.sleep(60)
+        dynamic_ipv4 = ''
+        dynamic_ipv6 = ''
+
+        # go to Status Menu
+        self.utils.find_element(*locators.StatusMenu).click()
+
+        self.utils.find_element( '//*[@id="tf1_status_devStatus"]').click()
+        time.sleep(5)
+        self.utils.find_element( '//*[@id="main"]/div[6]/ul/li[3]/a').click()
+        try:
+            dynamic_ipv4_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
+            dynamic_ipv4 = dynamic_ipv4_full.split(' ')[0]
+            try:
+                dynamic_ipv6_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+            except:
+                dynamic_ipv6_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+            dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
+            if 'fe80' in dynamic_ipv6:
+                dynamic_ipv6 = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+
+            logger.info('WAN IP Addresses after configuration to Dynamic')
+            logger.info('Wan Ipv4 Address: {}'.format(dynamic_ipv4))
+            logger.info('Wan Ipv6 Address: {}'.format(dynamic_ipv6))
+
+            if dynamic_ipv4 == '0.0.0.0':
+                time.sleep(30)
+                # Retry After 30 Seconds
+                dynamic_ipv4_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
+                dynamic_ipv4 = dynamic_ipv4_full.split(' ')[0]
+                try:
+                    dynamic_ipv6_full = self.utils.find_element(
+                                                            '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+                except:
+                    dynamic_ipv6_full = self.utils.find_element(
+                                                            '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+                    dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
+        except Exception as E:
+            logger.error(E)
+
+        success = 0
+        if static_ipv4 != dynamic_ipv4 and dynamic_ipv4 != '0.0.0.0':
+            logger.info('Dynamic IPv4 from WAN Side is received')
+            success += 1
         else:
-            logger.info('Primary AP SSID Information is missing on Dashboard')
+            logger.error('ONT has not received dynamic wan ipv4')
 
-        wan_mac_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p').text
-
-        if wan_mac_address != '' and len(wan_mac_address) == 17:
-            logger.info('WAN MAC Address Information exist on Dashboard')
-            success_count += 1
+        if static_ipv6 != dynamic_ipv6 and dynamic_ipv6 != '':
+            logger.info('Dynamic IPv6 from WAN Side is received')
+            success += 1
         else:
-            logger.error('WAN MAC Address Information is missing on Dashboard')
+            logger.error('ONT has not received dynamic wan ipv6')
 
-        lan_mac_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[10]/p').text
-
-        if lan_mac_address != '' and len(lan_mac_address) == 17:
-            logger.info('LAN MAC Address Information exist on Dashboard')
-            success_count += 1
-        else:
-            logger.error('LAN MAC Address Information is missing on Dashboard')
-
-        wan_ip_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p').text
-        lan_ip_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[11]/p').text
-
-        if wan_ip_address != '0.0.0.0' and lan_ip_address != '0.0.0.0' and wan_ip_address != '' and lan_ip_address != '':
-            logger.info('WAN and LAN IP Address Information exist on Dashboard')
-            success_count += 1
-        else:
-            logger.error('WAN and LAN Address Information are missing on Dashboard')
-
-        wan_status = self.utils.find_element('//body[1]/div[1]/div[2]/div[6]/div[2]/div[4]/div[3]/div[6]/p[1]/span[1]')
-        lan_status = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[12]/p/span')
-        if wan_status.get_attribute('class') == 'yesNo' and lan_status.get_attribute('class') == 'yesNo':
-            logger.info('WAN and LAN Status Information exist on Dashboard')
-            success_count += 1
-        else:
-            logger.error('WAN and LAN Status Information are missing on Dashboard')
-
-        tr69_status = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[2]/div[5]/p/span')
-        if tr69_status.get_attribute('class') == 'yesNo':
-            logger.info('TR-069 Status Information exist on Dashboard')
-            success_count += 1
-        else:
-            logger.error('TR-069 Status Information is missing on Dashboard')
-
-        wan_ipv6_1 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]').text
-        wan_ipv6_2 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]').text
-
-        if wan_ipv6_1 != '' and wan_ipv6_2 != '':
-            logger.info('WAN IPv6 Information exist on Dashboard')
-            success_count += 1
-        else:
-            logger.error('WAN IPv6 Information are missing on Dashboard')
-
-        lan_ipv6_1 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[1]').text
-        lan_ipv6_2 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[2]').text
-
-        if lan_ipv6_1 != '' and lan_ipv6_2 != '':
-            logger.info('LAN IPv6 Information exist on Dashboard')
-            success_count += 1
-        else:
-            logger.error('LAN IPv6 Information are missing on Dashboard')
-
-        if success_count != 11:
-            return False
+        if success != 2:
             self.utils.get_dbglog()
 
-        return True
-
+        return success  # It should be 2 for assertion
 
 
 

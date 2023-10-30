@@ -199,9 +199,12 @@ class Utils:
     #accept the alert
     def accept_alert(self):
         try:
+            time.sleep(3)
             self.driver.switch_to.alert.accept()
-            time.sleep(5)
+            logger.info("Alert Accepted")
+            time.sleep(3)
         except Exception as E:
+            logger.error(E)
             pass
     def get_serial_number(self):
         try:
