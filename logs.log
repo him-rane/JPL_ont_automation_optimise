@@ -1,136 +1,124 @@
-2023-10-30 14:50:59,142 logger_util -> DEBUG: Initializing Chrome WebDriver
-2023-10-30 14:51:02,822 logger_util -> INFO: Validate the static IP allocation functionalitu to WAN side of the ONT
-2023-10-30 14:51:02,823 logger_util -> DEBUG: Checking login status
-2023-10-30 14:51:17,860 logger_util -> DEBUG: Not logged in to the web GUI: False
-2023-10-30 14:51:17,861 logger_util -> DEBUG: Attempting to log in via WEBGUI
-2023-10-30 14:51:20,540 logger_util -> INFO: Login Successful
-2023-10-30 14:51:25,599 logger_util -> DEBUG: Performing device health check...
-2023-10-30 14:51:25,599 logger_util -> DEBUG: Checking GPON status
-2023-10-30 14:51:25,599 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
-2023-10-30 14:51:26,647 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-30 14:51:31,613 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
-2023-10-30 14:51:32,660 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
-2023-10-30 14:51:32,674 logger_util -> INFO: GPON Status: OPERATION (O5)
-2023-10-30 14:51:32,675 logger_util -> DEBUG: Checking WAN IPv4 Address
-2023-10-30 14:51:33,714 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-30 14:51:34,787 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-10-30 14:51:36,772 logger_util -> DEBUG: Checking WAN IPv4 Address
-2023-10-30 14:51:37,799 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-30 14:51:38,831 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
-2023-10-30 14:51:38,839 logger_util -> INFO: WAN IPv4 Address : 10.63.66.145
-2023-10-30 14:51:38,839 logger_util -> DEBUG: Checking WAN IPv6 Address
-2023-10-30 14:51:39,858 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-30 14:51:40,899 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
-2023-10-30 14:51:41,944 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]'
-2023-10-30 14:51:41,967 logger_util -> INFO: WAN IPv6 Address : 2405:201:fffb:400::27/128
-2023-10-30 14:51:41,967 logger_util -> DEBUG: Getting WAN Port Configuration
-2023-10-30 14:51:41,968 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
-2023-10-30 14:51:43,010 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-30 14:51:47,234 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
-2023-10-30 14:51:48,277 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
-2023-10-30 14:51:48,302 logger_util -> INFO: WAN Port Configuration found: 1015
-2023-10-30 14:51:48,303 logger_util -> DEBUG: Retrieving Firmware Version...
-2023-10-30 14:51:49,340 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-10-30 14:51:50,398 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-10-30 14:51:53,580 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
-2023-10-30 14:51:53,599 logger_util -> INFO: Firmware Version ARCTF1_JCOW401_R2.30
-2023-10-30 14:51:53,600 logger_util -> DEBUG: Checking IPv4 Connectivity with Ping
-2023-10-30 14:52:02,785 logger_util -> INFO: IPv4 Ping is successful
-2023-10-30 14:52:02,786 logger_util -> DEBUG: Checking IPv6 Connectivity with Ping
-2023-10-30 14:52:51,887 logger_util -> INFO: Device health check completed successfully.
-2023-10-30 14:52:51,888 logger_util -> DEBUG: Searching for the keyword: 'WAN IPv4 Configuration'
-2023-10-30 14:52:52,895 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-30 14:52:57,287 logger_util -> DEBUG: Found and clicked on the result containing 'WAN IPv4 Configuration'
-2023-10-30 14:52:58,338 logger_util -> DEBUG: Element found using locator: xpath='//select[@id='tf1_ispType']'
-2023-10-30 14:52:58,413 logger_util -> INFO: Configuring IP type to Static
-2023-10-30 14:52:59,467 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_stIpAddr"]'
-2023-10-30 14:53:00,551 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_stIpSnetMask"]'
-2023-10-30 14:53:01,645 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_stGwIpAddr"]'
-2023-10-30 14:53:02,720 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_primaryDns"]'
-2023-10-30 14:53:03,790 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_primaryDns"]'
-2023-10-30 14:53:04,905 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_secDns"]'
-2023-10-30 14:53:05,996 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_secDns"]'
-2023-10-30 14:53:07,092 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]'
-2023-10-30 14:53:12,686 logger_util -> ERROR: Message: no such alert
-  (Session info: chrome=118.0.5993.119)
-Stacktrace:
-	GetHandleVerifier [0x00CE4DE3+43907]
-	(No symbol) [0x00C70741]
-	(No symbol) [0x00B632B0]
-	(No symbol) [0x00B5AF08]
-	(No symbol) [0x00B7B584]
-	(No symbol) [0x00BB2BD4]
-	(No symbol) [0x00B7B491]
-	(No symbol) [0x00BB2956]
-	(No symbol) [0x00B8E17E]
-	(No symbol) [0x00B8F32D]
-	GetHandleVerifier [0x00F95AF9+2865305]
-	GetHandleVerifier [0x00FDE78B+3163435]
-	GetHandleVerifier [0x00FD8441+3138017]
-	GetHandleVerifier [0x00D6E0F0+605840]
-	(No symbol) [0x00C7A64C]
-	(No symbol) [0x00C76638]
-	(No symbol) [0x00C7675F]
-	(No symbol) [0x00C68DB7]
-	BaseThreadInitThunk [0x76F0FCC9+25]
-	RtlGetAppContainerNamedObjectPath [0x771D7C6E+286]
-	RtlGetAppContainerNamedObjectPath [0x771D7C3E+238]
-
-2023-10-30 14:53:22,687 logger_util -> DEBUG: Searching for the keyword: 'WAN IPv6 Configuration'
-2023-10-30 14:53:23,722 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-30 14:53:28,295 logger_util -> DEBUG: Found and clicked on the result containing 'WAN IPv6 Configuration'
-2023-10-30 14:53:29,452 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_ipV6Addr"]'
-2023-10-30 14:53:30,553 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_ipV6AddrPrefixLength"]'
-2023-10-30 14:53:31,643 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_ipV6AddrGateway"]'
-2023-10-30 14:53:32,744 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_staticPrimaryDns"]'
-2023-10-30 14:53:33,836 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_staticPrimaryDns"]'
-2023-10-30 14:53:35,008 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_staticSecondaryDns"]'
-2023-10-30 14:53:36,089 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_staticSecondaryDns"]'
-2023-10-30 14:53:37,281 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]'
-2023-10-30 14:53:43,069 logger_util -> ERROR: Message: no such alert
-  (Session info: chrome=118.0.5993.119)
-Stacktrace:
-	GetHandleVerifier [0x00CE4DE3+43907]
-	(No symbol) [0x00C70741]
-	(No symbol) [0x00B632B0]
-	(No symbol) [0x00B5AF08]
-	(No symbol) [0x00B7B584]
-	(No symbol) [0x00BB2BD4]
-	(No symbol) [0x00B7B491]
-	(No symbol) [0x00BB2956]
-	(No symbol) [0x00B8E17E]
-	(No symbol) [0x00B8F32D]
-	GetHandleVerifier [0x00F95AF9+2865305]
-	GetHandleVerifier [0x00FDE78B+3163435]
-	GetHandleVerifier [0x00FD8441+3138017]
-	GetHandleVerifier [0x00D6E0F0+605840]
-	(No symbol) [0x00C7A64C]
-	(No symbol) [0x00C76638]
-	(No symbol) [0x00C7675F]
-	(No symbol) [0x00C68DB7]
-	BaseThreadInitThunk [0x76F0FCC9+25]
-	RtlGetAppContainerNamedObjectPath [0x771D7C6E+286]
-	RtlGetAppContainerNamedObjectPath [0x771D7C3E+238]
-
-2023-10-30 14:53:44,119 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu2"]'
-2023-10-30 14:53:45,214 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_status_devStatus"]'
-2023-10-30 14:53:53,024 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/ul/li[3]/a'
-2023-10-30 14:53:55,458 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[3]/p'
-2023-10-30 14:53:56,522 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]'
-2023-10-30 14:53:57,591 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]'
-2023-10-30 14:53:58,643 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
-2023-10-30 14:53:58,659 logger_util -> DEBUG: Searching for the keyword: 'WAN IPv4 Configuration'
-2023-10-30 14:53:59,695 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-30 14:54:03,951 logger_util -> DEBUG: Found and clicked on the result containing 'WAN IPv4 Configuration'
-2023-10-30 14:54:05,103 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]'
-2023-10-30 14:54:17,722 logger_util -> DEBUG: Searching for the keyword: 'WAN IPv6 Configuration'
-2023-10-30 14:54:18,764 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-10-30 14:54:23,163 logger_util -> DEBUG: Found and clicked on the result containing 'WAN IPv6 Configuration'
-2023-10-30 14:54:24,349 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dhcpV6SatelessMode2"]'
-2023-10-30 14:54:25,450 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]'
-2023-10-30 14:55:38,934 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu2"]'
-2023-10-30 14:55:40,039 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_status_devStatus"]'
-2023-10-30 14:55:47,439 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/ul/li[3]/a'
-2023-10-30 14:55:49,812 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[3]/p'
-2023-10-30 14:55:50,887 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]'
-2023-10-30 14:55:51,947 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]'
+2023-10-31 15:52:13,415 logger_util -> DEBUG: Initializing Chrome WebDriver
+2023-10-31 15:52:17,630 logger_util -> DEBUG: Checking login status
+2023-10-31 15:52:32,672 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-10-31 15:52:32,674 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-10-31 15:52:35,517 logger_util -> INFO: Login Successful
+2023-10-31 15:52:40,587 logger_util -> DEBUG: Checking login status
+2023-10-31 15:52:40,615 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-10-31 15:52:40,615 logger_util -> DEBUG: Performing device health check...
+2023-10-31 15:52:40,616 logger_util -> DEBUG: Checking GPON status
+2023-10-31 15:52:40,616 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
+2023-10-31 15:52:41,662 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-31 15:52:46,708 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
+2023-10-31 15:52:47,756 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
+2023-10-31 15:52:47,773 logger_util -> INFO: GPON Status: OPERATION (O5)
+2023-10-31 15:52:47,774 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-10-31 15:52:48,822 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-31 15:52:49,899 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-31 15:52:51,817 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-10-31 15:52:52,857 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-31 15:52:53,900 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
+2023-10-31 15:52:53,908 logger_util -> INFO: WAN IPv4 Address : 10.63.66.166
+2023-10-31 15:52:53,908 logger_util -> DEBUG: Checking WAN IPv6 Address
+2023-10-31 15:52:54,917 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-31 15:52:55,965 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
+2023-10-31 15:52:57,031 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]'
+2023-10-31 15:52:57,057 logger_util -> INFO: WAN IPv6 Address : 2405:201:fffb:400::1d/128
+2023-10-31 15:52:57,057 logger_util -> DEBUG: Getting WAN Port Configuration
+2023-10-31 15:52:57,058 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
+2023-10-31 15:52:58,084 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-31 15:53:02,399 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
+2023-10-31 15:53:03,447 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-10-31 15:53:03,468 logger_util -> INFO: WAN Port Configuration found: 1015
+2023-10-31 15:53:03,469 logger_util -> DEBUG: Retrieving Firmware Version...
+2023-10-31 15:53:04,499 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-10-31 15:53:05,560 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-31 15:53:08,684 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
+2023-10-31 15:53:08,700 logger_util -> INFO: Firmware Version ARCTF1_JCOW401_R2.30
+2023-10-31 15:53:08,700 logger_util -> DEBUG: Checking IPv4 Connectivity with Ping
+2023-10-31 15:53:17,878 logger_util -> INFO: IPv4 Ping is successful
+2023-10-31 15:53:17,879 logger_util -> DEBUG: Checking IPv6 Connectivity with Ping
+2023-10-31 15:53:27,113 logger_util -> INFO: IPv6 Ping is successful
+2023-10-31 15:53:27,114 logger_util -> INFO: Device health check completed successfully.
+2023-10-31 15:53:28,172 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu3"]'
+2023-10-31 15:53:29,279 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_network_accessPoints"]'
+2023-10-31 15:53:31,446 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[1]'
+2023-10-31 15:53:32,487 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[2]'
+2023-10-31 15:53:38,786 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="disableMenu"]'
+2023-10-31 15:53:41,839 logger_util -> INFO: Alert Accepted
+2023-10-31 15:54:01,974 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[1]'
+2023-10-31 15:54:23,033 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[1]'
+2023-10-31 15:54:24,091 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[2]'
+2023-10-31 15:54:30,409 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="disableMenu"]'
+2023-10-31 15:54:33,472 logger_util -> INFO: Alert Accepted
+2023-10-31 15:54:53,178 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[1]'
+2023-10-31 15:55:44,239 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-31 15:55:47,278 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu3"]'
+2023-10-31 15:55:48,381 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_network_accessPoints"]'
+2023-10-31 15:55:50,757 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/ul/li[2]/a'
+2023-10-31 15:55:52,889 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[2]'
+2023-10-31 15:55:54,223 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="editMenu"]'
+2023-10-31 15:55:57,291 logger_util -> INFO: Alert Accepted
+2023-10-31 15:56:08,361 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtSSID"]'
+2023-10-31 15:56:09,445 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtSSID"]'
+2023-10-31 15:56:10,593 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPAPasswd"]'
+2023-10-31 15:56:11,655 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPAPasswd"]'
+2023-10-31 15:56:12,770 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPACnfPasswd"]'
+2023-10-31 15:56:13,863 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPACnfPasswd"]'
+2023-10-31 15:56:15,020 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-31 15:56:55,548 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[2]'
+2023-10-31 15:56:56,634 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[2]'
+2023-10-31 15:56:57,957 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="editMenu"]'
+2023-10-31 15:57:01,084 logger_util -> INFO: Alert Accepted
+2023-10-31 15:57:16,575 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtSSID"]'
+2023-10-31 15:57:17,634 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtSSID"]'
+2023-10-31 15:57:18,777 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPAPasswd"]'
+2023-10-31 15:57:19,853 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPAPasswd"]'
+2023-10-31 15:57:20,967 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPACnfPasswd"]'
+2023-10-31 15:57:22,028 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtWPACnfPasswd"]'
+2023-10-31 15:57:23,159 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-31 15:58:03,973 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[2]'
+2023-10-31 15:58:05,020 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-31 15:58:07,968 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[2]/span'
+2023-10-31 15:58:09,028 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p'
+2023-10-31 15:58:10,095 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="menu1"]'
+2023-10-31 15:58:16,474 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div[4]/input[2]'
+2023-10-31 15:58:18,507 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtFwSrcUserDestination"]'
+2023-10-31 15:58:19,629 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtinternalPort"]'
+2023-10-31 15:58:20,749 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_dialog"]/div[3]/input[2]'
+2023-10-31 15:58:34,554 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu5"]'
+2023-10-31 15:58:35,658 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_administration_backupRestore"]'
+2023-10-31 15:58:42,627 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div/div/form[1]/div[1]/div/input'
+2023-10-31 15:59:15,733 logger_util -> INFO: Alert Accepted
+2023-10-31 15:59:55,760 logger_util -> INFO: Factory Reseting the Device
+2023-10-31 15:59:56,815 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-10-31 16:00:00,303 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu5"]'
+2023-10-31 16:00:01,401 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_administration_backupRestore"]'
+2023-10-31 16:00:03,488 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmBackupFactoryDefaultSettings"]/div[1]/div/input'
+2023-10-31 16:00:06,547 logger_util -> INFO: Alert Accepted
+2023-10-31 16:00:16,561 logger_util -> DEBUG: Reseting Device (Estimated Time: 300 Seconds)
+2023-10-31 16:05:16,573 logger_util -> DEBUG: Checking login status
+2023-10-31 16:05:31,607 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-10-31 16:05:31,608 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-10-31 16:05:39,960 logger_util -> INFO: Login Successful
+2023-10-31 16:05:55,026 logger_util -> WARNING: Error occurred while closing the login popup
+2023-10-31 16:06:01,047 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu5"]'
+2023-10-31 16:06:02,126 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_administration_backupRestore"]'
+2023-10-31 16:06:04,125 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_txtRestoreFile"]'
+2023-10-31 16:06:10,206 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmBackupRestoreSavedSettings"]/div[3]/input'
+2023-10-31 16:06:13,276 logger_util -> INFO: Alert Accepted
+2023-10-31 16:09:43,281 logger_util -> DEBUG: Checking login status
+2023-10-31 16:09:58,345 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-10-31 16:09:58,346 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-10-31 16:10:00,772 logger_util -> INFO: Login Successful
+2023-10-31 16:10:15,801 logger_util -> WARNING: Error occurred while closing the login popup
+2023-10-31 16:10:20,804 logger_util -> DEBUG: Searching for the keyword: 'Port Forwarding'
+2023-10-31 16:10:21,860 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-10-31 16:10:26,176 logger_util -> DEBUG: Found and clicked on the result containing 'Port Forwarding'
+2023-10-31 16:10:29,235 logger_util -> DEBUG: Element found using locator: xpath='//tr[@id='portForwarding1']'
+2023-10-31 16:10:30,318 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu3"]'
+2023-10-31 16:10:31,431 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_network_accessPoints"]'
+2023-10-31 16:10:33,544 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[1]'
+2023-10-31 16:10:34,566 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="1"]/td[3]'
+2023-10-31 16:10:35,609 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[1]'
+2023-10-31 16:10:36,644 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="4"]/td[3]'

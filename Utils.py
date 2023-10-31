@@ -202,7 +202,7 @@ class Utils:
             time.sleep(3)
             self.driver.switch_to.alert.accept()
             logger.info("Alert Accepted")
-            time.sleep(3)
+            time.sleep(10)
         except Exception as E:
             logger.error(E)
             pass

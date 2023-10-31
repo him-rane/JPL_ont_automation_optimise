@@ -6,6 +6,9 @@ SecurityMenu='//*[@id="mainMenu4"]',"#mainMenu4","mainMenu4"
 AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
+Dashboard_ModelName = '//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > p:nth-child(2)'
+StatusMenu_DeviceStatus='//*[@id="tf1_status_devStatus"]','#tf1_status_devStatus','tf1_status_devStatus'
+
 SecurityMenu_FirewallSubMenu='//*[@id="tf1_security_defaultPolicy"]','#tf1_security_defaultPolicy','tf1_security_defaultPolicy'
 
 SecurityMenu_FirewallSubMenu_IPv4FirewallRules= "//a[normalize-space()='IPv4 Firewall Rules']","div[id='main'] li:nth-child(2) a:nth-child(1)"

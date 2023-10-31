@@ -1,3 +1,4 @@
+import os
 import subprocess
 from ftplib import FTP
 from telnetlib import EC
@@ -15,6 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 import Inputs
 import locators
+import setup
 from logger_util import logger
 from device_health import device_health
 from Utils import Utils
@@ -31,6 +33,18 @@ class functional_smoke:
         self.utils = Utils(driver)
         self.login = login(driver)
         self.device_health = device_health(driver)
+
+    def factory_reset(self):
+        logger.info("Factory Reseting the Device")
+        self.utils.find_element(*locators.DashboardMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        self.utils.find_element(*locators.Maintenance_BackupReboot_DefaultButton).click()
+        self.utils.accept_alert()
+        logger.debug('Reseting Device (Estimated Time: 300 Seconds)')
+        time.sleep(300)
+        self.login.webgui_login()
+
 
     def TC_Functional_Smoke_4(self):
         logger.debug('Validating MAC Address after Reboot and Reset')
@@ -1175,23 +1189,15 @@ class functional_smoke:
 
     def TC_Functional_Sanity_007(self):
         logger.info("Validate the static IP allocation functionalitu to WAN side of the ONT")
+
         if self.device_health.healh_check() == False:
             logger.error('Device health check failed. Exiting the test.')
             return False
 
-        # Configuring Static WAN IP
-        # logger.info('Configuring Static WAN IPv4')
-        # time.sleep(10)
-        # driver.find_element(By.XPATH, '//*[@id="menu1"]').send_keys('wan')
-        # time.sleep(2)
-        # driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi1"]').click()
-        # time.sleep(2)
-
-
+        #Configuring IPv4
         self.utils.search_gui('WAN IPv4 Configuration')
         wan = Select(self.utils.find_element("//select[@id='tf1_ispType']"))
         wan.select_by_value('1')
-
         # Configuring Static IPv4
         logger.info('Configuring IP type to Static')
         static_wan_address = '20.15.10.17'
@@ -1207,17 +1213,10 @@ class functional_smoke:
         self.utils.find_element( '//*[@id="tf1_secDns"]').clear()
         self.utils.find_element( '//*[@id="tf1_secDns"]').send_keys(secondary_dns)
         self.utils.find_element( '//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]').click()
-
         self.utils.accept_alert()
+        time.sleep(15)
 
-        time.sleep(10)
-        # self.utils.find_element("Configuring Static IPv6")
-        # print('Configuring Static WAN IPv6')
-        # driver.find_element(By.XPATH, '//*[@id="menu1"]').send_keys('wan')
-        # time.sleep(2)
-        # driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi2"]').click()
-        # time.sleep(2)
-
+        #Configuring IPv6
         self.utils.search_gui('WAN IPv6 Configuration')
         wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
         wan.select_by_value('ifStatic6')
@@ -1235,14 +1234,12 @@ class functional_smoke:
         self.utils.find_element( '//*[@id="tf1_staticSecondaryDns"]').send_keys(secondary_dns_v6)
         self.utils.find_element( '//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]').click()
         self.utils.accept_alert()
-
-        # time.sleep(60)
+        time.sleep(15)
 
         # go to Status Menu
         self.utils.find_element(*locators.StatusMenu).click()
+        self.utils.find_element(*locators.StatusMenu_DeviceStatus).click()
 
-        self.utils.find_element( '//*[@id="tf1_status_devStatus"]').click()
-        time.sleep(5)
         self.utils.find_element( '//*[@id="main"]/div[6]/ul/li[3]/a').click()
         ipv4_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
         static_ipv4 = ipv4_after_change.split(' ')[0]
@@ -1261,8 +1258,6 @@ class functional_smoke:
 
         logger.info(ipv6_after_change)
 
-        # print(static_ipv4)
-        # print(static_ipv6)
 
         if static_ipv4 == static_wan_address:
             logger.info('Static WAN IPv4 Configured Successfully')
@@ -1275,9 +1270,9 @@ class functional_smoke:
             logger.error('Static WAN IPv6 Configuration Failed')
 
         ont_state = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[17]/p').text
-        # print('ONT State : {}'.format(ont_state))
 
-        # Configuring Dynamic WAN IP
+
+        # Configuring Dynamic WAN IPv4
         self.utils.search_gui('WAN IPv4 Configuration')
         wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
         wan.select_by_value('0')
@@ -1289,7 +1284,6 @@ class functional_smoke:
         # Configuring Dynamic IPv6
         logger.debug('Configuring IP type to Dynamic')
         self.utils.search_gui('WAN IPv6 Configuration')
-
         wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
         wan.select_by_value('dhcp6c')
         self.utils.find_element( '//*[@id="tf1_dhcpV6SatelessMode2"]').click()
@@ -1303,8 +1297,8 @@ class functional_smoke:
 
         # go to Status Menu
         self.utils.find_element(*locators.StatusMenu).click()
+        self.utils.find_element(*locators.StatusMenu_DeviceStatus).click()
 
-        self.utils.find_element( '//*[@id="tf1_status_devStatus"]').click()
         time.sleep(5)
         self.utils.find_element( '//*[@id="main"]/div[6]/ul/li[3]/a').click()
         try:
@@ -1327,13 +1321,13 @@ class functional_smoke:
                 # Retry After 30 Seconds
                 dynamic_ipv4_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
                 dynamic_ipv4 = dynamic_ipv4_full.split(' ')[0]
+
                 try:
-                    dynamic_ipv6_full = self.utils.find_element(
-                                                            '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+                    dynamic_ipv6_full = self.utils.find_element('//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
                 except:
-                    dynamic_ipv6_full = self.utils.find_element(
-                                                            '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
-                    dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
+                    dynamic_ipv6_full = self.utils.find_element('//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+
+                dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
         except Exception as E:
             logger.error(E)
 
@@ -1350,10 +1344,255 @@ class functional_smoke:
         else:
             logger.error('ONT has not received dynamic wan ipv6')
 
+        if success == 2:
+            return True
+        else :
+            self.utils.get_dbglog()
+            return False
+
+    def TC_Functional_Sanity_55(self):
+        for number in range (5):
+            if self.device_health.healh_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            self.factory_reset()
+
+    def set_parameters_before_factory_reset(self):
+        # driver = setup.get_driver()
+        # network_menu(driver)
+        self.utils.find_element(*locators.NetworkMenu).click()
+        self.utils.find_element('//*[@id="tf1_network_accessPoints"]').click()
+
+        device_model_ = Inputs.device_model
+        list_ap = [1, 4]
+        if device_model_ == 'JCO110':
+            list_ap = [1]
+
+        ap_status = []
+        # Changing AP status to Enable/Disable
+        for i in list_ap:
+            xp_ = '//*[@id="{}"]/td[1]'.format(i)
+            # print(xp_)
+            get_ap_status = self.utils.find_element( xp_).text
+            # ap_status.append(get_ap_status)
+
+            edit_xpath = '//*[@id="{}"]/td[2]'.format(i)
+            edit_ap = self.utils.find_element(edit_xpath)
+            action = ActionChains(self.driver)
+            action.context_click(edit_ap).perform()
+            time.sleep(5)
+
+            if get_ap_status.lower() == 'disabled':
+                # print('Enabling AP{}'.format(i))
+                self.utils.find_element('//*[@id="enableMenu"]').click()
+                self.utils.accept_alert()
+            else:
+                # print('Disabling AP{}'.format(i))
+                self.utils.find_element( '//*[@id="disableMenu"]').click()
+                self.utils.accept_alert()
+
+            get_ap_status = self.utils.find_element(xp_).text
+            # print(get_ap_status)
+            ap_status.append(get_ap_status)
+            time.sleep(20)
+            # print('after sleep')
+
+        time.sleep(30)
+
+        # go to Dashboard
+        self.utils.find_element(*locators.DashboardMenu).click()
+        self.utils.find_element(*locators.NetworkMenu).click()
+
+        # go to Network
+
+        self.utils.find_element('//*[@id="tf1_network_accessPoints"]').click()
+        self.utils.find_element('//*[@id="main"]/div[6]/ul/li[2]/a').click()
+
+        profile_list = []
+        for i in list_ap:
+            xp_profile = '//*[@id="{}"]/td[2]'.format(i)
+            test_ssid = 'Test' + ' ' + str(i)
+            xp_profile_ = self.utils.find_element(xp_profile)
+            action = ActionChains(self.driver)
+            action.context_click(xp_profile_).perform()
+            self.utils.find_element('//*[@id="editMenu"]').click()
+            self.utils.accept_alert()
+            self.utils.find_element('//*[@id="tf1_txtSSID"]').clear()
+            self.utils.find_element('//*[@id="tf1_txtSSID"]').send_keys(test_ssid)
+            password_ = '12345678'
+           
+            self.utils.find_element('//*[@id="tf1_txtWPAPasswd"]').clear()
+            self.utils.find_element('//*[@id="tf1_txtWPAPasswd"]').send_keys(password_)
+
+         
+            self.utils.find_element( '//*[@id="tf1_txtWPACnfPasswd"]').clear()
+            self.utils.find_element( '//*[@id="tf1_txtWPACnfPasswd"]').send_keys(password_)
+
+
+            self.utils.find_element( '//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+
+            time.sleep(20)
+            profile_list.append(self.utils.find_element( xp_profile).text)
+        return ap_status, profile_list
+
+    def get_access_point_status(self):
+       
+        get_access_point_status = []
+        get_profile_names = []
+
+        device_model_ = Inputs.device_model
+        access_point = [1, 4]
+        if device_model_ == 'JCO110':
+            access_point = [1]
+
+        self.utils.find_element(*locators.NetworkMenu).click()
+
+        self.utils.find_element( '//*[@id="tf1_network_accessPoints"]').click()
+
+        for ap in access_point:
+            xp_ = '//*[@id="{}"]/td[1]'.format(ap)
+            get_ap_status = self.utils.find_element( xp_).text
+            get_access_point_status.append(get_ap_status)
+            xpp_ = '//*[@id="{}"]/td[3]'.format(ap)
+            get_profile_name = self.utils.find_element( xpp_).text
+            get_profile_names.append(get_profile_name)
+
+        # print(get_access_point_status)
+        # print(get_profile_names)
+
+        return get_access_point_status, get_profile_names
+
+    def TC_Functional_Smoke_011_012(self):
+        print('Validating Device Backup and Restore functionality from WEBGUI')
+        if self.device_health.healh_check() == False:
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+        # configuring wireless information
+        print('Configuring Wireless Profiles')
+        wireless_data_before_backup = self.set_parameters_before_factory_reset()
+
+
+        self.utils.find_element(*locators.DashboardMenu).click()
+        file_path = Inputs.file_path
+        serial_number = self.utils.find_element( '/html/body/div[1]/div[1]/div[2]/p[2]/span').text
+        model = self.utils.find_element(*locators.Dashboard_ModelName).text
+
+        backup_file = serial_number + '_' + model + '.enc'
+
+        # adding port forwarding rule
+        print('Adding Port Forwarding Rule')
+        self.utils.find_element( '//*[@id="menu1"]').send_keys('port')
+        time.sleep(2)
+        self.driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi0"]').click()
+        time.sleep(2)
+        self.utils.find_element( '//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
+        port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
+        port_forwarding_configuration.select_by_value('ACCEPT')
+        self.utils.find_element( '//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
+        self.utils.find_element( '//*[@id="tf1_txtinternalPort"]').send_keys('80')
+        self.utils.find_element( '//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+        time.sleep(10)
+
+        # Taking Backup from WEBGUI
+        print('Taking BACKUP of Device')
+
+        # go to Administration
+        self.utils.find_element(*locators.AdministrationMenu).click()
+
+        try:
+            self.utils.find_element( '//*[@id="tf1_administration_backupRestore"]').click()
+        except:
+            self.driver.find_element(By.ID, 'tf1_administration_backupRestore').click()
+
+        time.sleep(5)
+        try:
+            self.utils.find_element( '//*[@id="main"]/div[6]/div/div/form[1]/div[1]/div/input').click()
+        except:
+            try:
+                self.driver.find_element(By.CSS_SELECTOR,
+                                    '#main > div.contentMidArea > div > div > form:nth-child(1) > div.configRow > div > input').click()
+            except:
+                # go to Administration
+                self.utils.find_element(*locators.AdministrationMenu).click()
+
+                self.utils.find_element( '//*[@id="tf1_administration_backupRestore"]').click()
+                time.sleep(5)
+                try:
+                    self.utils.find_element( '//*[@id="main"]/div[6]/div/div/form[1]/div[1]/div/input').click()
+                except:
+                    try:
+                        self.driver.find_element(By.CSS_SELECTOR,
+                                            '#main > div.contentMidArea > div > div > form:nth-child(1) > div.configRow > div > input').click()
+                    except:
+                        assert False
+
+        time.sleep(30)
+
+        self.utils.accept_alert()
+
+        time.sleep(20)
+        files = os.listdir(file_path)
+
+        if backup_file in files:
+            print('Backup file Found in given path')
+        else:
+            print('Backup file Not found')
+            exit()
+        time.sleep(10)
+
+        # Restore Operation Code
+        restore_file_location = file_path + r'\\' + backup_file
+        print('Performing Restore Operation')
+        self.factory_reset()
+
+
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        # time.sleep(5)
+        restore_path = self.utils.find_element( '//*[@id="tf1_txtRestoreFile"]','#tf1_txtRestoreFile')
+        restore_path.send_keys(restore_file_location)
+        time.sleep(5)
+        self.utils.find_element( '//*[@id="tf1_frmBackupRestoreSavedSettings"]/div[3]/input').click()
+        self.utils.accept_alert()
+        time.sleep(200)
+        self.login.webgui_login()
+
+        print('Checking Port Forwarding rule details after Restore')
+        success = 0
+
+        self.utils.search_gui('Port Forwarding')
+        time.sleep(2)
+        data=self.utils.find_element("//tr[@id='portForwarding1']",'#portForwarding1')
+        port_forwarding_status = data.is_displayed()  # Gives True for success
+
+        if port_forwarding_status == True:
+            success += 1
+        else:
+            pass
+        print('Checking wireless profiles after Restore')
+        wireless_data_after_restore = self.get_access_point_status()
+        if wireless_data_before_backup == wireless_data_after_restore:
+            success += 1
+        else:
+            print('Fail')
+
+        print('Removing Backup File')
+        os.remove(file_path + '\\' + backup_file)
+
         if success != 2:
             self.utils.get_dbglog()
+        else:
+            return True
 
-        return success  # It should be 2 for assertion
+          # success should be 2 for assert check
+
+
+
+
+
+
+
+
 
 
 

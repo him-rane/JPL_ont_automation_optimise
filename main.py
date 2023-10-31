@@ -7,13 +7,19 @@ from selenium import webdriver
 from ExcelLogger import ExcelLogger
 #
 from functional_smoke import functional_smoke
+from login import login
+
 setup=setup.Setup()
 # setup.update_driver()
 driver=setup.get_driver()
 exlogger = ExcelLogger("test_results.xlsx")
+login=login(driver)
+login.webgui_login()
 
 obj=functional_smoke(driver)
-obj.TC_Functional_Sanity_007()
+# obj.get_access_point_status()
+obj.TC_Functional_Smoke_011_012()
+
 # exlogger.log_result("TC_Functional_Smoke_002", obj.TC_Functional_Smoke_002())
 # exlogger.log_result("TC_Functional_Smoke_003", obj.TC_Functional_Smoke_003())
 # exlogger.log_result("TC_Functional_Smoke_008",obj.TC_Functional_Smoke_008())

@@ -4,6 +4,8 @@ username = 'admin'
 guest='guest'
 new_admin='newadmin'
 new_guest= 'newguest'
+device_model ='JCOW401'
+file_path = r'C:\Users\ontvi\Downloads'
 
 password = 'P@ssw0rd'
 temp_password='PR@shant2301'
