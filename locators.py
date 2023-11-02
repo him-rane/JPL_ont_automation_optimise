@@ -84,9 +84,11 @@ ipv6_address_daseboard_2 = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p
 
 #Administration >> Maintenance >>
 # Maintenance '//*[@id="tf1_administration_backupRestore"]','#tf1_administration_backupRestore',
+Maintenance_BackupReboot_BackupButton="//input[@title='Backup']","input[title='Backup']"
 Maintenance_BackupReboot_RebootButton = '//*[@id="tf1_frmBackupReboot"]/div[1]/div/input', "input[title='Reboot']"
 Maintenance_BackupReboot_DefaultButton = '//*[@id="tf1_frmBackupFactoryDefaultSettings"]/div[1]/div/input', "input[title='Default']"
-
+Maintenance_BackupReboot_FileInput="//input[@id='tf1_txtRestoreFile']","#tf1_txtRestoreFile",'tf1_txtRestoreFile'
+Maintenance_BackupReboot_FileInputBtn="//input[@title='Restore']","input[title='Restore']"
 DateTimeConfiguration_CurrentRouterTime = '//*[@id="tf1__div"]/p', "div[id='tf1__div'] p"
 DateTimeConfiguration_TimeZone = '//*[@id="tf1_selTimezone"]', "#tf1_selTimezone"
 DateTimeConfiguration_SaveButton = '//*[@id="tf1_frmDateAndTime"]/div[10]/input[1]', "input[title='Save']"

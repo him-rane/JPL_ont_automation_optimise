@@ -13,7 +13,7 @@ class device_health:
         self.utils = Utils(self.driver)
         self.login=login(self.driver)
 
-    def healh_check(self):
+    def health_check(self):
 
         self.login.webgui_login()
 

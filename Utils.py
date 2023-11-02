@@ -203,8 +203,7 @@ class Utils:
             self.driver.switch_to.alert.accept()
             logger.info("Alert Accepted")
             time.sleep(10)
-        except Exception as E:
-            logger.error(E)
+        except:
             pass
     def get_serial_number(self):
         try:

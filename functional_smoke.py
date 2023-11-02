@@ -45,11 +45,25 @@ class functional_smoke:
         time.sleep(300)
         self.login.webgui_login()
 
+    def restore(self,restore_file_location):
+        self.utils.find_element(*locators.DashboardMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        # time.sleep(5)
+        restore_path = self.utils.find_element(*locators.Maintenance_BackupReboot_FileInput)
+        restore_path.send_keys(restore_file_location)
+        time.sleep(5)
+        self.utils.find_element(*locators.Maintenance_BackupReboot_FileInputBtn).click()
+        self.utils.accept_alert()
+        time.sleep(200)
+        self.login.webgui_login()
+
+
 
     def TC_Functional_Smoke_4(self):
         logger.debug('Validating MAC Address after Reboot and Reset')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -118,7 +132,7 @@ class functional_smoke:
     def TC_Functional_Sanity_5(self):
         logger.info("DHCP: Validate Functionality of dhcp server with limit IP address pool")
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -189,7 +203,7 @@ class functional_smoke:
     def TC_Finctional_Smoke_9(self):
         logger.info("Validate 'Logout' button functionality in web GUI")
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -206,7 +220,7 @@ class functional_smoke:
     def TC_Functional_Smoke_10(self):
         logger.info('Validating Date & Time functionality in HG')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -252,7 +266,7 @@ class functional_smoke:
     def TC_Functional_Smoke_26(self):
         logger.info('Validate Administration User Password management functionality in HG')
         try:
-            if not self.device_health.healh_check():
+            if not self.device_health.health_check():
                 logger.error('Device health check failed. Exiting the test.')
                 self.utils.get_dbglog()
                 return False
@@ -318,7 +332,7 @@ class functional_smoke:
     def TC_Functional_Smoke_27(self):
         logger.info('Validating Guest User & Password management functionality')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -396,7 +410,7 @@ class functional_smoke:
     def TC_Functional_Smoke_28_1(self):
         logger.info('Validating Custom Admin User & Password management functionality')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -446,7 +460,7 @@ class functional_smoke:
     def TC_Functional_Smoke_28_2(self):
         logger.info('Validating Custom Guest User & Password management functionality')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -508,7 +522,7 @@ class functional_smoke:
             for i in range(5):
                 # Your code here
                 logger.debug(f"Reboot Iteration {i}")
-                if self.device_health.healh_check() == False:
+                if self.device_health.health_check() == False:
                     logger.error('Device health check failed. Exiting the test.')
                     return False
 
@@ -582,7 +596,7 @@ class functional_smoke:
             logger.error(f"Error occurred while logging : {str(e)}")
 
     def static_wan_configuration(self):
-        if self.device_health.healh_check() == False:
+        if self.device_health.health_check() == False:
             logger.error('Device health check failed. Exiting the test.')
             return False
 
@@ -709,7 +723,7 @@ class functional_smoke:
     def TC_Functional_Smoke_39(self):
         logger.info("Validate default firewall functionality ")
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -900,7 +914,7 @@ class functional_smoke:
         logger.info('Validating HTTPS Firewall Rule Functionality')
         try:
 
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -949,7 +963,7 @@ class functional_smoke:
     def TC_Functional_Sanity_002_2(self):
         logger.debug('Validating HTTP Firewall Rule Functionality')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
             urls = ['http://testhtml5.vulnweb.com',
@@ -996,7 +1010,7 @@ class functional_smoke:
     def TC_Functional_Sanity_002_3(self):
         logger.debug('Validating FTP Firewall Rule Functionality')
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
 
@@ -1036,7 +1050,7 @@ class functional_smoke:
 
 
     def TC_Functional_Smoke_021(self):
-        if self.device_health.healh_check() == False:
+        if self.device_health.health_check() == False:
             logger.error('Device health check failed. Exiting the test.')
             return False
 
@@ -1081,7 +1095,7 @@ class functional_smoke:
     def TC_Functional_Smoke_029(self):
         logger.info("Verify the dashboard page information of ONT")
         try:
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
             success_count = 0
@@ -1190,7 +1204,7 @@ class functional_smoke:
     def TC_Functional_Sanity_007(self):
         logger.info("Validate the static IP allocation functionalitu to WAN side of the ONT")
 
-        if self.device_health.healh_check() == False:
+        if self.device_health.health_check() == False:
             logger.error('Device health check failed. Exiting the test.')
             return False
 
@@ -1352,7 +1366,7 @@ class functional_smoke:
 
     def TC_Functional_Sanity_55(self):
         for number in range (5):
-            if self.device_health.healh_check() == False:
+            if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
             self.factory_reset()
@@ -1462,132 +1476,187 @@ class functional_smoke:
 
         return get_access_point_status, get_profile_names
 
+    # def TC_Functional_Smoke_011_012(self):
+    #     print('Validating Device Backup and Restore functionality from WEBGUI')
+    #     if self.device_health.health_check() == False:
+    #         logger.error('Device health check failed. Exiting the test.')
+    #         return False
+    #     # configuring wireless information
+    #     print('Configuring Wireless Profiles')
+    #     wireless_data_before_backup = self.set_parameters_before_factory_reset()
+    #
+    #
+    #     self.utils.find_element(*locators.DashboardMenu).click()
+    #     file_path = Inputs.file_path
+    #     serial_number = self.utils.find_element( '/html/body/div[1]/div[1]/div[2]/p[2]/span').text
+    #     model = self.utils.find_element(*locators.Dashboard_ModelName).text
+    #
+    #     backup_file = serial_number + '_' + model + '.enc'
+    #
+    #     # adding port forwarding rule
+    #     print('Adding Port Forwarding Rule')
+    #     self.utils.find_element( '//*[@id="menu1"]').send_keys('port')
+    #     time.sleep(2)
+    #     self.driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi0"]').click()
+    #     time.sleep(2)
+    #     self.utils.find_element( '//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
+    #     port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
+    #     port_forwarding_configuration.select_by_value('ACCEPT')
+    #     self.utils.find_element( '//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
+    #     self.utils.find_element( '//*[@id="tf1_txtinternalPort"]').send_keys('80')
+    #     self.utils.find_element( '//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+    #     time.sleep(10)
+    #
+    #     # Taking Backup from WEBGUI
+    #     print('Taking BACKUP of Device')
+    #     self.utils.find_element(*locators.AdministrationMenu).click()
+    #     self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+    #     self.utils.find_element(*locators.Maintenance_BackupReboot_BackupButton).click()
+    #
+    #     time.sleep(30)
+    #
+    #     self.utils.accept_alert()
+    #     files = os.listdir(file_path)
+    #
+    #     if backup_file in files:
+    #         logger.info('Backup file Found in given path')
+    #     else:
+    #         logger.error('Backup file Not found')
+    #         return False
+    #     time.sleep(10)
+    #
+    #     # Restore Operation Code
+    #     restore_file_location = file_path + r'\\' + backup_file
+    #     logger.info('Performing Restore Operation')
+    #     self.factory_reset()
+    #     self.restore(restore_file_location)
+    #
+    #     logger.info('Checking Port Forwarding rule details after Restore')
+    #     success = 0
+    #
+    #     self.utils.search_gui('Port Forwarding')
+    #     time.sleep(2)
+    #     data=self.utils.find_element("//tr[@id='portForwarding1']",'#portForwarding1')
+    #     port_forwarding_status = data.is_displayed()  # Gives True for success
+    #
+    #     if port_forwarding_status == True:
+    #         success += 1
+    #
+    #     print('Checking wireless profiles after Restore')
+    #     wireless_data_after_restore = self.get_access_point_status()
+    #     if wireless_data_before_backup == wireless_data_after_restore:
+    #         success += 1
+    #     else:
+    #         print('Fail')
+    #
+    #     print('Removing Backup File')
+    #     os.remove(file_path + '\\' + backup_file)
+    #
+    #     if success != 2:
+    #         self.utils.get_dbglog()
+    #         return False
+    #     else:
+    #         return True
+    #
+    #       # success should be 2 for assert check
+
     def TC_Functional_Smoke_011_012(self):
-        print('Validating Device Backup and Restore functionality from WEBGUI')
-        if self.device_health.healh_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
+        # Step 1: Validating Device Backup and Restore functionality from WEBGUI
+        logger.info(" Validating Device Backup and Restore functionality from WEBGUI")
+
+        # Check device health
+        if not self.device_health.health_check():
+            logger.error("Device health check failed. Exiting the test.")
             return False
-        # configuring wireless information
-        print('Configuring Wireless Profiles')
+
+        # Step 2: Configuring Wireless Profiles
+        logger.info("Configuring Wireless Profiles")
         wireless_data_before_backup = self.set_parameters_before_factory_reset()
 
-
+        # Step 3: Obtain device information
         self.utils.find_element(*locators.DashboardMenu).click()
-        file_path = Inputs.file_path
-        serial_number = self.utils.find_element( '/html/body/div[1]/div[1]/div[2]/p[2]/span').text
+        serial_number = self.utils.find_element("/html/body/div[1]/div[1]/div[2]/p[2]/span").text
         model = self.utils.find_element(*locators.Dashboard_ModelName).text
+        backup_file = f"{serial_number}_{model}.enc"
 
-        backup_file = serial_number + '_' + model + '.enc'
-
-        # adding port forwarding rule
-        print('Adding Port Forwarding Rule')
-        self.utils.find_element( '//*[@id="menu1"]').send_keys('port')
+        # Step 4: Adding Port Forwarding Rule
+        logger.info("Adding Port Forwarding Rule")
+        self.utils.find_element('//*[@id="menu1"]').send_keys("port")
         time.sleep(2)
         self.driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi0"]').click()
         time.sleep(2)
-        self.utils.find_element( '//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
+        self.utils.find_element('//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
         port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
         port_forwarding_configuration.select_by_value('ACCEPT')
-        self.utils.find_element( '//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
-        self.utils.find_element( '//*[@id="tf1_txtinternalPort"]').send_keys('80')
-        self.utils.find_element( '//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+        self.utils.find_element('//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
+        self.utils.find_element('//*[@id="tf1_txtinternalPort"]').send_keys('80')
+        self.utils.find_element('//*[@id="tf1_dialog"]/div[3]/input[2]').click()
         time.sleep(10)
 
-        # Taking Backup from WEBGUI
-        print('Taking BACKUP of Device')
-
-        # go to Administration
+        # Step 5: Taking Backup from WEBGUI
+        logger.info("Taking BACKUP of Device")
         self.utils.find_element(*locators.AdministrationMenu).click()
-
-        try:
-            self.utils.find_element( '//*[@id="tf1_administration_backupRestore"]').click()
-        except:
-            self.driver.find_element(By.ID, 'tf1_administration_backupRestore').click()
-
-        time.sleep(5)
-        try:
-            self.utils.find_element( '//*[@id="main"]/div[6]/div/div/form[1]/div[1]/div/input').click()
-        except:
-            try:
-                self.driver.find_element(By.CSS_SELECTOR,
-                                    '#main > div.contentMidArea > div > div > form:nth-child(1) > div.configRow > div > input').click()
-            except:
-                # go to Administration
-                self.utils.find_element(*locators.AdministrationMenu).click()
-
-                self.utils.find_element( '//*[@id="tf1_administration_backupRestore"]').click()
-                time.sleep(5)
-                try:
-                    self.utils.find_element( '//*[@id="main"]/div[6]/div/div/form[1]/div[1]/div/input').click()
-                except:
-                    try:
-                        self.driver.find_element(By.CSS_SELECTOR,
-                                            '#main > div.contentMidArea > div > div > form:nth-child(1) > div.configRow > div > input').click()
-                    except:
-                        assert False
-
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        self.utils.find_element(*locators.Maintenance_BackupReboot_BackupButton).click()
         time.sleep(30)
 
         self.utils.accept_alert()
-
-        time.sleep(20)
-        files = os.listdir(file_path)
+        files = os.listdir(Inputs.file_path)
 
         if backup_file in files:
-            print('Backup file Found in given path')
+            logger.info("Backup file found in the given path.")
         else:
-            print('Backup file Not found')
-            exit()
+            logger.error("Backup file not found.")
+            return False
+
         time.sleep(10)
 
-        # Restore Operation Code
-        restore_file_location = file_path + r'\\' + backup_file
-        print('Performing Restore Operation')
+        # Step 6: Restore Operation
+        restore_file_location = os.path.join(Inputs.file_path, backup_file)
+        logger.info("Step 6: Performing Restore Operation")
         self.factory_reset()
+        self.restore(restore_file_location)
 
-
-        self.utils.find_element(*locators.AdministrationMenu).click()
-        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        # self.utils.find_element(*locators.AdministrationMenu).click()
+        # self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        # restore_path = self.utils.find_element(*locators.Maintenance_BackupReboot_FileInput)
+        # restore_path.send_keys(restore_file_location)
         # time.sleep(5)
-        restore_path = self.utils.find_element( '//*[@id="tf1_txtRestoreFile"]','#tf1_txtRestoreFile')
-        restore_path.send_keys(restore_file_location)
-        time.sleep(5)
-        self.utils.find_element( '//*[@id="tf1_frmBackupRestoreSavedSettings"]/div[3]/input').click()
-        self.utils.accept_alert()
-        time.sleep(200)
-        self.login.webgui_login()
+        # self.utils.find_element(*locators.Maintenance_BackupReboot_FileInputBtn).click()
+        # self.utils.accept_alert()
+        # time.sleep(200)
+        #
+        # self.login.webgui_login()
 
-        print('Checking Port Forwarding rule details after Restore')
+        # Step 7: Checking Port Forwarding rule details after Restore
+        print("Step 7: Checking Port Forwarding rule details after Restore")
         success = 0
 
         self.utils.search_gui('Port Forwarding')
         time.sleep(2)
-        data=self.utils.find_element("//tr[@id='portForwarding1']",'#portForwarding1')
+        data = self.utils.find_element("//tr[@id='portForwarding1']", '#portForwarding1')
         port_forwarding_status = data.is_displayed()  # Gives True for success
 
-        if port_forwarding_status == True:
+        if port_forwarding_status:
             success += 1
-        else:
-            pass
-        print('Checking wireless profiles after Restore')
+
+        # Step 8: Checking wireless profiles after Restore
+        print("Step 8: Checking wireless profiles after Restore")
         wireless_data_after_restore = self.get_access_point_status()
         if wireless_data_before_backup == wireless_data_after_restore:
             success += 1
         else:
-            print('Fail')
+            print("Fail")
 
-        print('Removing Backup File')
-        os.remove(file_path + '\\' + backup_file)
+        # Step 9: Removing Backup File
+        print("Step 9: Removing Backup File")
+        os.remove(os.path.join(Inputs.file_path, backup_file))
 
         if success != 2:
             self.utils.get_dbglog()
+            return False
         else:
             return True
-
-          # success should be 2 for assert check
-
-
-
 
 
 
