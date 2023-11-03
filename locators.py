@@ -6,10 +6,28 @@ SecurityMenu='//*[@id="mainMenu4"]',"#mainMenu4","mainMenu4"
 AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
+#DaseBoard
 Dashboard_ModelName = '//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > p:nth-child(2)'
+Dashboard_WAN_MacAddress='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > p:nth-child(2)'
+Dashboard_LAN_MacAddress='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[10]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(10) > p:nth-child(2)'
 StatusMenu_DeviceStatus='//*[@id="tf1_status_devStatus"]','#tf1_status_devStatus','tf1_status_devStatus'
 
+Dashboard_WAN_IPv6_1 = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]', 'body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(7) > p:nth-child(2)'
+Dashboard_WAN_IPv6_2 = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]', 'body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(7) > p:nth-child(3)'
+
+Dashboard_LAN_IPv6_1='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[1]','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(13) > p:nth-child(2)'
+Dashboard_LAN_IPv6_2='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[2]','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(13) > p:nth-child(3)'
+Dashboard_tr69_Status='//body[1]/div[1]/div[2]/div[6]/div[2]/div[2]/div[5]/p[1]/span[1]',"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(2) > div:nth-child(5) > p:nth-child(2) > span:nth-child(1)"
 SecurityMenu_FirewallSubMenu='//*[@id="tf1_security_defaultPolicy"]','#tf1_security_defaultPolicy','tf1_security_defaultPolicy'
+
+Dashboard_WAN_IPv4='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(5) > p:nth-child(2)'
+Dashboard_LAN_IPv4='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[11]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(5) > p:nth-child(2)'
+
+Dashboard_WAN_Status='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[6]/p/span','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(6) > p:nth-child(2) > span:nth-child(1)'
+Dashboard_LAN_Status='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[12]/p/span','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(12) > p:nth-child(2) > span:nth-child(1)'
+
+Dashboard_ap1_SSID='//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[7]/p','#main > div.contentMidArea > div.mainContentDBord > div.diviceStatusBlock > div.diviceStatus > div:nth-child(7) > p'
+Dashboard_ap4_SSID='//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[8]/p','#main > div.contentMidArea > div.mainContentDBord > div.diviceStatusBlock > div.diviceStatus > div:nth-child(8) > p'
 
 SecurityMenu_FirewallSubMenu_IPv4FirewallRules= "//a[normalize-space()='IPv4 Firewall Rules']","div[id='main'] li:nth-child(2) a:nth-child(1)"
 IPv4FirewallRules_AddNewBtn='//*[@id="main"]/div[6]/div/div[3]/input[2]',"input[title='+ Add new']"
@@ -58,9 +76,6 @@ AdministrationMenu_UsersConfiguration_Name='//*[@id="tf1_txtUserName"]','#tf1_tx
 AdministrationMenu_UsersConfiguration_Desc='//*[@id="tf1_userDescription"]','#tf1_userDescription','tf1_userDescription'
 AdministrationMenu_UsersConfiguration_TimeOut='//*[@id="tf1_loginTimeout"]','#tf1_loginTimeout','tf1_loginTimeout'
 
-
-
-
 #Network Menu>>Wireless
 NetworkMenu_WirelessSubMenu = "//a[@id='tf1_network_accessPoints']","#tf1_network_accessPoints","tf1_network_accessPoints"
 NetworkMenu_LanSubMenu="//a[@id='tf1_network_lanIPv4Config']",'#tf1_network_lanIPv4Config','tf1_network_lanIPv4Config'
@@ -68,19 +83,16 @@ LANIPv4Config_StartIP="//input[@id='tf1_dhcpStartIp']",'#tf1_dhcpStartIp','tf1_d
 LANIPv4Config_EndIP="//input[@id='tf1_dhcpEndIp']",'#tf1_dhcpEndIp','tf1_dhcpEndIp'
 LANIPv4Config_DomainName="//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName'
 LANIPv4Config_SaveBtn="//input[@title='Save']","input[title='Save']"
+
 #Login Page
 LoginPage_UserName= '//*[@id="tf1_userName"]', '#tf1_userName', 'tf1_userName'
 LoginPage_Password= '//*[@id="tf1_password"]', '#tf1_password', 'tf1_password'
 LoginPage_LoginButton= "//button[normalize-space()='Login']", "button[title='Login']"
 
-
 firmware_version_sidebar = "/html/body/div[1]/div[1]/div[2]/p[1]/span", "body > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > p:nth-child(1) > span:nth-child(2)"
 mac_address_daseboard = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p', "body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > p:nth-child(2)"
 gpon_status_WAN_Information = '//*[@id="main"]/div[6]/div[1]/div/div[17]/p', "body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(18) > p:nth-child(2)"
 ipv4_address_daseboard = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p', "body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(5) > p:nth-child(2)"
-
-ipv6_address_daseboard_1 = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]', 'body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(7) > p:nth-child(2)'
-ipv6_address_daseboard_2 = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]', 'body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(7) > p:nth-child(3)'
 
 #Administration >> Maintenance >>
 # Maintenance '//*[@id="tf1_administration_backupRestore"]','#tf1_administration_backupRestore',

@@ -17,8 +17,9 @@ login=login(driver)
 login.webgui_login()
 
 obj=functional_smoke(driver)
+obj.TC_Functional_Smoke_029()
 # obj.get_access_point_status()
-obj.TC_Functional_Smoke_011_012()
+# obj.backup()
 
 # exlogger.log_result("TC_Functional_Smoke_4", obj.TC_Functional_Smoke_4())
 # exlogger.log_result("TC_Functional_Sanity_5", obj.TC_Functional_Sanity_5())

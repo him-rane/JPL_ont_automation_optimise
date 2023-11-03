@@ -38,7 +38,7 @@ class device_health:
             logger.error("WAN port is NOT 1015")
             fail += 1
 
-        if self.utils.get_firmware_version()!=Inputs.latast_firmware:
+        if self.utils.get_firmware_version()!=Inputs.latest_firmware:
             logger.error("Device is not having latest firmware")
             fail += 1
         # if self.utils.website_check()==False:

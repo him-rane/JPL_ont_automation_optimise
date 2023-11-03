@@ -46,10 +46,10 @@ class functional_smoke:
         self.login.webgui_login()
 
     def restore(self,restore_file_location):
+        logger.debug(f"Restoring the the device: {restore_file_location} ")
         self.utils.find_element(*locators.DashboardMenu).click()
         self.utils.find_element(*locators.AdministrationMenu).click()
         self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
-        # time.sleep(5)
         restore_path = self.utils.find_element(*locators.Maintenance_BackupReboot_FileInput)
         restore_path.send_keys(restore_file_location)
         time.sleep(5)
@@ -58,6 +58,13 @@ class functional_smoke:
         time.sleep(200)
         self.login.webgui_login()
 
+    def backup(self):
+        logger.info("Taking BACKUP of Device")
+        self.utils.find_element(*locators.DashboardMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        self.utils.find_element(*locators.Maintenance_BackupReboot_BackupButton).click()
+        self.utils.accept_alert()
 
 
     def TC_Functional_Smoke_4(self):
@@ -1092,111 +1099,121 @@ class functional_smoke:
             success += 1
         return success  # suceess should be 1 for assertion
 
+
     def TC_Functional_Smoke_029(self):
-        logger.info("Verify the dashboard page information of ONT")
+        logger.info("Verifying the dashboard page information of ONT")
+
         try:
-            if self.device_health.health_check() == False:
+            # Check device health
+            if not self.device_health.health_check():
                 logger.error('Device health check failed. Exiting the test.')
                 return False
+
             success_count = 0
 
+            # Check firmware version
             get_firmware_version = self.utils.get_firmware_version()
-            if get_firmware_version == Inputs.latast_firmware:
-                logger.info('Firmware version is verified on Dashboard successfully')
+            if get_firmware_version == Inputs.latest_firmware:
+                logger.info('Firmware version on Dashboard is verified successfully')
                 success_count += 1
             else:
-                logger.error('Firmware Version is not same as required\n Please check Input File details or Firmware in device')
+                logger.error(
+                    'Firmware Version is not the same as required. Please check Input File details or Firmware in the device.')
 
-
-            get_model = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p','#main > div.contentMidArea > div.mainContentDBord > div.diviceStatusBlock > div.diviceStatus > div:nth-child(5) > p').text
-
-
-            model_ = Inputs.latast_firmware.split('_')[1]
-            if get_model == model_:
-                logger.info('Model Name is verified on Dashboard successfully')
+            # Check model name
+            get_model = self.utils.find_element(*locators.Dashboard_ModelName).text
+            model_name = Inputs.latest_firmware.split('_')[1]
+            if get_model == model_name:
+                logger.info('Model Name on Dashboard is verified successfully')
                 success_count += 1
             else:
-                logger.error('Model name is not same as required')
+                logger.error('Model name is not the same as required')
 
+            # Check serial number
             get_serial_number = self.utils.get_serial_number()
             if len(get_serial_number) == 15 and get_serial_number != '000000000000000':
-                logger.info('Serial Number is verified on Dashboard successfully')
+                logger.info(f'Serial Number on Dashboard is verified successfully : {get_serial_number}')
                 success_count += 1
             else:
                 logger.error('Serial number is invalid')
 
-            get_ap1_ssid = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[7]/p').text
-            get_ap4_ssid = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[8]/p').text
-
-            if get_ap1_ssid != '' and get_ap4_ssid != '':
-                logger.info('Primary AP SSID Information exist on Dashboard')
+            # Check AP SSID information
+            get_ap1_ssid = self.utils.find_element(*locators.Dashboard_ap1_SSID).text
+            get_ap4_ssid = self.utils.find_element(*locators.Dashboard_ap4_SSID).text
+            if get_ap1_ssid and get_ap4_ssid:
+                logger.info(f'Primary AP SSID Information exists on Dashboard : {get_ap1_ssid} And {get_ap4_ssid}')
                 success_count += 1
             else:
                 logger.info('Primary AP SSID Information is missing on Dashboard')
 
-            wan_mac_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p').text
-
-            if wan_mac_address != '' and len(wan_mac_address) == 17:
-                logger.info('WAN MAC Address Information exist on Dashboard')
+            # Check WAN MAC Address
+            wan_mac_address = self.utils.find_element(*locators.Dashboard_WAN_MacAddress).text
+            if wan_mac_address and len(wan_mac_address) == 17:
+                logger.info(f'WAN MAC Address Information exists on Dashboard : {wan_mac_address}')
                 success_count += 1
             else:
                 logger.error('WAN MAC Address Information is missing on Dashboard')
 
-            lan_mac_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[10]/p').text
-
-            if lan_mac_address != '' and len(lan_mac_address) == 17:
-                logger.info('LAN MAC Address Information exist on Dashboard')
+            # Check LAN MAC Address
+            lan_mac_address = self.utils.find_element(*locators.Dashboard_LAN_MacAddress).text
+            if lan_mac_address and len(lan_mac_address) == 17:
+                logger.info(f'LAN MAC Address Information exists on Dashboard : {lan_mac_address}')
                 success_count += 1
             else:
                 logger.error('LAN MAC Address Information is missing on Dashboard')
 
-            wan_ip_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p').text
-            lan_ip_address = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[11]/p').text
-
-            if wan_ip_address != '0.0.0.0' and lan_ip_address != '0.0.0.0' and wan_ip_address != '' and lan_ip_address != '':
-                logger.info('WAN and LAN IP Address Information exist on Dashboard')
+            # Check WAN and LAN IP Address
+            wan_ip_address = self.utils.find_element(*locators.Dashboard_WAN_IPv4).text
+            lan_ip_address = self.utils.find_element(*locators.Dashboard_LAN_IPv4).text
+            if wan_ip_address != '0.0.0.0' and lan_ip_address != '0.0.0.0' and wan_ip_address and lan_ip_address:
+                logger.info(f'WAN and LAN IP Address Information exists on Dashboard : {wan_ip_address} Ans {lan_ip_address}')
                 success_count += 1
             else:
                 logger.error('WAN and LAN Address Information are missing on Dashboard')
 
-            wan_status = self.utils.find_element('//body[1]/div[1]/div[2]/div[6]/div[2]/div[4]/div[3]/div[6]/p[1]/span[1]')
-            lan_status = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[12]/p/span')
+            # Check WAN and LAN Status
+            wan_status = self.utils.find_element(*locators.Dashboard_WAN_Status)
+            lan_status = self.utils.find_element(*locators.Dashboard_LAN_Status)
             if wan_status.get_attribute('class') == 'yesNo' and lan_status.get_attribute('class') == 'yesNo':
-                logger.info('WAN and LAN Status Information exist on Dashboard')
+                logger.info('WAN and LAN Status Information exists on Dashboard')
                 success_count += 1
             else:
                 logger.error('WAN and LAN Status Information are missing on Dashboard')
 
-            tr69_status = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[2]/div[5]/p/span')
+            # Check TR-069 Status
+            tr69_status = self.utils.find_element(*locators.Dashboard_tr69_Status)
             if tr69_status.get_attribute('class') == 'yesNo':
-                logger.info('TR-069 Status Information exist on Dashboard')
+                logger.info('TR-069 Status Information exists on Dashboard')
                 success_count += 1
             else:
                 logger.error('TR-069 Status Information is missing on Dashboard')
 
-            wan_ipv6_1 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]').text
-            wan_ipv6_2 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]').text
-
-            if wan_ipv6_1 != '' and wan_ipv6_2 != '':
-                logger.info('WAN IPv6 Information exist on Dashboard')
+            # Check WAN IPv6 Information
+            wan_ipv6_1 = self.utils.find_element(*locators.Dashboard_WAN_IPv6_1).text
+            wan_ipv6_2 = self.utils.find_element(*locators.Dashboard_WAN_IPv6_2).text
+            if wan_ipv6_1 and wan_ipv6_2:
+                logger.info('WAN IPv6 Information exists on Dashboard')
                 success_count += 1
             else:
-                logger.error('WAN IPv6 Information are missing on Dashboard')
+                logger.error('WAN IPv6 Information is missing on Dashboard')
 
-            lan_ipv6_1 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[1]').text
-            lan_ipv6_2 = self.utils.find_element('//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[2]').text
-
-            if lan_ipv6_1 != '' and lan_ipv6_2 != '':
-                logger.info('LAN IPv6 Information exist on Dashboard')
+            # Check LAN IPv6 Information
+            lan_ipv6_1 = self.utils.find_element(*locators.Dashboard_LAN_IPv6_1).text
+            lan_ipv6_2 = self.utils.find_element(*locators.Dashboard_LAN_IPv6_2).text
+            if lan_ipv6_1 and lan_ipv6_2:
+                logger.info('LAN IPv6 Information exists on Dashboard')
                 success_count += 1
             else:
-                logger.error('LAN IPv6 Information are missing on Dashboard')
+                logger.error('LAN IPv6 Information is missing on Dashboard')
 
-            if success_count != 11:
-                return False
+            if success_count == 11:
+                logger.info('All information on the Dashboard is verified successfully.')
+                return True
+            else:
+                logger.error('Verification of Dashboard information failed.')
                 self.utils.get_dbglog()
+                return False
 
-            return True
         except Exception as e:
             logger.error("Error occurred while executing TC_Functional_Smoke_029: %s", str(e))
             return False
@@ -1476,90 +1493,6 @@ class functional_smoke:
 
         return get_access_point_status, get_profile_names
 
-    # def TC_Functional_Smoke_011_012(self):
-    #     print('Validating Device Backup and Restore functionality from WEBGUI')
-    #     if self.device_health.health_check() == False:
-    #         logger.error('Device health check failed. Exiting the test.')
-    #         return False
-    #     # configuring wireless information
-    #     print('Configuring Wireless Profiles')
-    #     wireless_data_before_backup = self.set_parameters_before_factory_reset()
-    #
-    #
-    #     self.utils.find_element(*locators.DashboardMenu).click()
-    #     file_path = Inputs.file_path
-    #     serial_number = self.utils.find_element( '/html/body/div[1]/div[1]/div[2]/p[2]/span').text
-    #     model = self.utils.find_element(*locators.Dashboard_ModelName).text
-    #
-    #     backup_file = serial_number + '_' + model + '.enc'
-    #
-    #     # adding port forwarding rule
-    #     print('Adding Port Forwarding Rule')
-    #     self.utils.find_element( '//*[@id="menu1"]').send_keys('port')
-    #     time.sleep(2)
-    #     self.driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi0"]').click()
-    #     time.sleep(2)
-    #     self.utils.find_element( '//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
-    #     port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
-    #     port_forwarding_configuration.select_by_value('ACCEPT')
-    #     self.utils.find_element( '//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
-    #     self.utils.find_element( '//*[@id="tf1_txtinternalPort"]').send_keys('80')
-    #     self.utils.find_element( '//*[@id="tf1_dialog"]/div[3]/input[2]').click()
-    #     time.sleep(10)
-    #
-    #     # Taking Backup from WEBGUI
-    #     print('Taking BACKUP of Device')
-    #     self.utils.find_element(*locators.AdministrationMenu).click()
-    #     self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
-    #     self.utils.find_element(*locators.Maintenance_BackupReboot_BackupButton).click()
-    #
-    #     time.sleep(30)
-    #
-    #     self.utils.accept_alert()
-    #     files = os.listdir(file_path)
-    #
-    #     if backup_file in files:
-    #         logger.info('Backup file Found in given path')
-    #     else:
-    #         logger.error('Backup file Not found')
-    #         return False
-    #     time.sleep(10)
-    #
-    #     # Restore Operation Code
-    #     restore_file_location = file_path + r'\\' + backup_file
-    #     logger.info('Performing Restore Operation')
-    #     self.factory_reset()
-    #     self.restore(restore_file_location)
-    #
-    #     logger.info('Checking Port Forwarding rule details after Restore')
-    #     success = 0
-    #
-    #     self.utils.search_gui('Port Forwarding')
-    #     time.sleep(2)
-    #     data=self.utils.find_element("//tr[@id='portForwarding1']",'#portForwarding1')
-    #     port_forwarding_status = data.is_displayed()  # Gives True for success
-    #
-    #     if port_forwarding_status == True:
-    #         success += 1
-    #
-    #     print('Checking wireless profiles after Restore')
-    #     wireless_data_after_restore = self.get_access_point_status()
-    #     if wireless_data_before_backup == wireless_data_after_restore:
-    #         success += 1
-    #     else:
-    #         print('Fail')
-    #
-    #     print('Removing Backup File')
-    #     os.remove(file_path + '\\' + backup_file)
-    #
-    #     if success != 2:
-    #         self.utils.get_dbglog()
-    #         return False
-    #     else:
-    #         return True
-    #
-    #       # success should be 2 for assert check
-
     def TC_Functional_Smoke_011_012(self):
         # Step 1: Validating Device Backup and Restore functionality from WEBGUI
         logger.info(" Validating Device Backup and Restore functionality from WEBGUI")
@@ -1581,10 +1514,7 @@ class functional_smoke:
 
         # Step 4: Adding Port Forwarding Rule
         logger.info("Adding Port Forwarding Rule")
-        self.utils.find_element('//*[@id="menu1"]').send_keys("port")
-        time.sleep(2)
-        self.driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi0"]').click()
-        time.sleep(2)
+        self.utils.search_gui('Port Forwarding')
         self.utils.find_element('//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
         port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
         port_forwarding_configuration.select_by_value('ACCEPT')
@@ -1594,15 +1524,9 @@ class functional_smoke:
         time.sleep(10)
 
         # Step 5: Taking Backup from WEBGUI
-        logger.info("Taking BACKUP of Device")
-        self.utils.find_element(*locators.AdministrationMenu).click()
-        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
-        self.utils.find_element(*locators.Maintenance_BackupReboot_BackupButton).click()
-        time.sleep(30)
+        self.backup()
 
-        self.utils.accept_alert()
         files = os.listdir(Inputs.file_path)
-
         if backup_file in files:
             logger.info("Backup file found in the given path.")
         else:
@@ -1613,23 +1537,12 @@ class functional_smoke:
 
         # Step 6: Restore Operation
         restore_file_location = os.path.join(Inputs.file_path, backup_file)
-        logger.info("Step 6: Performing Restore Operation")
+        logger.debug("Performing Restore Operation")
         self.factory_reset()
         self.restore(restore_file_location)
 
-        # self.utils.find_element(*locators.AdministrationMenu).click()
-        # self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
-        # restore_path = self.utils.find_element(*locators.Maintenance_BackupReboot_FileInput)
-        # restore_path.send_keys(restore_file_location)
-        # time.sleep(5)
-        # self.utils.find_element(*locators.Maintenance_BackupReboot_FileInputBtn).click()
-        # self.utils.accept_alert()
-        # time.sleep(200)
-        #
-        # self.login.webgui_login()
-
         # Step 7: Checking Port Forwarding rule details after Restore
-        print("Step 7: Checking Port Forwarding rule details after Restore")
+        logger.debug("Checking Port Forwarding rule details after Restore")
         success = 0
 
         self.utils.search_gui('Port Forwarding')
@@ -1641,7 +1554,7 @@ class functional_smoke:
             success += 1
 
         # Step 8: Checking wireless profiles after Restore
-        print("Step 8: Checking wireless profiles after Restore")
+        logger.debug("Checking wireless profiles after Restore")
         wireless_data_after_restore = self.get_access_point_status()
         if wireless_data_before_backup == wireless_data_after_restore:
             success += 1
@@ -1649,7 +1562,7 @@ class functional_smoke:
             print("Fail")
 
         # Step 9: Removing Backup File
-        print("Step 9: Removing Backup File")
+        logger.debug("Removing Backup File")
         os.remove(os.path.join(Inputs.file_path, backup_file))
 
         if success != 2:

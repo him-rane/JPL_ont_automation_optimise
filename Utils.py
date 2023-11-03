@@ -162,9 +162,9 @@ class Utils:
         logger.debug("Checking WAN IPv6 Address")
         try:
             if self.find_element('//*[@id="breadCrumb"]').text == "Dashboard":
-                ipv6 = self.find_element(*locators.ipv6_address_daseboard_1).text
+                ipv6 = self.find_element(*locators.Dashboard_WAN_IPv6_1).text
                 if 'fe80' in ipv6:
-                    ipv6 = self.find_element(*locators.ipv6_address_daseboard_2).text
+                    ipv6 = self.find_element(*locators.Dashboard_WAN_IPv6_2).text
                 logger.info("WAN IPv6 Address : " + ipv6)
                 return ipv6.split('/')[0]
             else:
