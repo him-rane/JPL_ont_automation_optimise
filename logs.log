@@ -1,76 +1,16 @@
-2023-11-03 14:17:35,538 logger_util -> DEBUG: Initializing Chrome WebDriver
-2023-11-03 14:17:42,600 logger_util -> DEBUG: Checking login status
-2023-11-03 14:17:57,680 logger_util -> DEBUG: Not logged in to the web GUI: False
-2023-11-03 14:17:57,681 logger_util -> DEBUG: Attempting to log in via WEBGUI
-2023-11-03 14:18:04,802 logger_util -> INFO: Login Successful
-2023-11-03 14:18:19,863 logger_util -> WARNING: Error occurred while closing the login popup
-2023-11-03 14:18:24,869 logger_util -> INFO: Verifying the dashboard page information of ONT
-2023-11-03 14:18:24,873 logger_util -> DEBUG: Checking login status
-2023-11-03 14:18:24,902 logger_util -> DEBUG: Logged in to the web GUI: True
-2023-11-03 14:18:24,903 logger_util -> DEBUG: Performing device health check...
-2023-11-03 14:18:24,903 logger_util -> DEBUG: Checking GPON status
-2023-11-03 14:18:24,904 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
-2023-11-03 14:18:25,947 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-11-03 14:18:33,495 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
-2023-11-03 14:18:34,547 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
-2023-11-03 14:18:34,565 logger_util -> INFO: GPON Status: O5
-2023-11-03 14:18:34,566 logger_util -> DEBUG: Checking WAN IPv4 Address
-2023-11-03 14:18:35,618 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-11-03 14:18:36,652 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-11-03 14:18:42,009 logger_util -> DEBUG: Checking WAN IPv4 Address
-2023-11-03 14:18:43,035 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-11-03 14:18:44,098 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
-2023-11-03 14:18:44,123 logger_util -> INFO: WAN IPv4 Address : 10.63.66.142
-2023-11-03 14:18:44,124 logger_util -> DEBUG: Checking WAN IPv6 Address
-2023-11-03 14:18:45,140 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-11-03 14:18:46,203 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
-2023-11-03 14:18:46,226 logger_util -> INFO: WAN IPv6 Address : 2405:201:fffb:400::52/128
-2023-11-03 14:18:46,227 logger_util -> DEBUG: Getting WAN Port Configuration
-2023-11-03 14:18:46,227 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
-2023-11-03 14:18:47,268 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
-2023-11-03 14:18:53,089 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
-2023-11-03 14:18:54,141 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
-2023-11-03 14:18:54,168 logger_util -> INFO: WAN Port Configuration found: 1015
-2023-11-03 14:18:54,169 logger_util -> DEBUG: Retrieving Firmware Version...
-2023-11-03 14:18:55,205 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-11-03 14:18:56,256 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-11-03 14:19:01,101 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
-2023-11-03 14:19:01,130 logger_util -> INFO: Firmware Version SKYWTF1_JCOW407_D2.52.1
-2023-11-03 14:19:01,131 logger_util -> DEBUG: Checking IPv4 Connectivity with Ping
-2023-11-03 14:19:10,333 logger_util -> INFO: IPv4 Ping is successful
-2023-11-03 14:19:10,334 logger_util -> DEBUG: Checking IPv6 Connectivity with Ping
-2023-11-03 14:19:19,514 logger_util -> INFO: IPv6 Ping is successful
-2023-11-03 14:19:19,515 logger_util -> INFO: Device health check completed successfully.
-2023-11-03 14:19:19,516 logger_util -> DEBUG: Retrieving Firmware Version...
-2023-11-03 14:19:20,546 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
-2023-11-03 14:19:21,599 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
-2023-11-03 14:19:21,623 logger_util -> INFO: Firmware Version SKYWTF1_JCOW407_D2.52.1
-2023-11-03 14:19:21,624 logger_util -> INFO: Firmware version on Dashboard is verified successfully
-2023-11-03 14:19:22,671 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p'
-2023-11-03 14:19:22,687 logger_util -> INFO: Model Name on Dashboard is verified successfully
-2023-11-03 14:19:22,688 logger_util -> DEBUG: Getting Serial Number 
-2023-11-03 14:19:23,741 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[2]/span'
-2023-11-03 14:19:23,758 logger_util -> INFO: Serial Number found: RSD0TKF00000030
-2023-11-03 14:19:23,758 logger_util -> INFO: Serial Number on Dashboard is verified successfully : RSD0TKF00000030
-2023-11-03 14:19:24,798 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[7]/p'
-2023-11-03 14:19:25,870 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[8]/p'
-2023-11-03 14:19:25,886 logger_util -> INFO: Primary AP SSID Information exists on Dashboard :  JioFiber-pt55E And  JioFiber-pt55E_5G
-2023-11-03 14:19:26,927 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p'
-2023-11-03 14:19:26,942 logger_util -> INFO: WAN MAC Address Information exists on Dashboard : 14:11:6d:49:bf:48
-2023-11-03 14:19:27,995 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[10]/p'
-2023-11-03 14:19:28,017 logger_util -> INFO: LAN MAC Address Information exists on Dashboard : 14:11:6d:49:bf:49
-2023-11-03 14:19:29,054 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
-2023-11-03 14:19:30,094 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[11]/p'
-2023-11-03 14:19:30,101 logger_util -> INFO: WAN and LAN IP Address Information exists on Dashboard : 10.63.66.142 Ans 192.168.29.1
-2023-11-03 14:19:31,137 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[6]/p/span'
-2023-11-03 14:19:32,190 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[12]/p/span'
-2023-11-03 14:19:32,244 logger_util -> INFO: WAN and LAN Status Information exists on Dashboard
-2023-11-03 14:19:33,295 logger_util -> DEBUG: Element found using locator: xpath='//body[1]/div[1]/div[2]/div[6]/div[2]/div[2]/div[5]/p[1]/span[1]'
-2023-11-03 14:19:33,324 logger_util -> INFO: TR-069 Status Information exists on Dashboard
-2023-11-03 14:19:34,366 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
-2023-11-03 14:19:35,421 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[2]'
-2023-11-03 14:19:35,438 logger_util -> INFO: WAN IPv6 Information exists on Dashboard
-2023-11-03 14:19:36,459 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[1]'
-2023-11-03 14:19:37,491 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[13]/p[2]'
-2023-11-03 14:19:37,500 logger_util -> INFO: LAN IPv6 Information exists on Dashboard
-2023-11-03 14:19:37,500 logger_util -> INFO: All information on the Dashboard is verified successfully.
+2023-11-06 17:34:44,624 logger_util -> DEBUG: Initializing Chrome WebDriver
+2023-11-06 17:34:51,818 logger_util -> DEBUG: Checking login status
+2023-11-06 17:35:06,824 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-11-06 17:35:06,824 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-11-06 17:35:09,990 logger_util -> INFO: Login Successful
+2023-11-06 17:35:25,092 logger_util -> WARNING: Error occurred while closing the login popup
+2023-11-06 17:35:30,107 logger_util -> INFO: Validating redirection to login page after Factory Reset from WebGUI
+2023-11-06 17:35:30,108 logger_util -> INFO: Factory Reseting the Device
+2023-11-06 17:35:31,152 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-11-06 17:35:34,644 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu5"]'
+2023-11-06 17:35:35,757 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_administration_backupRestore"]'
+2023-11-06 17:35:38,011 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmBackupFactoryDefaultSettings"]/div[1]/div/input'
+2023-11-06 17:35:41,114 logger_util -> INFO: Alert Accepted
+2023-11-06 17:35:51,126 logger_util -> DEBUG: Reseting Device (Estimated Time: 300 Seconds)
+2023-11-06 17:40:52,164 logger_util -> DEBUG: Element found using locator: xpath='//div[@class='loginForm']'
+2023-11-06 17:40:52,165 logger_util -> INFO: WebGUI successfully redirected to the login page after Factory Reset

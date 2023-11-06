@@ -7,6 +7,10 @@ AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
 #DaseBoard
+DashboardMenu_Logout_Dropdown="//p[@class='dropbtn']",'.dropbtn'
+DashboardMenu_Logout_Dropdown_Logout="//div[@class='dropdown-content']",'.dropdown-content','tf1_logoutAnchor'
+DashboardMenu_Logout_Dropdown_Logout_OK="//a[normalize-space()='OK']",'body > div:nth-child(1) > div:nth-child(2) > form:nth-child(6) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)'
+
 Dashboard_ModelName = '//*[@id="main"]/div[6]/div[2]/div[4]/div[1]/div[5]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > p:nth-child(2)'
 Dashboard_WAN_MacAddress='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > p:nth-child(2)'
 Dashboard_LAN_MacAddress='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[10]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(10) > p:nth-child(2)'
@@ -48,11 +52,6 @@ IPv6FirewallRules_DeleteMenu="//li[@id='deleteMenu']",'#deleteMenu','deleteMenu'
 
 IPv6FirewallRules_Entries='//*[@id="recordsData_info"]','#recordsData_info','recordsData_info'
 IPv6FirewallRules_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'
-# DashboardMenu
-
-DashboardMenu_Logout_Dropdown="//p[@class='dropbtn']",'.dropbtn'
-DashboardMenu_Logout_Dropdown_Logout="//div[@class='dropdown-content']",'.dropdown-content','tf1_logoutAnchor'
-DashboardMenu_Logout_Dropdown_Logout_OK="//a[normalize-space()='OK']",'body > div:nth-child(1) > div:nth-child(2) > form:nth-child(6) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)'
 
 #Administration >> Maintenance>>
 AdministrationMenu_MaintenanceSubMenu='//*[@id="tf1_administration_backupRestore"]','#tf1_administration_backupRestore','tf1_administration_backupRestore'
@@ -104,3 +103,27 @@ Maintenance_BackupReboot_FileInputBtn="//input[@title='Restore']","input[title='
 DateTimeConfiguration_CurrentRouterTime = '//*[@id="tf1__div"]/p', "div[id='tf1__div'] p"
 DateTimeConfiguration_TimeZone = '//*[@id="tf1_selTimezone"]', "#tf1_selTimezone"
 DateTimeConfiguration_SaveButton = '//*[@id="tf1_frmDateAndTime"]/div[10]/input[1]', "input[title='Save']"
+
+#static IPv4 Configuration
+WanConfigIPv4_SelectMenu='//*[@id="tf1_ispType"]','#tf1_ispType','tf1_ispType'
+WanConfigIPv4_IpAddr='//*[@id="tf1_stIpAddr"]','#tf1_stIpAddr','tf1_stIpAddr'
+WanConfigIPv4_IpSubnetMask='//*[@id="tf1_stIpSnetMask"]',"#tf1_stIpSnetMask",'tf1_stIpSnetMask'
+WanConfigIPv4_GatewayIPAddr="//input[@id='tf1_stGwIpAddr']",'#tf1_stGwIpAddr','tf1_stGwIpAddr'
+WanConfigIPv4_PrimaryDns="//input[@id='tf1_primaryDns']",'#tf1_primaryDns','tf1_primaryDns'
+WanConfigIPv4_SecondaryDns="//input[@id='tf1_secDns']","#tf1_secDns",'tf1_secDns'
+WanConfigIPv4_SaveBtn='//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]',"input[title='Save']"
+
+#static IPv6 Configuration
+WanConfigIPv6_SelectMenu="//select[@id='tf1_ispType']","#tf1_ispType",'tf1_ispType'
+WanConfigIPv6_IPv6Addr="//input[@id='tf1_ipV6Addr']","#tf1_ipV6Addr",'tf1_ipV6Addr'
+WanConfigIPv6_PrefixLen="//input[@id='tf1_ipV6AddrPrefixLength']","#tf1_ipV6AddrPrefixLength","tf1_ipV6AddrPrefixLength"
+WanConfigIPv6_Gateway="//input[@id='tf1_ipV6AddrGateway']",'#tf1_ipV6AddrGateway','tf1_ipV6AddrGateway'
+WanConfigIPv6_PrimaryDns="//input[@id='tf1_staticPrimaryDns']",'#tf1_staticPrimaryDns','tf1_staticPrimaryDns'
+WanConfigIPv6_SecondaryDns="//input[@id='tf1_staticSecondaryDns']",'#tf1_staticSecondaryDns','tf1_staticSecondaryDns'
+WanConfigIPv6_SaveBtn='//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]',"input[title='Save']"
+
+#WAN Information
+DeviceStatus_WANInfo="//a[normalize-space()='WAN Information']","div[id='main'] li:nth-child(3) a:nth-child(1)"
+WanInfo_IPv6Addr1='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]',"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(6) > p:nth-child(2)"
+WanInfo_IPv6Addr2='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]',"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(6) > p:nth-child(3)"
+WanInfo_IPv4Addr='//*[@id="main"]/div[6]/div[1]/div/div[3]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4) > p:nth-child(2)'

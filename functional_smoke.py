@@ -43,7 +43,7 @@ class functional_smoke:
         self.utils.accept_alert()
         logger.debug('Reseting Device (Estimated Time: 300 Seconds)')
         time.sleep(300)
-        self.login.webgui_login()
+
 
     def restore(self,restore_file_location):
         logger.debug(f"Restoring the the device: {restore_file_location} ")
@@ -1219,167 +1219,168 @@ class functional_smoke:
             return False
 
     def TC_Functional_Sanity_007(self):
-        logger.info("Validate the static IP allocation functionalitu to WAN side of the ONT")
-
-        if self.device_health.health_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
-            return False
-
-        #Configuring IPv4
-        self.utils.search_gui('WAN IPv4 Configuration')
-        wan = Select(self.utils.find_element("//select[@id='tf1_ispType']"))
-        wan.select_by_value('1')
-        # Configuring Static IPv4
-        logger.info('Configuring IP type to Static')
-        static_wan_address = '20.15.10.17'
-        subnet = '255.255.255.0'
-        gateway = '20.15.10.1'
-        primary_dns = '1.2.3.4'
-        secondary_dns = '1.2.3.5'
-        self.utils.find_element( '//*[@id="tf1_stIpAddr"]').send_keys(static_wan_address)
-        self.utils.find_element( '//*[@id="tf1_stIpSnetMask"]').send_keys(subnet)
-        self.utils.find_element( '//*[@id="tf1_stGwIpAddr"]').send_keys(gateway)
-        self.utils.find_element( '//*[@id="tf1_primaryDns"]').clear()
-        self.utils.find_element( '//*[@id="tf1_primaryDns"]').send_keys(primary_dns)
-        self.utils.find_element( '//*[@id="tf1_secDns"]').clear()
-        self.utils.find_element( '//*[@id="tf1_secDns"]').send_keys(secondary_dns)
-        self.utils.find_element( '//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]').click()
-        self.utils.accept_alert()
-        time.sleep(15)
-
-        #Configuring IPv6
-        self.utils.search_gui('WAN IPv6 Configuration')
-        wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
-        wan.select_by_value('ifStatic6')
-        static_wan_address_v6 = 'fd00::65'
-        prefix = '64'
-        gateway_v6 = 'fd00::64'
-        primary_dns_v6 = 'fd00::63'
-        secondary_dns_v6 = 'fd00::62'
-        self.utils.find_element( '//*[@id="tf1_ipV6Addr"]').send_keys(static_wan_address_v6)
-        self.utils.find_element( '//*[@id="tf1_ipV6AddrPrefixLength"]').send_keys(prefix)
-        self.utils.find_element( '//*[@id="tf1_ipV6AddrGateway"]').send_keys(gateway_v6)
-        self.utils.find_element( '//*[@id="tf1_staticPrimaryDns"]').clear()
-        self.utils.find_element( '//*[@id="tf1_staticPrimaryDns"]').send_keys(primary_dns_v6)
-        self.utils.find_element( '//*[@id="tf1_staticSecondaryDns"]').clear()
-        self.utils.find_element( '//*[@id="tf1_staticSecondaryDns"]').send_keys(secondary_dns_v6)
-        self.utils.find_element( '//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]').click()
-        self.utils.accept_alert()
-        time.sleep(15)
-
-        # go to Status Menu
-        self.utils.find_element(*locators.StatusMenu).click()
-        self.utils.find_element(*locators.StatusMenu_DeviceStatus).click()
-
-        self.utils.find_element( '//*[@id="main"]/div[6]/ul/li[3]/a').click()
-        ipv4_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
-        static_ipv4 = ipv4_after_change.split(' ')[0]
-
+        logger.info("Validate the static IP allocation functionality to WAN side of the ONT")
         try:
-            ipv6_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
-        except:
-            ipv6_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
 
-        static_ipv6 = ipv6_after_change.split(' ')[0]
+            #Step 1: Configuring IPv4
+            self.utils.search_gui('WAN IPv4 Configuration')
+            wan = Select(self.utils.find_element(*locators.WanConfigIPv4_SelectMenu))
+            wan.select_by_value('1')
+            # Configuring Static IPv4
+            logger.info('Configuring IP type to Static')
+            static_wan_address = '20.15.10.17'
+            subnet = '255.255.255.0'
+            gateway = '20.15.10.1'
+            primary_dns = '1.2.3.4'
+            secondary_dns = '1.2.3.5'
+            self.utils.find_element(*locators.WanConfigIPv4_IpAddr).send_keys(static_wan_address)
+            self.utils.find_element(*locators.WanConfigIPv4_IpSubnetMask).send_keys(subnet)
+            self.utils.find_element(*locators.WanConfigIPv4_GatewayIPAddr).send_keys(gateway)
+            self.utils.find_element(*locators.WanConfigIPv4_PrimaryDns).clear()
+            self.utils.find_element(*locators.WanConfigIPv4_PrimaryDns).send_keys(primary_dns)
+            self.utils.find_element(*locators.WanConfigIPv4_SecondaryDns ).clear()
+            self.utils.find_element(*locators.WanConfigIPv4_SecondaryDns).send_keys(secondary_dns)
+            self.utils.find_element(*locators.WanConfigIPv4_SaveBtn).click()
+            self.utils.accept_alert()
+            time.sleep(15)
 
-        if static_wan_address_v6 in static_ipv6:
-            pass
-        else:
-            ipv6_after_change = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+            #Step 2:Configuring IPv6
+            self.utils.search_gui('WAN IPv6 Configuration')
+            wan = Select(self.utils.find_element(*locators.WanConfigIPv6_SelectMenu))
+            wan.select_by_value('ifStatic6')
+            static_wan_address_v6 = 'fd00::65'
+            prefix = '64'
+            gateway_v6 = 'fd00::64'
+            primary_dns_v6 = 'fd00::63'
+            secondary_dns_v6 = 'fd00::62'
+            self.utils.find_element(*locators.WanConfigIPv6_IPv6Addr).send_keys(static_wan_address_v6)
+            self.utils.find_element(*locators.WanConfigIPv6_PrefixLen).send_keys(prefix)
+            self.utils.find_element(*locators.WanConfigIPv6_Gateway).send_keys(gateway_v6)
+            self.utils.find_element(*locators.WanConfigIPv6_PrimaryDns).clear()
+            self.utils.find_element(*locators.WanConfigIPv6_PrimaryDns).send_keys(primary_dns_v6)
+            self.utils.find_element(*locators.WanConfigIPv6_SecondaryDns).clear()
+            self.utils.find_element(*locators.WanConfigIPv6_SecondaryDns).send_keys(secondary_dns_v6)
+            self.utils.find_element(*locators.WanConfigIPv6_SaveBtn).click()
+            self.utils.accept_alert()
+            time.sleep(15)
 
-        logger.info(ipv6_after_change)
+            # go to Status Menu
+            self.utils.find_element(*locators.StatusMenu).click()
+            self.utils.find_element(*locators.StatusMenu_DeviceStatus).click()
+            self.utils.find_element(*locators.DeviceStatus_WANInfo).click()
+            ipv4_after_change = self.utils.find_element( *locators.WanInfo_IPv4Addr).text
+            static_ipv4 = ipv4_after_change.split(' ')[0]
 
-
-        if static_ipv4 == static_wan_address:
-            logger.info('Static WAN IPv4 Configured Successfully')
-        else:
-            logger.error('Static WAN IPv4 Configuration Failed')
-
-        if (static_wan_address_v6 in ipv6_after_change):
-            logger.info('Static WAN IPv6 Configured Successfully')
-        else:
-            logger.error('Static WAN IPv6 Configuration Failed')
-
-        ont_state = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[17]/p').text
-
-
-        # Configuring Dynamic WAN IPv4
-        self.utils.search_gui('WAN IPv4 Configuration')
-        wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
-        wan.select_by_value('0')
-        dns = Select(self.driver.find_element(By.ID, 'tf1_dnsServerSource'))
-        dns.select_by_value('1')
-        self.utils.find_element( '//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]').click()
-        time.sleep(10)
-
-        # Configuring Dynamic IPv6
-        logger.debug('Configuring IP type to Dynamic')
-        self.utils.search_gui('WAN IPv6 Configuration')
-        wan = Select(self.driver.find_element(By.ID, 'tf1_ispType'))
-        wan.select_by_value('dhcp6c')
-        self.utils.find_element( '//*[@id="tf1_dhcpV6SatelessMode2"]').click()
-        self.utils.find_element( '//*[@id="tf1_frmWanIpv6Config"]/div[5]/input[1]').click()
-        time.sleep(10)
-
-        # waiting for changes
-        time.sleep(60)
-        dynamic_ipv4 = ''
-        dynamic_ipv6 = ''
-
-        # go to Status Menu
-        self.utils.find_element(*locators.StatusMenu).click()
-        self.utils.find_element(*locators.StatusMenu_DeviceStatus).click()
-
-        time.sleep(5)
-        self.utils.find_element( '//*[@id="main"]/div[6]/ul/li[3]/a').click()
-        try:
-            dynamic_ipv4_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
-            dynamic_ipv4 = dynamic_ipv4_full.split(' ')[0]
             try:
-                dynamic_ipv6_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+                ipv6_after_change = self.utils.find_element(*locators.WanInfo_IPv6Addr1).text
             except:
-                dynamic_ipv6_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
-            dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
-            if 'fe80' in dynamic_ipv6:
-                dynamic_ipv6 = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
+                ipv6_after_change = self.utils.find_element( *locators.WanInfo_IPv6Addr2).text
 
-            logger.info('WAN IP Addresses after configuration to Dynamic')
-            logger.info('Wan Ipv4 Address: {}'.format(dynamic_ipv4))
-            logger.info('Wan Ipv6 Address: {}'.format(dynamic_ipv6))
+            static_ipv6 = ipv6_after_change.split(' ')[0]
 
-            if dynamic_ipv4 == '0.0.0.0':
-                time.sleep(30)
-                # Retry After 30 Seconds
-                dynamic_ipv4_full = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[3]/p').text
+            if static_wan_address_v6 in static_ipv6:
+                pass
+            else:
+                ipv6_after_change = self.utils.find_element( *locators.WanInfo_IPv6Addr2).text
+
+            logger.info(ipv6_after_change)
+
+
+            if static_ipv4 == static_wan_address:
+                logger.info('Static WAN IPv4 Configured Successfully')
+            else:
+                logger.error('Static WAN IPv4 Configuration Failed')
+
+            if (static_wan_address_v6 in ipv6_after_change):
+                logger.info('Static WAN IPv6 Configured Successfully')
+            else:
+                logger.error('Static WAN IPv6 Configuration Failed')
+
+            ont_state = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[17]/p').text
+
+
+            # Configuring Dynamic WAN IPv4
+            self.utils.search_gui('WAN IPv4 Configuration')
+            wan = Select(self.utils.find_element(*locators.WanConfigIPv4_SelectMenu))
+            wan.select_by_value('0')
+            dns = Select(self.driver.find_element(By.ID, 'tf1_dnsServerSource'))
+            dns.select_by_value('1')
+            self.utils.find_element(*locators.WanConfigIPv4_SaveBtn).click()
+            time.sleep(10)
+
+            # Configuring Dynamic IPv6
+            logger.debug('Configuring IP type to Dynamic')
+            self.utils.search_gui('WAN IPv6 Configuration')
+            wan = Select(self.utils.find_element(*locators.WanConfigIPv6_SelectMenu))
+            wan.select_by_value('dhcp6c')
+            self.utils.find_element( '//*[@id="tf1_dhcpV6SatelessMode2"]').click()
+            self.utils.find_element(*locators.WanConfigIPv6_SaveBtn).click()
+            time.sleep(10)
+
+            # waiting for changes
+            time.sleep(60)
+            dynamic_ipv4 = ''
+            dynamic_ipv6 = ''
+
+            # go to Status Menu
+            self.utils.find_element(*locators.StatusMenu).click()
+            self.utils.find_element(*locators.StatusMenu_DeviceStatus).click()
+            self.utils.find_element(*locators.DeviceStatus_WANInfo).click()
+            try:
+                dynamic_ipv4_full = self.utils.find_element( *locators.WanInfo_IPv4Addr).text
                 dynamic_ipv4 = dynamic_ipv4_full.split(' ')[0]
-
                 try:
-                    dynamic_ipv6_full = self.utils.find_element('//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]').text
+                    dynamic_ipv6_full = self.utils.find_element(*locators.WanInfo_IPv6Addr1).text
                 except:
-                    dynamic_ipv6_full = self.utils.find_element('//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]').text
-
+                    dynamic_ipv6_full = self.utils.find_element(*locators.WanInfo_IPv6Addr1).text
                 dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
+                if 'fe80' in dynamic_ipv6:
+                    dynamic_ipv6 = self.utils.find_element(*locators.WanInfo_IPv6Addr2).text
+
+                logger.info('WAN IP Addresses after configuration to Dynamic')
+                logger.info('Wan Ipv4 Address: {}'.format(dynamic_ipv4))
+                logger.info('Wan Ipv6 Address: {}'.format(dynamic_ipv6))
+
+                if dynamic_ipv4 == '0.0.0.0':
+                    time.sleep(30)
+                    # Retry After 30 Seconds
+                    dynamic_ipv4_full = self.utils.find_element( *locators.WanInfo_IPv4Addr).text
+                    dynamic_ipv4 = dynamic_ipv4_full.split(' ')[0]
+
+                    try:
+                        dynamic_ipv6_full = self.utils.find_element(*locators.WanInfo_IPv6Addr1).text
+                    except:
+                        dynamic_ipv6_full = self.utils.find_element(*locators.WanInfo_IPv6Addr2).text
+
+                    dynamic_ipv6 = dynamic_ipv6_full.split(' ')[0]
+            except Exception as E:
+                logger.error(E)
+
+            success = 0
+            if static_ipv4 != dynamic_ipv4 and dynamic_ipv4 != '0.0.0.0':
+                logger.info('Dynamic IPv4 from WAN Side is received')
+                success += 1
+            else:
+                logger.error('ONT has not received dynamic wan ipv4')
+
+            if static_ipv6 != dynamic_ipv6 and dynamic_ipv6 != '':
+                logger.info('Dynamic IPv6 from WAN Side is received')
+                success += 1
+            else:
+                logger.error('ONT has not received dynamic wan ipv6')
+
+            if success == 2:
+                return True
+            else :
+                self.utils.get_dbglog()
+                return False
         except Exception as E:
-            logger.error(E)
-
-        success = 0
-        if static_ipv4 != dynamic_ipv4 and dynamic_ipv4 != '0.0.0.0':
-            logger.info('Dynamic IPv4 from WAN Side is received')
-            success += 1
-        else:
-            logger.error('ONT has not received dynamic wan ipv4')
-
-        if static_ipv6 != dynamic_ipv6 and dynamic_ipv6 != '':
-            logger.info('Dynamic IPv6 from WAN Side is received')
-            success += 1
-        else:
-            logger.error('ONT has not received dynamic wan ipv6')
-
-        if success == 2:
-            return True
-        else :
-            self.utils.get_dbglog()
+            logger.error(f"Error occurred while configuring the static IP : {str(E)}")
             return False
+
 
     def TC_Functional_Sanity_55(self):
         for number in range (5):
@@ -1387,6 +1388,7 @@ class functional_smoke:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
             self.factory_reset()
+            self.login.webgui_login()
 
     def set_parameters_before_factory_reset(self):
         # driver = setup.get_driver()
@@ -1496,80 +1498,109 @@ class functional_smoke:
     def TC_Functional_Smoke_011_012(self):
         # Step 1: Validating Device Backup and Restore functionality from WEBGUI
         logger.info(" Validating Device Backup and Restore functionality from WEBGUI")
+        try:
+            # Check device health
+            if not self.device_health.health_check():
+                logger.error("Device health check failed. Exiting the test.")
+                return False
 
-        # Check device health
-        if not self.device_health.health_check():
-            logger.error("Device health check failed. Exiting the test.")
+            # Step 2: Configuring Wireless Profiles
+            logger.info("Configuring Wireless Profiles")
+            wireless_data_before_backup = self.set_parameters_before_factory_reset()
+
+            # Step 3: Obtain device information
+            self.utils.find_element(*locators.DashboardMenu).click()
+            serial_number = self.utils.find_element("/html/body/div[1]/div[1]/div[2]/p[2]/span").text
+            model = self.utils.find_element(*locators.Dashboard_ModelName).text
+            backup_file = f"{serial_number}_{model}.enc"
+
+            # Step 4: Adding Port Forwarding Rule
+            logger.info("Adding Port Forwarding Rule")
+            self.utils.search_gui('Port Forwarding')
+            self.utils.find_element('//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
+            port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
+            port_forwarding_configuration.select_by_value('ACCEPT')
+            self.utils.find_element('//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
+            self.utils.find_element('//*[@id="tf1_txtinternalPort"]').send_keys('80')
+            self.utils.find_element('//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+            time.sleep(10)
+
+            # Step 5: Taking Backup from WEBGUI
+            self.backup()
+
+            files = os.listdir(Inputs.file_path)
+            if backup_file in files:
+                logger.info("Backup file found in the given path.")
+            else:
+                logger.error("Backup file not found.")
+                return False
+
+            time.sleep(10)
+
+            # Step 6: Restore Operation
+            restore_file_location = os.path.join(Inputs.file_path, backup_file)
+            logger.debug("Performing Restore Operation")
+            self.factory_reset()
+            self.login.webgui_login()
+            self.restore(restore_file_location)
+
+            # Step 7: Checking Port Forwarding rule details after Restore
+            logger.debug("Checking Port Forwarding rule details after Restore")
+            success = 0
+
+            self.utils.search_gui('Port Forwarding')
+            time.sleep(2)
+            data = self.utils.find_element("//tr[@id='portForwarding1']", '#portForwarding1')
+            port_forwarding_status = data.is_displayed()  # Gives True for success
+
+            if port_forwarding_status:
+                success += 1
+
+            # Step 8: Checking wireless profiles after Restore
+            logger.debug("Checking wireless profiles after Restore")
+            wireless_data_after_restore = self.get_access_point_status()
+            if wireless_data_before_backup == wireless_data_after_restore:
+                success += 1
+            else:
+                print("Fail")
+
+            # Step 9: Removing Backup File
+            logger.debug("Removing Backup File")
+            os.remove(os.path.join(Inputs.file_path, backup_file))
+
+            if success != 2:
+                self.utils.get_dbglog()
+                return False
+            else:
+                return True
+        except Exception as e:
+            logger.error("Error occurred while executing TC_Functional_Smoke_011_012: %s", str(e))
             return False
 
-        # Step 2: Configuring Wireless Profiles
-        logger.info("Configuring Wireless Profiles")
-        wireless_data_before_backup = self.set_parameters_before_factory_reset()
+    def TC_Functional_Smoke_37(self):
+        logger.info('Validating redirection to login page after Factory Reset from WebGUI')
+        try:
+            # Perform factory reset
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            self.factory_reset()
 
-        # Step 3: Obtain device information
-        self.utils.find_element(*locators.DashboardMenu).click()
-        serial_number = self.utils.find_element("/html/body/div[1]/div[1]/div[2]/p[2]/span").text
-        model = self.utils.find_element(*locators.Dashboard_ModelName).text
-        backup_file = f"{serial_number}_{model}.enc"
-
-        # Step 4: Adding Port Forwarding Rule
-        logger.info("Adding Port Forwarding Rule")
-        self.utils.search_gui('Port Forwarding')
-        self.utils.find_element('//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
-        port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
-        port_forwarding_configuration.select_by_value('ACCEPT')
-        self.utils.find_element('//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
-        self.utils.find_element('//*[@id="tf1_txtinternalPort"]').send_keys('80')
-        self.utils.find_element('//*[@id="tf1_dialog"]/div[3]/input[2]').click()
-        time.sleep(10)
-
-        # Step 5: Taking Backup from WEBGUI
-        self.backup()
-
-        files = os.listdir(Inputs.file_path)
-        if backup_file in files:
-            logger.info("Backup file found in the given path.")
-        else:
-            logger.error("Backup file not found.")
+            # Check if redirected to the login page
+            try:
+                self.utils.find_element("//div[@class='loginForm']", "div[class='loginForm']")
+                logger.info("WebGUI successfully redirected to the login page after Factory Reset")
+                return True
+            except:
+                logger.error("WebGUI did not redirect to the login page after Factory Reset")
+                return False
+        except Exception as e:
+            logger.error(f"Error occurred during TC_Functional_Smoke_37: {str(e)}")
             return False
 
-        time.sleep(10)
 
-        # Step 6: Restore Operation
-        restore_file_location = os.path.join(Inputs.file_path, backup_file)
-        logger.debug("Performing Restore Operation")
-        self.factory_reset()
-        self.restore(restore_file_location)
 
-        # Step 7: Checking Port Forwarding rule details after Restore
-        logger.debug("Checking Port Forwarding rule details after Restore")
-        success = 0
 
-        self.utils.search_gui('Port Forwarding')
-        time.sleep(2)
-        data = self.utils.find_element("//tr[@id='portForwarding1']", '#portForwarding1')
-        port_forwarding_status = data.is_displayed()  # Gives True for success
-
-        if port_forwarding_status:
-            success += 1
-
-        # Step 8: Checking wireless profiles after Restore
-        logger.debug("Checking wireless profiles after Restore")
-        wireless_data_after_restore = self.get_access_point_status()
-        if wireless_data_before_backup == wireless_data_after_restore:
-            success += 1
-        else:
-            print("Fail")
-
-        # Step 9: Removing Backup File
-        logger.debug("Removing Backup File")
-        os.remove(os.path.join(Inputs.file_path, backup_file))
-
-        if success != 2:
-            self.utils.get_dbglog()
-            return False
-        else:
-            return True
 
 
 
