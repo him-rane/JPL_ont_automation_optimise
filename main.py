@@ -10,15 +10,14 @@ from functional_smoke import functional_smoke
 from login import login
 
 setup=setup.Setup()
-# setup.update_driver()
+#setup.update_driver()
 driver=setup.get_driver()
 exlogger = ExcelLogger("test_results.xlsx")
 login=login(driver)
 login.webgui_login()
 
 obj=functional_smoke(driver)
-obj.TC_Functional_Smoke_37()
-# obj.get_access_point_status()
+obj.TC_Functional_Sanity_046()
 # obj.backup()
 
 # exlogger.log_result("TC_Functional_Smoke_4", obj.TC_Functional_Smoke_4())

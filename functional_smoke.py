@@ -9,6 +9,7 @@ from selenium import webdriver
 
 from selenium.webdriver.chrome import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.expected_conditions import presence_of_element_located
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.support.wait import WebDriverWait
@@ -34,6 +35,17 @@ class functional_smoke:
         self.login = login(driver)
         self.device_health = device_health(driver)
 
+    def reboot(self):
+            # go to Administration >> Maintenance >> Reboot
+        self.utils.find_element(*locators.DashboardMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        self.utils.find_element(*locators.Maintenance_BackupReboot_RebootButton).click()
+
+        self.utils.accept_alert()
+
+        logger.debug('Reseting Device (Estimated Time: 200 Seconds)')
+        time.sleep(200)
     def factory_reset(self):
         logger.info("Factory Reseting the Device")
         self.utils.find_element(*locators.DashboardMenu).click()
@@ -43,8 +55,6 @@ class functional_smoke:
         self.utils.accept_alert()
         logger.debug('Reseting Device (Estimated Time: 300 Seconds)')
         time.sleep(300)
-
-
     def restore(self,restore_file_location):
         logger.debug(f"Restoring the the device: {restore_file_location} ")
         self.utils.find_element(*locators.DashboardMenu).click()
@@ -57,7 +67,6 @@ class functional_smoke:
         self.utils.accept_alert()
         time.sleep(200)
         self.login.webgui_login()
-
     def backup(self):
         logger.info("Taking BACKUP of Device")
         self.utils.find_element(*locators.DashboardMenu).click()
@@ -1056,48 +1065,7 @@ class functional_smoke:
 
 
 
-    def TC_Functional_Smoke_021(self):
-        if self.device_health.health_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
-            return False
 
-        self.utils.search_gui("LAN IPv4 Configuration")
-        self.utils.find_element("//select[@id='tf1_DnsSvrs']").click()
-        self.utils.find_element('//*[@id="tf1_DnsSvrs"]/option[2]').click()
-        self.utils.find_element("//input[@id='tf1_dhcpDomainName']").clear()
-        self.utils.find_element("//input[@id='tf1_dhcpDomainName']").send_keys('isp')
-        self.utils.find_element("//input[@title='Save']").click()
-        time.sleep(30)
-        commands = ['cmd /c ipconfig/release',
-                    'ipconfig/renew',
-                    'ipconfig/all']
-        count = 0
-        for command in commands:
-            cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            cmd_out = cmd.communicate()
-            time.sleep(5)
-        dns = []
-        lan_status_string = str(cmd_out[0])
-        # logger.info(lan_status_string)
-        lan_status_string_split = lan_status_string.split(',')
-        # logger.info(lan_status_string_split)
-        packets = lan_status_string_split[-1].split('\\r\\n')
-        for data in packets:
-            packets_ = data.split(':')
-            # logger.info(packets_)
-            if packets_[0] == '   DNS Servers . . . . . . . . . . . ':
-                # logger.info('here')
-                # logger.info(packets_)
-                dns.append(data)
-                i = packets.index(data)
-                dns.append(packets[i + 1])
-                dns.append(packets[i + 2])
-                break
-        logger.info(dns)
-        success = 0
-        if dns[1].strip() not in '192.168.29.1':
-            success += 1
-        return success  # suceess should be 1 for assertion
 
 
     def TC_Functional_Smoke_029(self):
@@ -1577,6 +1545,28 @@ class functional_smoke:
             logger.error("Error occurred while executing TC_Functional_Smoke_011_012: %s", str(e))
             return False
 
+    def TC_Functional_Smoke_36(self):
+        logger.info('Validating redirection to login page after Factory Reset from WebGUI')
+        try:
+            # Perform factory reset
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+
+            self.reboot()
+
+            # Check if redirected to the login page
+            try:
+                self.utils.find_element("//div[@class='loginForm']", "div[class='loginForm']")
+                logger.info("WebGUI successfully redirected to the login page after Factory Reset")
+                return True
+            except:
+                logger.error("WebGUI did not redirect to the login page after Factory Reset")
+                return False
+        except Exception as e:
+            logger.error(f"Error occurred during TC_Functional_Smoke_37: {str(e)}")
+            return False
+
     def TC_Functional_Smoke_37(self):
         logger.info('Validating redirection to login page after Factory Reset from WebGUI')
         try:
@@ -1597,6 +1587,226 @@ class functional_smoke:
         except Exception as e:
             logger.error(f"Error occurred during TC_Functional_Smoke_37: {str(e)}")
             return False
+
+    def TC_Functional_Smoke_33(self):
+        logger.info("Password should be change after evey factory reset")
+        try:
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+
+            self.factory_reset()
+
+            username = 'admin'
+            password = 'P@ssw0rd'
+
+            self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
+            self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
+            self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+            try:
+                message = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
+                if 'invalid' in message.lower():
+                    logger.debug('Enter Default Password')
+            except:
+                pass
+
+            display_check = 0
+            try:
+                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
+                self.driver.find_element(By.ID, 'tf1_password').send_keys('Jiocentrum')
+                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                display_check = self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').is_displayed()
+                self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').send_keys(password)
+                self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfAdminPassword"]').send_keys(password)
+                self.driver.find_element(By.XPATH, '//*[@id="tf1_guestPassword"]').send_keys(password)
+                self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfGuestPassword"]').send_keys(password)
+                self.driver.find_element(By.XPATH, '//*[@id="tf1_frmchangePassword"]/div[9]/input[1]').click()
+                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
+                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
+                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+
+            except Exception as E:
+                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
+                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
+                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+
+            finally:
+                try:
+                    self.driver.find_element(By.XPATH, '//*[@id="tf1_forcedLoginContent"]/div/a').click()
+                except Exception as E:
+                    pass
+
+            if display_check == True:
+                logger.info("Password is changed after Factory Reset")
+                return True
+            else:
+                logger.error("Password is NOT changed after Factory Reset")
+                self.utils.get_dbglog()
+                return False
+        except Exception as e:
+            logger.error(f"Error occurred during TC_Functional_Smoke_33: {str(e)}")
+            return False
+
+    def TC_Functional_Smoke_020(self):
+        logger.info('Validating LAN Side DNS Proxy Functionality')
+        try:
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            self.utils.search_gui("LAN IPv4 Configuration")
+            self.utils.find_element("//select[@id='tf1_DnsSvrs']",'#tf1_DnsSvrs','tf1_DnsSvrs').click()
+            self.utils.find_element('//*[@id="tf1_DnsSvrs"]/option[1]').click()
+            self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').clear()
+            self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').send_keys('proxy')
+            self.utils.find_element("//input[@title='Save']","input[title='Save']").click()
+            time.sleep(30)
+            commands = ['cmd /c ipconfig/release',
+                        'ipconfig/renew',
+                        'ipconfig/all']
+            count = 0
+            for command in commands:
+                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                cmd_out = cmd.communicate()
+                time.sleep(5)
+            dns = []
+            lan_status_string = str(cmd_out[0])
+            lan_status_string_split = lan_status_string.split(',')
+            packets = lan_status_string_split[-1].split('\\r\\n')
+            for data in packets:
+                packets_ = data.split(':')
+                if packets_[0] == '   DNS Servers . . . . . . . . . . . ':
+                    dns.append(data)
+                    i = packets.index(data)
+                    dns.append(packets[i + 1])
+                    dns.append(packets[i + 2])
+                    break
+            logger.info(dns)
+            if dns[1].strip() in '192.168.29.1':
+                return True
+            else:
+                return False
+        except Exception as E:
+            logger.error(f"Error occurred during TC_Functional_Smoke_020: {str(E)}")
+            return False
+
+    def TC_Functional_Smoke_021(self):
+        logger.info('Validating LAN Side DNS from ISP Functionality')
+        try:
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+
+            self.utils.search_gui("LAN IPv4 Configuration")
+            self.utils.find_element("//select[@id='tf1_DnsSvrs']",'#tf1_DnsSvrs','tf1_DnsSvrs').click()
+            self.utils.find_element('//*[@id="tf1_DnsSvrs"]/option[2]').click()
+            self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').clear()
+            self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').send_keys('isp')
+            self.utils.find_element("//input[@title='Save']","input[title='Save']").click()
+            time.sleep(30)
+            commands = ['cmd /c ipconfig/release',
+                        'ipconfig/renew',
+                        'ipconfig/all']
+            count = 0
+            for command in commands:
+                cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                cmd_out = cmd.communicate()
+                time.sleep(5)
+            dns = []
+            lan_status_string = str(cmd_out[0])
+            lan_status_string_split = lan_status_string.split(',')
+            packets = lan_status_string_split[-1].split('\\r\\n')
+            for data in packets:
+                packets_ = data.split(':')
+                # logger.info(packets_)
+                if packets_[0] == '   DNS Servers . . . . . . . . . . . ':
+                    # logger.info('here')
+                    # logger.info(packets_)
+                    dns.append(data)
+                    i = packets.index(data)
+                    dns.append(packets[i + 1])
+                    dns.append(packets[i + 2])
+                    break
+            logger.info(dns)
+            if dns[1].strip() not in '192.168.29.1':
+                return True
+            else:
+                return False
+        except Exception as E:
+            logger.error(f"Error occurred during TC_Functional_Smoke_021: {str(E)}")
+            return False
+
+    def TC_Functional_Sanity_046(self):
+        print('Validating WAN VLAN ID Change from WEBGUI')
+        if self.device_health.health_check() == False:
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+
+        current_wan_vlan=self.utils.get_wan_port()
+        new_wan_vlan = '200'
+        self.utils.find_element("//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId').clear()
+        self.utils.find_element("//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId').send_keys(new_wan_vlan)
+
+        self.utils.find_element("//input[@title='Save']","input[title='Save']").click()
+        self.utils.accept_alert()
+
+        time.sleep(200)
+
+        print('Checking whether is WAN VLAN ID is changed or not')
+        self.login.webgui_login()
+
+        changed_vlan=self.utils.get_wan_port()
+        print('Current WAN VLAN: {}'.format(changed_vlan))
+
+        success=0
+        if changed_vlan != current_wan_vlan:
+            print('WAN VLAN ID is changed successfully')
+            success += 1  # 1
+        else:
+            print('WAN VLAN ID is not changed')
+            self.utils.get_dbglog()
+            exit()
+
+        self.utils.find_element(*locators.DashboardMenu).click()
+        ipv4_wan_info=self.utils.find_element(*locators.Dashboard_WAN_IPv4).text
+        ipv4_wan_ = ipv4_wan_info.split('/')
+        ipv4_wan_ip_address = ipv4_wan_[0]
+        print('WAN IPv4 Address: {}'.format(ipv4_wan_ip_address))
+
+        if ipv4_wan_ip_address == '0.0.0.0' and success == 1:
+            print('WAN IP in Vlan 200 is not received')
+            print('Check 200 Server if it is down')
+
+        private_subnet = ipv4_wan_ip_address.split('.')[-2]
+        if private_subnet == '200':
+            print('Device is received WAN IP in Vlan 200')
+            success += 1  # 2
+
+        if self.utils.ping_ipv4_from_lan_client()==True:
+            print('IPv4 Ping to Server is successful')
+            success += 1  # 3
+
+        print('Reverting WAN VLAN to Original state')
+        self.search_gui('WAN Port Configuration')
+        self.utils.find_element("//input[@id='tf1_vlanId']", "#tf1_vlanId", 'tf1_vlanId').clear()
+        self.utils.find_element("//input[@id='tf1_vlanId']", "#tf1_vlanId", 'tf1_vlanId').send_keys(current_wan_vlan)
+
+        self.utils.find_element("//input[@title='Save']", "input[title='Save']").click()
+        self.utils.accept_alert()
+
+        time.sleep(200)
+        if success == 3:
+            print('Test Case is Pass')
+            return True
+        else:
+            print('Test Case is Fail')
+            return False
+
+
+
+
+
+
+
 
 
 

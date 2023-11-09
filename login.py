@@ -39,6 +39,7 @@ class login:
                     try:
                         check_error = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
                         if 'invalid' in check_error.lower():
+
                             self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
                             self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.default_password)
                             self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
@@ -54,6 +55,7 @@ class login:
                             self.driver.find_element(By.ID, 'tf1_userName').send_keys(Inputs.username)
                             self.driver.find_element(By.ID, 'tf1_password').send_keys(Inputs.password)
                             self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                            logger.info("Login Successful")
                     except:
                         check_error = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
                         if 'invalid' in check_error.lower():
@@ -63,7 +65,7 @@ class login:
                 except Exception as e:
                     logger.error(e)
 
-                logger.info("Login Successful")
+
             except Exception as e:
                 logger.error("Error occurred while attempting to log in via WEBGUI: %s", str(e))
 

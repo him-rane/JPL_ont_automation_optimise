@@ -1,16 +1,142 @@
-2023-11-06 17:34:44,624 logger_util -> DEBUG: Initializing Chrome WebDriver
-2023-11-06 17:34:51,818 logger_util -> DEBUG: Checking login status
-2023-11-06 17:35:06,824 logger_util -> DEBUG: Not logged in to the web GUI: False
-2023-11-06 17:35:06,824 logger_util -> DEBUG: Attempting to log in via WEBGUI
-2023-11-06 17:35:09,990 logger_util -> INFO: Login Successful
-2023-11-06 17:35:25,092 logger_util -> WARNING: Error occurred while closing the login popup
-2023-11-06 17:35:30,107 logger_util -> INFO: Validating redirection to login page after Factory Reset from WebGUI
-2023-11-06 17:35:30,108 logger_util -> INFO: Factory Reseting the Device
-2023-11-06 17:35:31,152 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
-2023-11-06 17:35:34,644 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu5"]'
-2023-11-06 17:35:35,757 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_administration_backupRestore"]'
-2023-11-06 17:35:38,011 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="tf1_frmBackupFactoryDefaultSettings"]/div[1]/div/input'
-2023-11-06 17:35:41,114 logger_util -> INFO: Alert Accepted
-2023-11-06 17:35:51,126 logger_util -> DEBUG: Reseting Device (Estimated Time: 300 Seconds)
-2023-11-06 17:40:52,164 logger_util -> DEBUG: Element found using locator: xpath='//div[@class='loginForm']'
-2023-11-06 17:40:52,165 logger_util -> INFO: WebGUI successfully redirected to the login page after Factory Reset
+2023-11-09 15:56:29,429 logger_util -> DEBUG: Initializing Chrome WebDriver
+2023-11-09 15:56:36,971 logger_util -> DEBUG: Checking login status
+2023-11-09 15:56:51,985 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-11-09 15:56:51,986 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-11-09 15:57:06,608 logger_util -> INFO: Login Successful
+2023-11-09 15:57:21,698 logger_util -> WARNING: Error occurred while closing the login popup
+2023-11-09 15:57:26,713 logger_util -> DEBUG: Checking login status
+2023-11-09 15:57:26,721 logger_util -> DEBUG: Logged in to the web GUI: True
+2023-11-09 15:57:26,721 logger_util -> DEBUG: Performing device health check...
+2023-11-09 15:57:26,721 logger_util -> DEBUG: Checking GPON status
+2023-11-09 15:57:26,722 logger_util -> DEBUG: Searching for the keyword: 'WAN Information'
+2023-11-09 15:57:27,735 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-11-09 15:57:34,837 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Information'
+2023-11-09 15:57:35,894 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[1]/div/div[17]/p'
+2023-11-09 15:57:35,908 logger_util -> INFO: GPON Status: O5
+2023-11-09 15:57:35,909 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-11-09 15:57:36,934 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-11-09 15:57:37,988 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-11-09 15:57:41,660 logger_util -> DEBUG: Checking WAN IPv4 Address
+2023-11-09 15:57:42,676 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-11-09 15:57:43,711 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
+2023-11-09 15:57:43,722 logger_util -> INFO: WAN IPv4 Address : 10.63.66.145
+2023-11-09 15:57:43,722 logger_util -> DEBUG: Checking WAN IPv6 Address
+2023-11-09 15:57:44,762 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-11-09 15:57:45,834 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[7]/p[1]'
+2023-11-09 15:57:45,851 logger_util -> INFO: WAN IPv6 Address : 2405:201:fffb:400::21/128
+2023-11-09 15:57:45,851 logger_util -> DEBUG: Getting WAN Port Configuration
+2023-11-09 15:57:45,851 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
+2023-11-09 15:57:46,891 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-11-09 15:57:53,434 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
+2023-11-09 15:57:54,480 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-11-09 15:57:54,510 logger_util -> INFO: WAN Port Configuration found: 1015
+2023-11-09 15:57:54,511 logger_util -> DEBUG: Retrieving Firmware Version...
+2023-11-09 15:57:55,541 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="breadCrumb"]'
+2023-11-09 15:57:56,592 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-11-09 15:58:01,645 logger_util -> DEBUG: Element found using locator: xpath='/html/body/div[1]/div[1]/div[2]/p[1]/span'
+2023-11-09 15:58:01,668 logger_util -> INFO: Firmware Version SKYWTF1_JCOW407_R2.52.2
+2023-11-09 15:58:01,668 logger_util -> DEBUG: Checking IPv4 Connectivity with Ping
+2023-11-09 15:58:10,933 logger_util -> INFO: IPv4 Ping is successful
+2023-11-09 15:58:10,934 logger_util -> DEBUG: Checking IPv6 Connectivity with Ping
+2023-11-09 15:58:20,127 logger_util -> INFO: IPv6 Ping is successful
+2023-11-09 15:58:20,127 logger_util -> INFO: Device health check completed successfully.
+2023-11-09 15:58:20,128 logger_util -> DEBUG: Getting WAN Port Configuration
+2023-11-09 15:58:20,128 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
+2023-11-09 15:58:21,143 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-11-09 15:58:28,133 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
+2023-11-09 15:58:29,174 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-11-09 15:58:29,201 logger_util -> INFO: WAN Port Configuration found: 1015
+2023-11-09 15:58:30,223 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-11-09 15:58:31,303 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-11-09 15:58:32,386 logger_util -> DEBUG: Element found using locator: xpath='//input[@title='Save']'
+2023-11-09 15:58:35,456 logger_util -> INFO: Alert Accepted
+2023-11-09 16:02:05,482 logger_util -> DEBUG: Checking login status
+2023-11-09 16:02:20,559 logger_util -> DEBUG: Not logged in to the web GUI: False
+2023-11-09 16:02:20,560 logger_util -> DEBUG: Attempting to log in via WEBGUI
+2023-11-09 16:02:41,585 logger_util -> WARNING: Error occurred while closing the login popup
+2023-11-09 16:02:46,599 logger_util -> DEBUG: Getting WAN Port Configuration
+2023-11-09 16:02:46,600 logger_util -> DEBUG: Searching for the keyword: 'WAN Port Configuration'
+2023-11-09 16:02:47,650 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='menu1']'
+2023-11-09 16:02:54,049 logger_util -> DEBUG: Found and clicked on the result containing 'WAN Port Configuration'
+2023-11-09 16:02:55,099 logger_util -> DEBUG: Element found using locator: xpath='//input[@id='tf1_vlanId']'
+2023-11-09 16:02:55,126 logger_util -> INFO: WAN Port Configuration found: 200
+2023-11-09 16:02:56,159 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="mainMenu1"]'
+2023-11-09 16:03:01,634 logger_util -> DEBUG: Element found using locator: xpath='//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[5]/p'
+2023-11-09 16:03:01,653 logger_util -> DEBUG: Checking IPv4 Connectivity with Ping
+2023-11-09 16:03:13,752 logger_util -> ERROR: Ping IPv4 Failed
+2023-11-09 16:03:29,811 logger_util -> ERROR: Element not found using locator: xpath='//input[@id='tf1_vlanId']': Message: no such element: Unable to locate element: {"method":"xpath","selector":"//input[@id='tf1_vlanId']"}
+  (Session info: chrome=119.0.6045.124); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF64D1982B2+55298]
+	(No symbol) [0x00007FF64D105E02]
+	(No symbol) [0x00007FF64CFC05AB]
+	(No symbol) [0x00007FF64D00175C]
+	(No symbol) [0x00007FF64D0018DC]
+	(No symbol) [0x00007FF64D03CBC7]
+	(No symbol) [0x00007FF64D0220EF]
+	(No symbol) [0x00007FF64D03AAA4]
+	(No symbol) [0x00007FF64D021E83]
+	(No symbol) [0x00007FF64CFF670A]
+	(No symbol) [0x00007FF64CFF7964]
+	GetHandleVerifier [0x00007FF64D510AAB+3694587]
+	GetHandleVerifier [0x00007FF64D56728E+4048862]
+	GetHandleVerifier [0x00007FF64D55F173+4015811]
+	GetHandleVerifier [0x00007FF64D2347D6+695590]
+	(No symbol) [0x00007FF64D110CE8]
+	(No symbol) [0x00007FF64D10CF34]
+	(No symbol) [0x00007FF64D10D062]
+	(No symbol) [0x00007FF64D0FD3A3]
+	BaseThreadInitThunk [0x00007FF8029B7344+20]
+	RtlUserThreadStart [0x00007FF802DC26B1+33]
+
+2023-11-09 16:03:44,878 logger_util -> ERROR: Element not found using locator: css selector='#tf1_vlanId': Message: no such element: Unable to locate element: {"method":"css selector","selector":"#tf1_vlanId"}
+  (Session info: chrome=119.0.6045.124); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF64D1982B2+55298]
+	(No symbol) [0x00007FF64D105E02]
+	(No symbol) [0x00007FF64CFC05AB]
+	(No symbol) [0x00007FF64D00175C]
+	(No symbol) [0x00007FF64D0018DC]
+	(No symbol) [0x00007FF64D03CBC7]
+	(No symbol) [0x00007FF64D0220EF]
+	(No symbol) [0x00007FF64D03AAA4]
+	(No symbol) [0x00007FF64D021E83]
+	(No symbol) [0x00007FF64CFF670A]
+	(No symbol) [0x00007FF64CFF7964]
+	GetHandleVerifier [0x00007FF64D510AAB+3694587]
+	GetHandleVerifier [0x00007FF64D56728E+4048862]
+	GetHandleVerifier [0x00007FF64D55F173+4015811]
+	GetHandleVerifier [0x00007FF64D2347D6+695590]
+	(No symbol) [0x00007FF64D110CE8]
+	(No symbol) [0x00007FF64D10CF34]
+	(No symbol) [0x00007FF64D10D062]
+	(No symbol) [0x00007FF64D0FD3A3]
+	BaseThreadInitThunk [0x00007FF8029B7344+20]
+	RtlUserThreadStart [0x00007FF802DC26B1+33]
+
+2023-11-09 16:03:59,966 logger_util -> ERROR: Element not found using locator: id='tf1_vlanId': Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="tf1_vlanId"]"}
+  (Session info: chrome=119.0.6045.124); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF64D1982B2+55298]
+	(No symbol) [0x00007FF64D105E02]
+	(No symbol) [0x00007FF64CFC05AB]
+	(No symbol) [0x00007FF64D00175C]
+	(No symbol) [0x00007FF64D0018DC]
+	(No symbol) [0x00007FF64D03CBC7]
+	(No symbol) [0x00007FF64D0220EF]
+	(No symbol) [0x00007FF64D03AAA4]
+	(No symbol) [0x00007FF64D021E83]
+	(No symbol) [0x00007FF64CFF670A]
+	(No symbol) [0x00007FF64CFF7964]
+	GetHandleVerifier [0x00007FF64D510AAB+3694587]
+	GetHandleVerifier [0x00007FF64D56728E+4048862]
+	GetHandleVerifier [0x00007FF64D55F173+4015811]
+	GetHandleVerifier [0x00007FF64D2347D6+695590]
+	(No symbol) [0x00007FF64D110CE8]
+	(No symbol) [0x00007FF64D10CF34]
+	(No symbol) [0x00007FF64D10D062]
+	(No symbol) [0x00007FF64D0FD3A3]
+	BaseThreadInitThunk [0x00007FF8029B7344+20]
+	RtlUserThreadStart [0x00007FF802DC26B1+33]
+
+2023-11-09 16:03:59,967 logger_util -> WARNING: Element not found using any of the provided locators: xpath=//input[@id='tf1_vlanId'], css selector=#tf1_vlanId, id=tf1_vlanId

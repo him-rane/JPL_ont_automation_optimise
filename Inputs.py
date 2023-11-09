@@ -12,5 +12,5 @@ temp_password='PR@shant2301'
 
 default_password = 'Jiocentrum'
 gateway="192.168.29.1"
-latest_firmware= "ARCNTF1_JCOW411_D2.30.1"
+latest_firmware= "SKYWTF1_JCOW407_R2.52.2"
 serial_number="RSD0TKF00000030"
