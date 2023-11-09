@@ -127,3 +127,6 @@ DeviceStatus_WANInfo="//a[normalize-space()='WAN Information']","div[id='main'] 
 WanInfo_IPv6Addr1='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]',"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(6) > p:nth-child(2)"
 WanInfo_IPv6Addr2='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]',"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(6) > p:nth-child(3)"
 WanInfo_IPv4Addr='//*[@id="main"]/div[6]/div[1]/div/div[3]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4) > p:nth-child(2)'
+
+WANPortConfig_VlanID="//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId'
+WANPortConfig_VlanID_SaveBtn="//input[@title='Save']","input[title='Save']"

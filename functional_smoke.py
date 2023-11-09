@@ -1736,74 +1736,78 @@ class functional_smoke:
             return False
 
     def TC_Functional_Sanity_046(self):
-        print('Validating WAN VLAN ID Change from WEBGUI')
-        if self.device_health.health_check() == False:
-            logger.error('Device health check failed. Exiting the test.')
+        logger.info('Starting WAN VLAN ID Change validation from WEBGUI')
+
+        try:
+            if not self.device_health.health_check():
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+
+            current_wan_vlan = self.utils.get_wan_port()
+            new_wan_vlan = '200'
+
+            logger.debug(f'Changing WAN VLAN ID from {current_wan_vlan} to {new_wan_vlan}')
+            self.utils.find_element(*locators.WANPortConfig_VlanID).clear()
+            self.utils.find_element(*locators.WANPortConfig_VlanID).send_keys(new_wan_vlan)
+            self.utils.find_element(*locators.WANPortConfig_VlanID_SaveBtn).click()
+            self.utils.accept_alert()
+
+            time.sleep(200)
+
+            logger.debug('Checking whether WAN VLAN ID is changed or not')
+            self.login.webgui_login()
+
+            changed_vlan = self.utils.get_wan_port()
+            logger.info(f'Current WAN VLAN: {changed_vlan}')
+
+            success = 0
+            if changed_vlan != current_wan_vlan:
+                logger.info('WAN VLAN ID changed successfully')
+                success += 1
+            else:
+                logger.error('WAN VLAN ID did not change')
+                self.utils.get_dbglog()
+                return False
+
+            logger.debug('Checking WAN IP and related configurations')
+
+            self.utils.find_element(*locators.DashboardMenu).click()
+            ipv4_wan_info = self.utils.find_element(*locators.Dashboard_WAN_IPv4).text
+            ipv4_wan_ = ipv4_wan_info.split('/')
+            ipv4_wan_ip_address = ipv4_wan_[0]
+            logger.info(f'WAN IPv4 Address: {ipv4_wan_ip_address}')
+
+            if ipv4_wan_ip_address == '0.0.0.0' and success == 1:
+                logger.error('WAN IP in Vlan 200 is not received. Check 200 Server if it is down')
+
+            private_subnet = ipv4_wan_ip_address.split('.')[-2]
+            if private_subnet == '200':
+                logger.info('Device received WAN IP in Vlan 200')
+                success += 1
+
+            if self.utils.ping_ipv4_from_lan_client():
+                logger.info('IPv4 Ping to Server is successful')
+                success += 1
+
+            logger.debug('Reverting WAN VLAN to Original state')
+            self.utils.search_gui('WAN Port Configuration')
+            self.utils.find_element(*locators.WANPortConfig_VlanID).clear()
+            self.utils.find_element(*locators.WANPortConfig_VlanID).send_keys(current_wan_vlan)
+            self.utils.find_element(*locators.WANPortConfig_VlanID_SaveBtn).click()
+            self.utils.accept_alert()
+
+            time.sleep(200)
+
+            if success == 3:
+                logger.info("Changing behavior of VLAN ID is working as expected")
+                return True
+            else:
+                logger.error("Changing behavior of VLAN ID is NOT working as expected")
+                return False
+
+        except Exception as e:
+            logger.error(f"Error occurred during TC_Functional_Sanity_046: {str(e)}")
             return False
-
-
-        current_wan_vlan=self.utils.get_wan_port()
-        new_wan_vlan = '200'
-        self.utils.find_element("//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId').clear()
-        self.utils.find_element("//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId').send_keys(new_wan_vlan)
-
-        self.utils.find_element("//input[@title='Save']","input[title='Save']").click()
-        self.utils.accept_alert()
-
-        time.sleep(200)
-
-        print('Checking whether is WAN VLAN ID is changed or not')
-        self.login.webgui_login()
-
-        changed_vlan=self.utils.get_wan_port()
-        print('Current WAN VLAN: {}'.format(changed_vlan))
-
-        success=0
-        if changed_vlan != current_wan_vlan:
-            print('WAN VLAN ID is changed successfully')
-            success += 1  # 1
-        else:
-            print('WAN VLAN ID is not changed')
-            self.utils.get_dbglog()
-            exit()
-
-        self.utils.find_element(*locators.DashboardMenu).click()
-        ipv4_wan_info=self.utils.find_element(*locators.Dashboard_WAN_IPv4).text
-        ipv4_wan_ = ipv4_wan_info.split('/')
-        ipv4_wan_ip_address = ipv4_wan_[0]
-        print('WAN IPv4 Address: {}'.format(ipv4_wan_ip_address))
-
-        if ipv4_wan_ip_address == '0.0.0.0' and success == 1:
-            print('WAN IP in Vlan 200 is not received')
-            print('Check 200 Server if it is down')
-
-        private_subnet = ipv4_wan_ip_address.split('.')[-2]
-        if private_subnet == '200':
-            print('Device is received WAN IP in Vlan 200')
-            success += 1  # 2
-
-        if self.utils.ping_ipv4_from_lan_client()==True:
-            print('IPv4 Ping to Server is successful')
-            success += 1  # 3
-
-        print('Reverting WAN VLAN to Original state')
-        self.search_gui('WAN Port Configuration')
-        self.utils.find_element("//input[@id='tf1_vlanId']", "#tf1_vlanId", 'tf1_vlanId').clear()
-        self.utils.find_element("//input[@id='tf1_vlanId']", "#tf1_vlanId", 'tf1_vlanId').send_keys(current_wan_vlan)
-
-        self.utils.find_element("//input[@title='Save']", "input[title='Save']").click()
-        self.utils.accept_alert()
-
-        time.sleep(200)
-        if success == 3:
-            print('Test Case is Pass')
-            return True
-        else:
-            print('Test Case is Fail')
-            return False
-
-
-
 
 
 
