@@ -1741,6 +1741,7 @@ class functional_smoke:
             logger.error('Device health check failed. Exiting the test.')
             return False
 
+
         current_wan_vlan=self.utils.get_wan_port()
         new_wan_vlan = '200'
         self.utils.find_element("//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId').clear()
