@@ -24,10 +24,11 @@ class Setup:
             options.add_argument("--start-maximized")
 
             driver = webdriver.Chrome(options=options)
-            driver.implicitly_wait(15)
             driver.get("http://192.168.29.1")
+            driver.implicitly_wait(15)
             return driver
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             logger.exception(e)
             return e
+

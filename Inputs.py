@@ -12,5 +12,20 @@ temp_password='PR@shant2301'
 
 default_password = 'Jiocentrum'
 gateway="192.168.29.1"
-latest_firmware= "SKYWTF1_JCOW407_R2.52.2"
-serial_number="RSD0TKF00000030"
+latest_firmware= "ARCNTF1_JCOW411_D2.30.1"
+serial_number="RAROTFH00000003"
+telnet_password = ['X+-1hVxP', '!U+p4sNl', '7>0y0PhQ']
+acs_url = "http://10.64.218.26/CpeAdmin/Login.aspx"
+acs_user = 'rancore'
+acs_pwd = 'rcore@123'
+
+#firmware version
+upgrade='TPLTF1_JCOW402_R2.52.1'
+downgrade='TPLTF1_JCOW402_R2.52'
+
+upgrade_image = rf'C:\Users\ontvi\Downloads\Firmware\{upgrade}.img'
+upgrade_sign = rf'C:\Users\ontvi\Downloads\Firmware\{upgrade}.sig'
+
+downgrade_image = rf'C:\Users\ontvi\Downloads\Firmware\{downgrade}.img'
+downgrade_sign = rf'C:\Users\ontvi\Downloads\Firmware\{downgrade}.sig'
+

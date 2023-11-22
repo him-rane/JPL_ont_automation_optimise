@@ -78,3 +78,42 @@ class login:
 
             time.sleep(5)
             return False
+
+    def acs_login(self):
+        self.driver.execute_script("window.open('');")
+        self.driver.switch_to.window(self.driver.window_handles[1])
+
+        # Open the second website in the new tab
+        # driver.get('http://192.168.29.1')
+        # login.webgui_login()
+        # utils.search_gui("wan")
+        # options = webdriver.ChromeOptions()
+        # options.add_argument('ignore-certificate-errors')
+        # # options.add_argument("--start-maximized")
+        # driver = webdriver.Chrome(chrome_options=options)
+
+        self.driver.get(Inputs.acs_url)
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+        self.driver.find_element(by=By.ID, value="txtName").send_keys(Inputs.acs_user)
+        self.driver.find_element(by=By.ID, value="txtPassword").send_keys(Inputs.acs_pwd)
+        if self.driver.find_element(by=By.ID, value="btnLogin_btn"):
+            self.driver.find_element(by=By.ID, value="btnLogin_btn").click()
+        print("Logged into ACS successfully")
+        print("searching for ONT serial number : " + Inputs.serial_number)
+        time.sleep(10)
+        self.driver.find_element(by=By.XPATH, value='//*[@id="lmi1"]').click()
+        try:
+            self.driver.find_element(by=By.XPATH, value='//*[@id="lmi1"]').click()
+        except:
+            print('element not found')
+        self.driver.switch_to.frame("frmDesktop")
+        time.sleep(3)
+        self.driver.find_element(By.ID, 'tbDeviceID').send_keys(Inputs.serial_number)
+        self.driver.find_element(By.ID, 'btnSearch_btn').click()
+        try:
+            self.driver.find_element(By.ID, 'btnSearch_btn').click()
+        except:
+            print("element not found")
+        time.sleep(10)
+        return self.driver

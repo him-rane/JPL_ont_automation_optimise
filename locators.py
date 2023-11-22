@@ -1,3 +1,11 @@
+
+
+#Login Page
+LoginPage_UserName= '//*[@id="tf1_userName"]', '#tf1_userName', 'tf1_userName'
+LoginPage_Password= '//*[@id="tf1_password"]', '#tf1_password', 'tf1_password'
+LoginPage_LoginButton= "//button[normalize-space()='Login']", "button[title='Login']"
+LoginPage_LoginForm="//div[@class='loginForm']", "div[class='loginForm']"
+
 # Menues
 DashboardMenu='//*[@id="mainMenu1"]',"#mainMenu1","mainMenu1"
 StatusMenu='//*[@id="mainMenu2"]','#mainMenu2',"mainMenu2"
@@ -78,15 +86,13 @@ AdministrationMenu_UsersConfiguration_TimeOut='//*[@id="tf1_loginTimeout"]','#tf
 #Network Menu>>Wireless
 NetworkMenu_WirelessSubMenu = "//a[@id='tf1_network_accessPoints']","#tf1_network_accessPoints","tf1_network_accessPoints"
 NetworkMenu_LanSubMenu="//a[@id='tf1_network_lanIPv4Config']",'#tf1_network_lanIPv4Config','tf1_network_lanIPv4Config'
+
 LANIPv4Config_StartIP="//input[@id='tf1_dhcpStartIp']",'#tf1_dhcpStartIp','tf1_dhcpStartIp'
 LANIPv4Config_EndIP="//input[@id='tf1_dhcpEndIp']",'#tf1_dhcpEndIp','tf1_dhcpEndIp'
 LANIPv4Config_DomainName="//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName'
+LANIPv4Config_DNSServers="//select[@id='tf1_DnsSvrs']",'#tf1_DnsSvrs','tf1_DnsSvrs'
 LANIPv4Config_SaveBtn="//input[@title='Save']","input[title='Save']"
 
-#Login Page
-LoginPage_UserName= '//*[@id="tf1_userName"]', '#tf1_userName', 'tf1_userName'
-LoginPage_Password= '//*[@id="tf1_password"]', '#tf1_password', 'tf1_password'
-LoginPage_LoginButton= "//button[normalize-space()='Login']", "button[title='Login']"
 
 firmware_version_sidebar = "/html/body/div[1]/div[1]/div[2]/p[1]/span", "body > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > p:nth-child(1) > span:nth-child(2)"
 mac_address_daseboard = '//*[@id="main"]/div[6]/div[2]/div[4]/div[3]/div[4]/p', "body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > p:nth-child(2)"
@@ -99,7 +105,14 @@ Maintenance_BackupReboot_BackupButton="//input[@title='Backup']","input[title='B
 Maintenance_BackupReboot_RebootButton = '//*[@id="tf1_frmBackupReboot"]/div[1]/div/input', "input[title='Reboot']"
 Maintenance_BackupReboot_DefaultButton = '//*[@id="tf1_frmBackupFactoryDefaultSettings"]/div[1]/div/input', "input[title='Default']"
 Maintenance_BackupReboot_FileInput="//input[@id='tf1_txtRestoreFile']","#tf1_txtRestoreFile",'tf1_txtRestoreFile'
+
+
+
+
 Maintenance_BackupReboot_FileInputBtn="//input[@title='Restore']","input[title='Restore']"
+
+Maintenance_Firmware_Upgrade="//a[normalize-space()='Firmware Upgrade']","div[id='main'] li:nth-child(2) a:nth-child(1)"
+
 DateTimeConfiguration_CurrentRouterTime = '//*[@id="tf1__div"]/p', "div[id='tf1__div'] p"
 DateTimeConfiguration_TimeZone = '//*[@id="tf1_selTimezone"]', "#tf1_selTimezone"
 DateTimeConfiguration_SaveButton = '//*[@id="tf1_frmDateAndTime"]/div[10]/input[1]', "input[title='Save']"
@@ -130,3 +143,5 @@ WanInfo_IPv4Addr='//*[@id="main"]/div[6]/div[1]/div/div[3]/p','body > div:nth-ch
 
 WANPortConfig_VlanID="//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId'
 WANPortConfig_VlanID_SaveBtn="//input[@title='Save']","input[title='Save']"
+
+

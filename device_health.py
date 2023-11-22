@@ -20,10 +20,10 @@ class device_health:
         logger.debug("Performing device health check...")
         fail=0
 
-        GPON_state=self.utils.get_GPON_state();
-        if "01" in GPON_state:
+        GPON_state = self.utils.get_GPON_state()
+        if ("05" not in str(GPON_state)) and ("O5" not in str(GPON_state)):
             logger.error("Device is not in operational state")
-            fail+=1
+            fail += 1
 
         ipv4 = self.utils.get_ipv4()
         if "0.0.0.0" in ipv4:

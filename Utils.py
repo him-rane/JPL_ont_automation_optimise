@@ -146,7 +146,7 @@ class Utils:
     def get_ipv4(self):
         logger.debug("Checking WAN IPv4 Address")
         try:
-            if self.find_element('//*[@id="breadCrumb"]').text=="Dashboard":
+            if self.find_element('//*[@id="breadCrumb"]',"#breadCrumb",'breadCrumb').text=="Dashboard":
                 ipv4=self.find_element(*locators.ipv4_address_daseboard).text
                 logger.info("WAN IPv4 Address : " + ipv4)
                 return ipv4

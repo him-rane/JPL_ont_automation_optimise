@@ -1,6 +1,8 @@
+from datetime import datetime
 import os
 import subprocess
 from ftplib import FTP
+import telnetlib
 from telnetlib import EC
 from selenium import webdriver
 
@@ -535,22 +537,27 @@ class functional_smoke:
     def TC_Functional_Smoke_32(self):
         logger.info("Validate the maintenance functionality like Reboot from Web GUI - 5 Iterations")
         try:
+
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+
             for i in range(5):
                 # Your code here
                 logger.debug(f"Reboot Iteration {i}")
-                if self.device_health.health_check() == False:
-                    logger.error('Device health check failed. Exiting the test.')
-                    return False
-
                     # go to Administration >> Maintenance >> Reboot
                 self.utils.find_element(*locators.AdministrationMenu).click()
                 self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
                 self.utils.find_element(*locators.Maintenance_BackupReboot_RebootButton).click()
 
                 self.utils.accept_alert()
-
                 logger.debug('Reseting Device (Estimated Time: 200 Seconds)')
                 time.sleep(200)
+
+                if self.device_health.health_check() == False:
+                    logger.error('Device health check failed. Exiting the test.')
+                    return False
+
                 # self.login.webgui_login()
         except Exception as e:
             logger.error("Error occurred while executing TC_Functional_Smoke_32: %s", str(e))
@@ -1063,11 +1070,6 @@ class functional_smoke:
             logger.error(f"Error occurred while checking FTP rules: {str(E)}")
             return False
 
-
-
-
-
-
     def TC_Functional_Smoke_029(self):
         logger.info("Verifying the dashboard page information of ONT")
 
@@ -1557,7 +1559,7 @@ class functional_smoke:
 
             # Check if redirected to the login page
             try:
-                self.utils.find_element("//div[@class='loginForm']", "div[class='loginForm']")
+                self.utils.find_element(*locators.LoginPage_LoginForm)
                 logger.info("WebGUI successfully redirected to the login page after Factory Reset")
                 return True
             except:
@@ -1600,9 +1602,10 @@ class functional_smoke:
             username = 'admin'
             password = 'P@ssw0rd'
 
-            self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-            self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
-            self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+            self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+            self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
+
+            self.utils.find_element(*locators.LoginPage_LoginButton).click()
             try:
                 message = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
                 if 'invalid' in message.lower():
@@ -1612,23 +1615,23 @@ class functional_smoke:
 
             display_check = 0
             try:
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys('Jiocentrum')
-                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys('Jiocentrum')
+                self.utils.find_element(*locators.LoginPage_LoginButton).click()
                 display_check = self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').is_displayed()
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').send_keys(password)
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfAdminPassword"]').send_keys(password)
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_guestPassword"]').send_keys(password)
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfGuestPassword"]').send_keys(password)
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_frmchangePassword"]/div[9]/input[1]').click()
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
-                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
+                self.utils.find_element(*locators.LoginPage_LoginButton).click()
 
             except Exception as E:
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
-                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
+                self.utils.find_element(*locators.LoginPage_LoginButton).click()
 
             finally:
                 try:
@@ -1654,11 +1657,11 @@ class functional_smoke:
                 logger.error('Device health check failed. Exiting the test.')
                 return False
             self.utils.search_gui("LAN IPv4 Configuration")
-            self.utils.find_element("//select[@id='tf1_DnsSvrs']",'#tf1_DnsSvrs','tf1_DnsSvrs').click()
+            self.utils.find_element(*locators.LANIPv4Config_DNSServers).click()
             self.utils.find_element('//*[@id="tf1_DnsSvrs"]/option[1]').click()
-            self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').clear()
-            self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').send_keys('proxy')
-            self.utils.find_element("//input[@title='Save']","input[title='Save']").click()
+            self.utils.find_element(*locators.LANIPv4Config_DomainName).clear()
+            self.utils.find_element(*locators.LANIPv4Config_DomainName).send_keys('proxy')
+            self.utils.find_element(*locators.LANIPv4Config_SaveBtn).click()
             time.sleep(30)
             commands = ['cmd /c ipconfig/release',
                         'ipconfig/renew',
@@ -1697,7 +1700,7 @@ class functional_smoke:
                 return False
 
             self.utils.search_gui("LAN IPv4 Configuration")
-            self.utils.find_element("//select[@id='tf1_DnsSvrs']",'#tf1_DnsSvrs','tf1_DnsSvrs').click()
+            self.utils.find_element(*locators.LANIPv4Config_DNSServers).click()
             self.utils.find_element('//*[@id="tf1_DnsSvrs"]/option[2]').click()
             self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').clear()
             self.utils.find_element("//input[@id='tf1_dhcpDomainName']",'#tf1_dhcpDomainName','tf1_dhcpDomainName').send_keys('isp')
@@ -1808,6 +1811,203 @@ class functional_smoke:
         except Exception as e:
             logger.error(f"Error occurred during TC_Functional_Sanity_046: {str(e)}")
             return False
+
+    def TC_Functional_Smoke_019(self):
+        logger.info('Validating Telnet Access for R-Build')
+        try:
+            if not self.device_health.health_check():
+                logger.error('Device health check failed. Exiting the test.')
+                return False
+            HOST = "192.168.29.1"
+            user = 'root'
+            success = 0
+            iteration = 1
+            logger.debug('Checking Telnet Access')
+            tn = telnetlib.Telnet()
+            try:
+                for i in Inputs.telnet_password:
+                    tn.open(HOST)
+                    time.sleep(5)
+                    tn.write(user.encode("ascii") + b"\n")
+                    time.sleep(5)
+                    password = i
+                    tn.write(password.encode("ascii") + b"\n")
+                    break
+            except Exception as E:
+                if 'fail' in str(E).lower():
+                    logger.info('Telnet is happening successfully')
+                    tn.close()
+                    return True
+                else:
+                    logger.error('Telnet should not be allowed in R build\n Test Case Failed')
+                    tn.close()
+                    return  False
+        except Exception as e:
+            logger.error(f"Error occurred during TC_Functional_Smoke_019: {str(e)}")
+            return False
+
+    def upgrade_downgrade_from_webgui(self):
+        if not self.device_health.health_check():
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+
+        # print(Inputs.downgrade_image)
+        # print(Inputs.downgrade_sign)
+
+
+        self.login.acs_login()
+        print('Found device on ACS')
+        self.driver.implicitly_wait(60)
+        self.driver.switch_to.default_content()
+        try:
+            element = WebDriverWait(self.driver, 70).until(presence_of_element_located((By.ID, "lmi5")))
+            element.click()
+        except:
+            try:
+                element = WebDriverWait(self.driver, 70).until(presence_of_element_located((By.ID, "lmi5")))
+                element.click()
+            except:
+                print('element not found')
+        self.driver.switch_to.frame("frmDesktop")
+        time.sleep(2)
+        element = WebDriverWait(self.driver, 70).until(presence_of_element_located((By.ID, "txbFind")))
+        element.clear()
+        time.sleep(2)
+        element = WebDriverWait(self.driver, 70).until(presence_of_element_located((By.ID, "txbFind")))
+        element.send_keys('Device.DeviceInfo')
+        time.sleep(2)
+        self.driver.find_element(By.ID, "hlFind_btn").click()
+        time.sleep(2)
+        print('Navigated to Device.Info')
+        self.driver.switch_to.default_content()
+        time.sleep(2)
+        self.driver.switch_to.frame("frmButtons")
+        time.sleep(2)
+        self.driver.find_element(By.ID, 'UcDeviceSettingsControls1_btnGetCurrent_btn').click()
+        time.sleep(2)
+        self.driver.switch_to.default_content()
+        time.sleep(2)
+        self.driver.find_element(By.XPATH, '//*[@id="btnAlertOk_btn"]').click()
+        time.sleep(60)
+        self.driver.switch_to.frame("frmDesktop")
+        time.sleep(2)
+        for i in range(10, 15):
+            parameter_name = self.driver.find_element(By.XPATH,
+                                                 '//*[@id="tblParamsTable"]/tbody/tr[' + str(i) + ']/td[1]').text
+            if parameter_name == 'X_RJIL_COM_DowngradeEnable':
+                break
+
+        downgrade_parameter = self.driver.find_element(By.XPATH,
+                                                  '//*[@id="tblParamsTable"]/tbody/tr[' + str(i) + ']/td[2]').text
+        if downgrade_parameter == '0':
+            print('Downgrade parameter is 0')
+            self.driver.switch_to.default_content()
+            time.sleep(5)
+            self.driver.switch_to.frame("frmButtons")
+            time.sleep(3)
+            self.driver.find_element(By.ID, "UcDeviceSettingsControls1_btnChange_btn").click()
+            time.sleep(3)
+            self.driver.switch_to.default_content()
+            time.sleep(3)
+            self.driver.switch_to.frame("frmDesktop")
+            time.sleep(3)
+            self.driver.find_element(By.XPATH, '//*[@id="tblParamsTable"]/tbody/tr[' + str(i) + ']/td[2]/input').clear()
+            time.sleep(3)
+            self.driver.find_element(By.XPATH,
+                                '//*[@id="tblParamsTable"]/tbody/tr[' + str(i) + ']/td[2]/input').send_keys('1')
+            time.sleep(3)
+            self.driver.find_element(By.XPATH,
+                                '//*[@id="tblParamsTable"]/tbody/tr[' + str(i + 1) + ']/td[2]/input').clear()
+            time.sleep(3)
+            a = datetime.now()
+            b = datetime.date(a)
+            self.driver.find_element(By.XPATH,
+                                '//*[@id="tblParamsTable"]/tbody/tr[' + str(i + 1) + ']/td[2]/input').send_keys(
+                str(b) + 'T22:00:00.000000+05:30')
+            time.sleep(3)
+            self.driver.switch_to.default_content()
+            time.sleep(3)
+            self.driver.switch_to.frame("frmButtons")
+            time.sleep(3)
+            self.driver.find_element(By.ID, 'UcDeviceSettingsControls1_btnSendUpdate_btn').click()
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            time.sleep(3)
+            self.driver.switch_to.default_content()
+            time.sleep(3)
+            self.driver.find_element(By.XPATH, '//*[@id="btnAlertOk_btn"]').click()
+            print('Pushed Downgrade Enable parameter as 1 and Downgrade Validity parameter as ' + str(
+                b) + 'T22:00:00.000000+05:30')
+            print('Waiting 60 seconds')
+            time.sleep(60)
+            self.driver.switch_to.frame("frmDesktop")
+            check = self.driver.find_element(By.XPATH,
+                                        '/html/body/form/div[4]/table/tbody/tr/td[2]/span/table/tbody/tr[2]/td/div/table/tbody/tr[' + str(
+                                            i + 1) + ']/td[2]').text
+            print(check)
+            try:
+                assert check == (str(b) + 'T22:00:00.000000+05:30')
+            except:
+                print('Downgrade validity parameter did not get enabled')
+        else:
+            print('Downgrade parameter already in enable state')
+
+        self.driver.switch_to.window(self.driver.window_handles[0])
+
+
+
+
+        #firmware downgrade
+        self.change_firmware(Inputs.downgrade_image,Inputs.downgrade_sign)
+        self.login.webgui_login()
+
+        if self.utils.get_firmware_version() == Inputs.downgrade:
+
+            print('Firmware Downgraded Successfully to ' + Inputs.downgrade)
+        else:
+            print('Firmware is not Downgraded ')
+
+        self.change_firmware(Inputs.upgrade_image, Inputs.upgrade_sign)
+        self.login.webgui_login()
+
+        if self.utils.get_firmware_version() == Inputs.upgrade:
+
+            print('Firmware Downgraded Successfully to ' + Inputs.upgrade)
+        else:
+            print('Firmware is not Downgraded ')
+
+        if not self.device_health.health_check():
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+
+
+
+    def change_firmware(self,upgrade_file,signature_file):
+        self.utils.find_element(*locators.AdministrationMenu).click()
+        self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+        self.utils.find_element(*locators.Maintenance_Firmware_Upgrade).click()
+
+        upload_image_path = self.utils.find_element( "//input[@id='txtUploadFile']","#txtUploadFile",'txtUploadFile')
+        upload_image_path.send_keys(upgrade_file)
+        self.utils.find_element('//*[@id="tf1_frmUploadImg"]/div[1]/input[2]',"form[id='tf1_frmUploadImg'] input[title='Upload']").click()
+        self.utils.accept_alert()
+        time.sleep(60)
+
+
+        upload_image_path = self.utils.find_element("//input[@id='txtSignatureFile']", "#txtSignatureFile", 'txtSignatureFile')
+        upload_image_path.send_keys(signature_file)
+        self.utils.find_element('//*[@id="tf1_frmUploadSigImg"]/div[1]/input[2]',"form[id='tf1_frmUploadSigImg'] input[title='Upload']").click()
+        self.utils.accept_alert()
+        time.sleep(60)
+
+        self.utils.find_element('//*[@id="main"]/div[7]/div/div[3]/div[5]/input[2]').click()
+        self.utils.accept_alert()
+
+        time.sleep(300)
+
+
+
+
 
 
 
