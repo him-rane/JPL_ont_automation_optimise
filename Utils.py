@@ -102,11 +102,13 @@ class Utils:
 
     #LOGOUT USING WEBGUI
     def logout_gui(self):
+        logger.debug("Trying logout from WEBGUI")
         try:
             self.find_element(*locators.DashboardMenu_Logout_Dropdown).click()
             self.find_element(*locators.DashboardMenu_Logout_Dropdown_Logout).click()
             self.find_element(*locators.DashboardMenu_Logout_Dropdown_Logout_OK).click()
         except Exception as e:
+
             logger.error(e)
 
     #CHECK FOR LOGIN IN WEBGUI
@@ -201,8 +203,8 @@ class Utils:
         try:
             time.sleep(3)
             self.driver.switch_to.alert.accept()
-            logger.info("Alert Accepted")
-            time.sleep(10)
+            logger.debug("Alert Accepted")
+            time.sleep(5)
         except:
             pass
     def get_serial_number(self):

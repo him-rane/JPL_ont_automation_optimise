@@ -80,8 +80,7 @@ class login:
             return False
 
     def acs_login(self):
-        self.driver.execute_script("window.open('');")
-        self.driver.switch_to.window(self.driver.window_handles[1])
+
 
         # Open the second website in the new tab
         # driver.get('http://192.168.29.1')

@@ -1,9 +1,13 @@
 import logging
 
+from selenium.webdriver.common.by import By
+
 import Inputs
 from login import login
 from Utils import Utils
 from logger_util import logger
+import time
+from _datetime import datetime
 class device_health:
 
 
@@ -17,7 +21,7 @@ class device_health:
 
         self.login.webgui_login()
 
-        logger.debug("Performing device health check...")
+        logger.debug("Performing device health check")
         fail=0
 
         GPON_state = self.utils.get_GPON_state()
@@ -58,6 +62,43 @@ class device_health:
             logger.info("Device health check completed successfully.")
             return True
 
+    def time_date_conversion(self,my_time):
+        time_date_value = datetime.strptime(my_time, '%m/%d/%Y %H:%M:%S')
+        return time_date_value
+
+
+    def get_last_connection_time(self):
+        element = self.utils.find_element('//*[@id="tblDeviceInfo"]/tbody/tr[11]/td[2]',
+                                          'tbody tr:nth-child(10) td:nth-child(2) span:nth-child(1)').text
+
+        return self.time_date_conversion(element)
+
+    def health_check_acs(self):
+        logger.debug("Performing device ACS health check")
+        try:
+            self.driver.execute_script("window.open('');")
+            self.driver.switch_to.window(self.driver.window_handles[1])
+            self.login.acs_login()
+
+            old_time=self.get_last_connection_time()
+            logger.info(f"Old Connection Time - {old_time}")
+            time.sleep(30)
+
+            for number in range(5):
+                self.utils.find_element('//*[@id="btnReCheck_btn"]','#btnReCheck_btn').click()
+                time.sleep(30)
+                new_time=self.get_last_connection_time()
+                logger.info(f"New Connection Time - {new_time}")
+                if new_time > old_time:
+                    logger.info("ONT is Online on ACS")
+                    return True
+                time.sleep(60)
+
+            logger.error("ONT is offline on ACS")
+            return False
+        except Exception as E:
+            logger.error(f"Error occurred while performing ACS health check +{E}")
+            return False
 
 
 
