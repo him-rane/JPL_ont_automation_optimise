@@ -14,6 +14,7 @@ SecurityMenu='//*[@id="mainMenu4"]',"#mainMenu4","mainMenu4"
 AdministrationMenu='//*[@id="mainMenu5"]','#mainMenu5',"mainMenu5"
 AdvancedMenu='//*[@id="mainMenu6"]','#mainMenu6',"mainMenu6"
 
+
 #DaseBoard
 DashboardMenu_Logout_Dropdown="//p[@class='dropbtn']",'.dropbtn'
 DashboardMenu_Logout_Dropdown_Logout="//div[@class='dropdown-content']",'.dropdown-content','tf1_logoutAnchor'
@@ -86,6 +87,16 @@ AdministrationMenu_UsersConfiguration_TimeOut='//*[@id="tf1_loginTimeout"]','#tf
 #Network Menu>>Wireless
 NetworkMenu_WirelessSubMenu = "//a[@id='tf1_network_accessPoints']","#tf1_network_accessPoints","tf1_network_accessPoints"
 NetworkMenu_LanSubMenu="//a[@id='tf1_network_lanIPv4Config']",'#tf1_network_lanIPv4Config','tf1_network_lanIPv4Config'
+Wireless_ProfileMenu= "//a[normalize-space()='Profiles']", "div[id='main'] li:nth-child(2) a:nth-child(1)"
+
+SSID_EditMenu='//*[@id="editMenu"]','#editMenu','editMenu'
+SSID_EditMenu_Name='//*[@id="tf1_txtSSID"]', '#tf1_txtSSID','tf1_txtSSID'
+SSID_EditMenu_Pass='//*[@id="tf1_txtWPAPasswd"]',"#tf1_txtWPAPasswd",'tf1_txtWPAPasswd'
+SSID_EditMenu_CmrfmPass='//*[@id="tf1_txtWPACnfPasswd"]',"#tf1_txtWPACnfPasswd",'tf1_txtWPACnfPasswd'
+SSID_EditMenu_SaveBtn='//*[@id="tf1_dialog"]/div[3]/input[2]',"input[value='Save']"
+
+AP_Enable='//*[@id="enableMenu"]','#enableMenu','enableMenu'
+AP_Disable='//*[@id="disableMenu"]','#disableMenu','disableMenu'
 
 LANIPv4Config_StartIP="//input[@id='tf1_dhcpStartIp']",'#tf1_dhcpStartIp','tf1_dhcpStartIp'
 LANIPv4Config_EndIP="//input[@id='tf1_dhcpEndIp']",'#tf1_dhcpEndIp','tf1_dhcpEndIp'
@@ -126,6 +137,9 @@ WanConfigIPv4_PrimaryDns="//input[@id='tf1_primaryDns']",'#tf1_primaryDns','tf1_
 WanConfigIPv4_SecondaryDns="//input[@id='tf1_secDns']","#tf1_secDns",'tf1_secDns'
 WanConfigIPv4_SaveBtn='//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]',"input[title='Save']"
 
+#LAN IPv6 config
+LanConfigIPv4_DomainName="//input[@id='tf1_dhcpDomainName']", '#tf1_dhcpDomainName','tf1_dhcpDomainName'
+LanConfigIPv4_SaveBtn="//input[@title='Save']", "input[title='Save']"
 #static IPv6 Configuration
 WanConfigIPv6_SelectMenu="//select[@id='tf1_ispType']","#tf1_ispType",'tf1_ispType'
 WanConfigIPv6_IPv6Addr="//input[@id='tf1_ipV6Addr']","#tf1_ipV6Addr",'tf1_ipV6Addr'
@@ -141,7 +155,11 @@ WanInfo_IPv6Addr1='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[1]',"body > div:nt
 WanInfo_IPv6Addr2='//*[@id="main"]/div[6]/div[1]/div/div[5]/p[2]',"body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(6) > p:nth-child(3)"
 WanInfo_IPv4Addr='//*[@id="main"]/div[6]/div[1]/div/div[3]/p','body > div:nth-child(1) > div:nth-child(2) > div:nth-child(19) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4) > p:nth-child(2)'
 
+#Wan port configuration
 WANPortConfig_VlanID="//input[@id='tf1_vlanId']","#tf1_vlanId",'tf1_vlanId'
 WANPortConfig_VlanID_SaveBtn="//input[@title='Save']","input[title='Save']"
+
+#Network Menu
+
 
 

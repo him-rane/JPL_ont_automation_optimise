@@ -19,9 +19,6 @@ class acs:
         self.device_health = device_health(driver)
 
     def downgrade_parameter_disable(self):
-        self.device_health.health_check_acs()
-        print('Found device on ACS')
-        self.driver.implicitly_wait(60)
         self.driver.switch_to.default_content()
         try:
             element = WebDriverWait(self.driver, 70).until(presence_of_element_located((By.ID, "lmi5")))

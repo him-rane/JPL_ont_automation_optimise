@@ -25,7 +25,6 @@ class Utils:
     def cmd_line(cmd):
         return str(os.popen(cmd).read().split("/n")[0])
 
-
     def find_element(self, xpath_='',css_selector_='', id_=''):
         locators = [
             (By.XPATH, xpath_),
@@ -48,10 +47,10 @@ class Utils:
                 logger.debug(f"Element found using locator: {locator_used}")
                 return element
             except NoSuchElementException as e:
-                logger.error(f"Element not found using locator: {locator_type}='{locator_value}': {e}")
+                logger.error(f"Element not found using locator: {locator_type}='{locator_value}'")
             except Exception as e:
                 logger.error(
-                    f"An error occurred while locating the element using locator: {locator_type}='{locator_value}': {e}")
+                    f"An error occurred while locating the element using locator: {locator_type}='{locator_value}'")
 
         logger.warning(
             f"Element not found using any of the provided locators: {', '.join([f'{loc[0]}={loc[1]}' for loc in locators])}")
@@ -273,6 +272,7 @@ class Utils:
             cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             out = cmd.communicate()
             output = str(out[0])
+            logger.debug(output)
 
             if 'time' and 'TTL' in output:
                 logger.info('IPv4 Ping is successful')
@@ -280,7 +280,7 @@ class Utils:
             else:
                 ping_fail_check_1 = 'could not find host'
                 ping_fail_check_2 = 'Request timed out'
-                if ('time' not in output) and (ping_fail_check_1 in output or ping_fail_check_2 in output):
+                if ('time' not in output) and (ping_fail_check_1 in output) or (ping_fail_check_2 in output):
                     logger.error('Ping IPv4 Failed')
                     return False
 
@@ -296,6 +296,7 @@ class Utils:
             cmd = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             out = cmd.communicate()
             output = str(out[0])
+            logger.debug(output)
 
             if 'time' in output and 'ms' in output:
                 logger.info('IPv6 Ping is successful')
@@ -304,7 +305,7 @@ class Utils:
                 ping_fail_check_1 = 'unreachable'
                 ping_fail_check_2 = 'Request timed out'
                 ping_fail_check_3 = 'could not find'
-                if ('time' not in output) and (ping_fail_check_1 in output or ping_fail_check_2 in output or ping_fail_check_3 in output):
+                if ('time' not in output) and (ping_fail_check_1 in output )or (ping_fail_check_2 in output) or (ping_fail_check_3 in output):
                     logger.error('Ping IPv6 Failed')
                     return False
 

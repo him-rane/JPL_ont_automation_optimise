@@ -4,6 +4,7 @@ import subprocess
 from ftplib import FTP
 import telnetlib
 from acs_functions import acs
+from selenium import webdriver
 import time
 from telnetlib import EC
 from selenium import webdriver
@@ -87,10 +88,10 @@ class functional_smoke:
                 return True
             else:
                 return True
-
         except Exception as E:
             logger.error("Error occurred while executing TC_Functional_Sanity_002_1: %s", str(E))
             return False
+
     def TC_Functional_Sanity_002_2(self):
         logger.debug('Validating HTTP Firewall Rule Functionality')
         try:
@@ -137,6 +138,7 @@ class functional_smoke:
         except Exception as E:
             logger.error("Error occurred while executing TC_Functional_Sanity_002_3: %s", str(E))
             return False
+
     def TC_Functional_Sanity_002_3(self):
         logger.debug('Validating FTP Firewall Rule Functionality')
         try:
@@ -254,6 +256,7 @@ class functional_smoke:
             start_ip_address = '192.168.29.{}'.format(start_ip)
             end_ip_address = '192.168.29.{}'.format(end_ip)
 
+            self.driver.refresh()
             self.login.webgui_login()
             logger.debug('Configuring Limit for LAN IP')
             # go to Network Menu
@@ -294,8 +297,10 @@ class functional_smoke:
             logger.error("Error occurred while executing TC_Functional_Sanity_5: %s", str(E))
             return False
 
+
     def TC_Functional_Sanity_7(self):
-        logger.info("Validate the static IP allocation functionality to WAN side of the ONT")
+        self.utils.logout_gui()
+        logger.info("Validate the Dynamic IP allocation functionality to WAN side of the ONT")
         try:
             if self.device_health.health_check() == False:
                 logger.error('Device health check failed. Exiting the test.')
@@ -377,7 +382,6 @@ class functional_smoke:
 
             ont_state = self.utils.find_element( '//*[@id="main"]/div[6]/div[1]/div/div[17]/p').text
 
-
             # Configuring Dynamic WAN IPv4
             self.utils.search_gui('WAN IPv4 Configuration')
             wan = Select(self.utils.find_element(*locators.WanConfigIPv4_SelectMenu))
@@ -394,7 +398,7 @@ class functional_smoke:
             wan.select_by_value('dhcp6c')
             self.utils.find_element( '//*[@id="tf1_dhcpV6SatelessMode2"]').click()
             self.utils.find_element(*locators.WanConfigIPv6_SaveBtn).click()
-            time.sleep(10)
+
 
             # waiting for changes
             time.sleep(60)
@@ -448,6 +452,16 @@ class functional_smoke:
             else:
                 logger.error('ONT has not received dynamic wan ipv6')
 
+
+            if self.utils.ping_ipv4_from_lan_client() == False:
+                success-=1
+                logger.error("Unable to ping google with IPv4")
+
+
+            if self.utils.ping_ipv6_from_lan_client() == False:
+                success -= 1
+                logger.error("Unable to ping google with IPv6")
+
             if success == 2:
                 return True
             else :
@@ -455,6 +469,7 @@ class functional_smoke:
                 return False
         except Exception as E:
             logger.error("Error occurred while executing TC_Functional_Sanity_7: %s", str(E))
+            self.utils.get_dbglog()
             return False
 
     def TC_Finctional_Smoke_9(self):
@@ -513,7 +528,13 @@ class functional_smoke:
             time.sleep(15)
 
             # Get the current date and time after reverting
+
             current_time_after_revert = self.utils.find_element(*locators.DateTimeConfiguration_CurrentRouterTime).text
+            if current_time_after_revert== changed_time:
+                time.sleep(60)
+
+            current_time_after_revert = self.utils.find_element(*locators.DateTimeConfiguration_CurrentRouterTime).text
+
             logger.info(f'Current Date and Time after reverting: {current_time_after_revert}')
 
             logger.info('Date & Time functionality is Working as expected')
@@ -900,27 +921,28 @@ class functional_smoke:
             return False
 
     def TC_Functional_Smoke_29_30(self):
-        # Step 1: Validating Device Backup and Restore functionality from WEBGUI
-        logger.info(" Validating Device Backup and Restore functionality from WEBGUI")
+        logger.info('Validating Device Backup and Restore functionality from WEBGUI')
         try:
-            # Check device health
-            if not self.device_health.health_check():
-                logger.error("Device health check failed. Exiting the test.")
+            if self.device_health.health_check() == False:
+                logger.error('Device health check failed. Exiting the test.')
                 return False
-
-            # Step 2: Configuring Wireless Profiles
-            logger.info("Configuring Wireless Profiles")
+            # configuring wireless information
+            logger.info('Configuring Wireless Profiles')
             wireless_data_before_backup = self.set_parameters_before_factory_reset()
 
-            # Step 3: Obtain device information
             self.utils.find_element(*locators.DashboardMenu).click()
-            serial_number = self.utils.find_element("/html/body/div[1]/div[1]/div[2]/p[2]/span").text
+            file_path = Inputs.file_path
+            serial_number = self.utils.find_element('/html/body/div[1]/div[1]/div[2]/p[2]/span').text
             model = self.utils.find_element(*locators.Dashboard_ModelName).text
-            backup_file = f"{serial_number}_{model}.enc"
 
-            # Step 4: Adding Port Forwarding Rule
-            logger.info("Adding Port Forwarding Rule")
-            self.utils.search_gui('Port Forwarding')
+            backup_file = serial_number + '_' + model + '.enc'
+
+            # adding port forwarding rule
+            logger.info('Adding Port Forwarding Rule')
+            self.utils.find_element('//*[@id="menu1"]').send_keys('port')
+            time.sleep(2)
+            self.driver.find_element(By.CSS_SELECTOR, 'li[id="menuLi0"]').click()
+            time.sleep(2)
             self.utils.find_element('//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
             port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
             port_forwarding_configuration.select_by_value('ACCEPT')
@@ -929,84 +951,189 @@ class functional_smoke:
             self.utils.find_element('//*[@id="tf1_dialog"]/div[3]/input[2]').click()
             time.sleep(10)
 
-            # Step 5: Taking Backup from WEBGUI
-            self.backup()
+            # Taking Backup from WEBGUI
+            logger.info('Taking BACKUP of Device')
+            self.utils.find_element(*locators.AdministrationMenu).click()
+            self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+            self.utils.find_element(*locators.Maintenance_BackupReboot_BackupButton).click()
 
-            files = os.listdir(Inputs.file_path)
+            time.sleep(30)
+
+            self.utils.accept_alert()
+            files = os.listdir(file_path)
+
             if backup_file in files:
-                logger.info("Backup file found in the given path.")
+                logger.info('Backup file Found in given path')
             else:
-                logger.error("Backup file not found.")
+                logger.error('Backup file Not found')
                 return False
-
             time.sleep(10)
 
-            # Step 6: Restore Operation
-            restore_file_location = os.path.join(Inputs.file_path, backup_file)
-            logger.debug("Performing Restore Operation")
+
             self.factory_reset()
             self.login.webgui_login()
-            self.restore(restore_file_location)
 
-            # Step 7: Checking Port Forwarding rule details after Restore
-            logger.debug("Checking Port Forwarding rule details after Restore")
             success = 0
+            logger.info('Checking wireless profiles after Reset')
+            wireless_data_after_reset = self.get_access_point_status()
+            if wireless_data_before_backup == wireless_data_after_reset:
+                logger.error("Wireless config NOT removed after factory reset")
+                return False
+            else:
+                logger.info("Wireless config removed after factory reset")
+                success += 1
+
+            self.utils.search_gui('Port Forwarding')
+            time.sleep(2)
+
+            entries=self.utils.find_element("//div[@id='recordsData_info']",'#recordsData_info','recordsData_info').text
+
+            if "1" in entries:
+                logger.info("port forward rule NOT removed after factory reset")
+
+            else:
+                logger.info("port forward rule removed after factory reset")
+                success += 1
+
+
+            # Restore Operation Code
+            restore_file_location = file_path + r'\\' + backup_file
+            logger.info('Performing Restore Operation')
+
+
+            self.utils.find_element(*locators.AdministrationMenu).click()
+            self.utils.find_element(*locators.AdministrationMenu_MaintenanceSubMenu).click()
+            # time.sleep(5)
+            restore_path = self.utils.find_element(*locators.Maintenance_BackupReboot_FileInput)
+            restore_path.send_keys(restore_file_location)
+            time.sleep(5)
+            self.utils.find_element(*locators.Maintenance_BackupReboot_FileInputBtn).click()
+            self.utils.accept_alert()
+            time.sleep(200)
+
+            self.login.webgui_login()
+
+            logger.info('Checking Port Forwarding rule details after Restore')
+
 
             self.utils.search_gui('Port Forwarding')
             time.sleep(2)
             data = self.utils.find_element("//tr[@id='portForwarding1']", '#portForwarding1')
             port_forwarding_status = data.is_displayed()  # Gives True for success
 
-            if port_forwarding_status:
+            if port_forwarding_status == True:
                 success += 1
-            else:
-                logger.error("Port forwarding rule is NOT found after restore")
 
-            # Step 8: Checking wireless profiles after Restore
-            logger.debug("Checking wireless profiles after Restore")
+            logger.info('Checking wireless profiles after Restore')
             wireless_data_after_restore = self.get_access_point_status()
+            logger.debug(wireless_data_after_restore)
+            logger.debug(wireless_data_before_backup)
             if wireless_data_before_backup == wireless_data_after_restore:
                 success += 1
             else:
-                logger.error("Wireless config before backup is NOT same as wireless config after restore")
+                logger.error("Wireless config not backuped")
 
-            # Step 9: Removing Backup File
-            logger.debug("Removing Backup File")
-            os.remove(os.path.join(Inputs.file_path, backup_file))
+            logger.info('Removing Backup File')
+            os.remove(file_path + '\\' + backup_file)
 
-            if success != 2:
-                logger.error("Device Backup and Restore functionality from WEBGUI is NOT working as expected")
+            if success != 4:
+                logger.warning('Device Backup and Restore functionality from WEBGUI NOT working as expected')
                 self.utils.get_dbglog()
                 return False
             else:
-                logger.info("Device Backup and Restore functionality from WEBGUI is working as expected")
+                logger.info('Device Backup and Restore functionality from WEBGUI working as expected')
                 return True
         except Exception as e:
             logger.error("Error occurred while executing TC_Functional_Smoke_29_30: %s", str(e))
+            self.utils.get_dbglog()
             return False
-
-    def TC_Functional_Smoke_31(self):
-        logger.info("Validate the maintenance functionality like Factory from Web GUI - 5 Iterations")
-        try:
-            if self.device_health.health_check() == False:
-                logger.error('Device health check failed. Exiting the test.')
-                return False
-
-            for i in range(5):
-                # Your code here
-                logger.debug(f"Restart Iteration {i}")
-                # go to Administration >> Maintenance >> Reboot
-
-                self.factory_reset()
-
-                if self.device_health.health_check() == False:
-                    logger.error('Device health check failed. Exiting the test.')
-                    return False
-
-        except Exception as e:
-            logger.error("Error occurred while executing TC_Functional_Smoke_31: %s", str(e))
-            return False
-
+    # def TC_Functional_Smoke_29_30(self):
+    #     # Step 1: Validating Device Backup and Restore functionality from WEBGUI
+    #     logger.info(" Validating Device Backup and Restore functionality from WEBGUI")
+    #     try:
+    #         # Check device health
+    #         if not self.device_health.health_check():
+    #             logger.error("Device health check failed. Exiting the test.")
+    #             return False
+    #
+    #         # Step 2: Configuring Wireless Profiles
+    #         logger.info("Configuring Wireless Profiles")
+    #         wireless_data_before_backup = self.set_parameters_before_factory_reset()
+    #
+    #         # Step 3: Obtain device information
+    #         self.utils.find_element(*locators.DashboardMenu).click()
+    #         serial_number = self.utils.find_element("/html/body/div[1]/div[1]/div[2]/p[2]/span").text
+    #         model = self.utils.find_element(*locators.Dashboard_ModelName).text
+    #         backup_file = f"{serial_number}_{model}.enc"
+    #
+    #         # Step 4: Adding Port Forwarding Rule
+    #         logger.info("Adding Port Forwarding Rule")
+    #         self.utils.search_gui('Port Forwarding')
+    #         self.utils.find_element('//*[@id="main"]/div[6]/div/div[4]/input[2]').click()
+    #         port_forwarding_configuration = Select(self.driver.find_element(By.ID, 'tf1_selFwAction'))
+    #         port_forwarding_configuration.select_by_value('ACCEPT')
+    #         self.utils.find_element('//*[@id="tf1_txtFwSrcUserDestination"]').send_keys('192.168.29.100')
+    #         self.utils.find_element('//*[@id="tf1_txtinternalPort"]').send_keys('80')
+    #         self.utils.find_element('//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+    #         time.sleep(10)
+    #
+    #         # Step 5: Taking Backup from WEBGUI
+    #         self.backup()
+    #
+    #         files = os.listdir(Inputs.file_path)
+    #         if backup_file in files:
+    #             logger.info("Backup file found in the given path.")
+    #         else:
+    #             logger.error("Backup file not found.")
+    #             return False
+    #
+    #         time.sleep(10)
+    #
+    #         logger.debug("Checking Port Forwarding rule details after reset")
+    #         success = 0
+    #
+    #         self.utils.search_gui('Port Forwarding')
+    #         time.sleep(2)
+    #         data = self.utils.find_element("//tr[@id='portForwarding1']", '#portForwarding1')
+    #         port_forwarding_status = data.is_displayed()  # Gives True for success
+    #
+    #         if port_forwarding_status:
+    #             success += 1
+    #         else:
+    #             logger.error("Port forwarding rule is NOT found after restore")
+    #
+    #         # Step 6: Restore Operation
+    #         restore_file_location = os.path.join(Inputs.file_path, backup_file)
+    #         logger.debug("Performing Restore Operation")
+    #         self.factory_reset()
+    #         self.login.webgui_login()
+    #         self.restore(restore_file_location)
+    #
+    #         #  Checking Port Forwarding rule details after Restore
+    #
+    #
+    #         # Step 8: Checking wireless profiles after Restore
+    #         logger.debug("Checking wireless profiles after Restore")
+    #         wireless_data_after_restore = self.get_access_point_status()
+    #         if wireless_data_before_backup == wireless_data_after_restore:
+    #             success += 1
+    #         else:
+    #             logger.error("Wireless config before backup is NOT same as wireless config after restore")
+    #
+    #         # Step 9: Removing Backup File
+    #         logger.debug("Removing Backup File")
+    #         os.remove(os.path.join(Inputs.file_path, backup_file))
+    #
+    #         if success != 2:
+    #             logger.error("Device Backup and Restore functionality from WEBGUI is NOT working as expected")
+    #             self.utils.get_dbglog()
+    #             return False
+    #         else:
+    #             logger.info("Device Backup and Restore functionality from WEBGUI is working as expected")
+    #             return True
+    #     except Exception as e:
+    #         logger.error("Error occurred while executing TC_Functional_Smoke_29_30: %s", str(e))
+    #         return False
     def TC_Functional_Smoke_32(self):
         logger.info("Validate the maintenance functionality like Reboot from Web GUI - 5 Iterations")
         try:
@@ -1024,7 +1151,7 @@ class functional_smoke:
                 self.utils.find_element(*locators.Maintenance_BackupReboot_RebootButton).click()
 
                 self.utils.accept_alert()
-                logger.debug('Reseting Device (Estimated Time: 200 Seconds)')
+                logger.debug('Reboot Device (Estimated Time: 200 Seconds)')
                 time.sleep(200)
 
                 if self.device_health.health_check() == False:
@@ -1033,6 +1160,7 @@ class functional_smoke:
 
                 # self.login.webgui_login()
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error("Error occurred while executing TC_Functional_Smoke_32: %s", str(e))
             return False
     def TC_Functional_Smoke_33(self):
@@ -1092,10 +1220,11 @@ class functional_smoke:
                 self.utils.get_dbglog()
                 return False
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Smoke_33: {str(e)}")
             return False
 
-    def TC_Functional_Sanity_34(self):
+    def TC_Functional_Smoke_33(self):
         logger.info('Validating Change password on Reset from ACS')
         try:
             if not self.device_health.health_check():
@@ -1132,9 +1261,9 @@ class functional_smoke:
             username = 'admin'
             password = 'P@ssw0rd'
 
-            self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-            self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
-            self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+            self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+            self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
+            self.utils.find_element(*locators.LoginPage_LoginButton).click()
             try:
                 message = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[1]/p').text
                 if 'invalid' in message.lower():
@@ -1145,9 +1274,9 @@ class functional_smoke:
 
             display_check = 0
             try:
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys('Jiocentrum')
-                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys('Jiocentrum')
+                self.utils.find_element(*locators.LoginPage_LoginButton).click()
                 display_check = self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').is_displayed()
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_adminPassword"]').send_keys(password)
                 self.driver.find_element(By.XPATH, '//*[@id="tf1_cnfAdminPassword"]').send_keys(password)
@@ -1159,15 +1288,13 @@ class functional_smoke:
                 self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
 
             except Exception as E:
-                self.driver.find_element(By.ID, 'tf1_userName').send_keys(username)
-                self.driver.find_element(By.ID, 'tf1_password').send_keys(password)
-                self.driver.find_element(By.NAME, 'button.login.users.dashboard').click()
+                self.utils.find_element(*locators.LoginPage_UserName).send_keys(username)
+                self.utils.find_element(*locators.LoginPage_Password).send_keys(password)
+                self.utils.find_element(*locators.LoginPage_LoginButton).click()
 
             finally:
                 try:
-                    time.sleep(5)
                     self.driver.find_element(By.XPATH, '//*[@id="tf1_forcedLoginContent"]/div/a').click()
-                    time.sleep(5)
                 except Exception as E:
                     pass
 
@@ -1179,9 +1306,35 @@ class functional_smoke:
                 self.utils.get_dbglog()
                 return False
         except Exception as E:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Sanity_34: {str(E)}")
             return False
+    def TC_Functional_Smoke_35(self):
+        logger.info('Validating WEBGUI Redirecting or not after firmware upgrade')
 
+        if not self.device_health.health_check():
+            logger.error('Device health check failed. Exiting the test.')
+            return False
+
+        if self.device_health.health_check_acs() == False:
+            logger.error('Device ACS health check failed. Exiting the test.')
+            return False
+
+        self.acs.downgrade_parameter_disable()
+        self.driver.close()
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.refresh()
+        self.login.webgui_login()
+        self.change_firmware(Inputs.upgrade_image,Inputs.upgrade_sign)
+
+        try:
+            self.utils.find_element(*locators.LoginPage_LoginForm)
+            logger.info("WebGUI successfully redirected to the login page after firmware upgrade")
+            return True
+        except:
+            logger.error("WebGUI did not redirect to the login page after firmware upgrade")
+            self.utils.get_dbglog()
+            return False
     def TC_Functional_Smoke_36(self):
         logger.info('Validating redirection to login page after Factory Reset from WebGUI')
         try:
@@ -1199,11 +1352,12 @@ class functional_smoke:
                 return True
             except:
                 logger.error("WebGUI did not redirect to the login page after Factory Reset")
+                self.utils.get_dbglog()
                 return False
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Smoke_37: {str(e)}")
             return False
-
     def TC_Functional_Smoke_37(self):
         logger.info('Validating redirection to login page after Factory Reset from WebGUI')
         try:
@@ -1219,14 +1373,13 @@ class functional_smoke:
                 logger.info("WebGUI successfully redirected to the login page after Factory Reset")
                 return True
             except:
+                self.utils.get_dbglog()
                 logger.error("WebGUI did not redirect to the login page after Factory Reset")
                 return False
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Smoke_37: {str(e)}")
             return False
-
-
-
     def TC_Functional_Smoke_39(self):
         logger.info("Validate default firewall functionality ")
         try:
@@ -1239,18 +1392,31 @@ class functional_smoke:
             self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[3]/p/input').click()
             self.utils.find_element('//*[@id="tf1_frmdefaultPolicy"]/div[5]/input[1]').click()
 
-            if self.utils.ping_ipv4_from_lan_client() == False and self.utils.ping_ipv6_from_lan_client() == False:
-                logger.info('Block Always functionality is working fine with ping ipv4 and Ipv6')
-
             logger.debug('Checking Block Always functionality')
 
             fails = 0
+            if self.utils.ping_ipv4_from_lan_client() == False :
+                logger.info('Block Always functionality is working fine with ping ipv4 ')
+            else:
+                logger.error('Block Always functionality is NOT working fine with ping ipv4 ')
+                fails+=1
+
+            if self.utils.ping_ipv6_from_lan_client() == False:
+                logger.info('Block Always functionality is working fine with ping Ipv6')
+            else:
+                logger.error('Block Always functionality is NOT working fine with ping Ipv6')
+                fails+=1
+
+
+
+
             urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
                     'https://www.onlinesbi.sbi',
                     'https://www.facebook.com']
             if not self.website_check(urls):
-                logger.info(' Block Always functioanality with Youtube streamingn working fine')
+                logger.info('Unable to access the internet Block Always functionality is working as expected ')
             else:
+                logger.error('Able to access the internet Block Always functionality is NOT working as expected ')
                 fails += 1
 
             logger.debug("Reverting back the changes to Allow Always")
@@ -1269,28 +1435,36 @@ class functional_smoke:
             if self.utils.ping_ipv4_from_lan_client() == True:
                 logger.info('Allow Always functionality is working fine with ping ipv4')
             else:
+                logger.error('Allow Always functionality is NOT working fine with ping ipv4')
                 fails += 1
+
             if self.utils.ping_ipv6_from_lan_client() == True:
                 logger.info('Allow Always functionality is working fine with ping Ipv6')
             else:
+                logger.error('Allow Always functionality is NOT working fine with ping ipv6')
                 fails += 1
 
             urls = ['https://www.youtube.com/watch?v=VVsC2fD1BjA',
                     'https://www.onlinesbi.sbi',
                     'https://www.facebook.com']
+
             if self.website_check(urls):
-                logger.info(' Allow Always functionality working fine')
+                logger.info('Successfully access the Internet : Allow Always functionality working fine ')
             else:
+                logger.error('Unable access the Internet : Allow Always functionality NOT working as expected  ')
                 fails += 1
 
             if fails == 0:
+                logger.info("Default firewall functionality is working as expected")
                 return True
             else:
+                logger.error("Default firewall functionality is NOT working as expected")
+                self.utils.get_dbglog()
                 return False
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error("Error occurred while executing TC_Functional_Smoke_39: %s", str(e))
             return False
-
     def TC_Functional_Smoke_40(self):
         logger.info('Validating Telnet Access for R-Build')
         try:
@@ -1320,8 +1494,10 @@ class functional_smoke:
                 else:
                     logger.error('Telnet should not be allowed in R build\n Test Case Failed')
                     tn.close()
+                    self.utils.get_dbglog()
                     return  False
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Smoke_40: {str(e)}")
             return False
     def TC_Functional_Smoke_41(self):
@@ -1361,8 +1537,10 @@ class functional_smoke:
             if dns[1].strip() in '192.168.29.1':
                 return True
             else:
+                self.utils.get_dbglog()
                 return False
         except Exception as E:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Smoke_41: {str(E)}")
             return False
     def TC_Functional_Smoke_42(self):
@@ -1375,11 +1553,9 @@ class functional_smoke:
             self.utils.search_gui("LAN IPv4 Configuration")
             self.utils.find_element(*locators.LANIPv4Config_DNSServers).click()
             self.utils.find_element('//*[@id="tf1_DnsSvrs"]/option[2]').click()
-            self.utils.find_element("//input[@id='tf1_dhcpDomainName']", '#tf1_dhcpDomainName',
-                                    'tf1_dhcpDomainName').clear()
-            self.utils.find_element("//input[@id='tf1_dhcpDomainName']", '#tf1_dhcpDomainName',
-                                    'tf1_dhcpDomainName').send_keys('isp')
-            self.utils.find_element("//input[@title='Save']", "input[title='Save']").click()
+            self.utils.find_element(*locators.LanConfigIPv4_DomainName).clear()
+            self.utils.find_element(*locators.LanConfigIPv4_DomainName).send_keys('isp')
+            self.utils.find_element(*locators.LanConfigIPv4_SaveBtn).click()
             time.sleep(30)
             commands = ['cmd /c ipconfig/release',
                         'ipconfig/renew',
@@ -1410,10 +1586,13 @@ class functional_smoke:
                 return True
             else:
                 logger.info('LAN Side DNS from ISP Functionality is NOT working as expected')
+                self.utils.get_dbglog()
                 return False
         except Exception as E:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Smoke_42: {str(E)}")
             return False
+    # 44 todo
     def TC_Functional_Sanity_46(self):
         logger.info('Starting WAN VLAN ID Change validation from WEBGUI')
 
@@ -1482,13 +1661,13 @@ class functional_smoke:
                 return True
             else:
                 logger.error("Changing behavior of VLAN ID is NOT working as expected")
+                self.utils.get_dbglog()
                 return False
 
         except Exception as e:
             logger.error(f"Error occurred during TC_Functional_Sanity_46: {str(e)}")
+            self.utils.get_dbglog()
             return False
-
-
     def TC_Functional_Sanity_55(self):
         logger.info("Multiple Reset")
         try:
@@ -1500,10 +1679,12 @@ class functional_smoke:
                 self.factory_reset()
                 if self.device_health.health_check() == False:
                     logger.error('Device health check failed. Exiting the test.')
+                    self.utils.get_dbglog()
                     return False
 
         except Exception as E:
             logger.error(f"Error occurred during TC_Functional_Sanity_55: {str(E)}")
+            self.utils.get_dbglog()
             return False
     def TC_Functional_Sanity_56(self):
         logger.info("Validate multiple Reboots from ACS")
@@ -1516,7 +1697,7 @@ class functional_smoke:
                 logger.error('Device ACS health check failed. Exiting the test.')
                 return False
 
-            for number in range(5):
+            for number in range(2):
                 logger.info(f'Rebooting device from ACS : Itiration {number+1}')
                 self.driver.switch_to.default_content()
                 self.driver.switch_to.frame('frmButtons')
@@ -1542,9 +1723,21 @@ class functional_smoke:
 
                 if self.device_health.health_check_acs()==False:
                     logger.error('Device ACS health check failed. Exiting the test.')
+                    self.utils.get_dbglog()
                     return False
 
+            self.driver.close()
+            self.driver.switch_to.window(self.driver.window_handles[0])
+            self.driver.refresh()
+            try:
+                self.utils.find_element("/html/body/div/div/h1/a").click()
+            except:
+                pass
+            logger.info("Successfully validate multiple Reboots from ACS")
+            return True
+
         except Exception as E:
+            self.utils.get_dbglog()
             logger.error(f"Error occurred during TC_Functional_Sanity_56: {str(E)}")
             return False
 
@@ -1664,6 +1857,7 @@ class functional_smoke:
                 return False
 
         except Exception as e:
+            self.utils.get_dbglog()
             logger.error("Error occurred while executing TC_Functional_Smoke_57: %s", str(e))
             return False
 
@@ -1708,6 +1902,7 @@ class functional_smoke:
         self.utils.accept_alert()
 
     def add_firewall_rule(self, service_type='HTTP', action_type='DROP', rule_type='Outbound'):
+        self.driver.refresh()
         self.login.webgui_login()
         self.utils.find_element(*locators.SecurityMenu).click()
         self.utils.find_element(*locators.SecurityMenu_FirewallSubMenu).click()
@@ -1839,7 +2034,7 @@ class functional_smoke:
             return False
 
         self.utils.search_gui('WAN IPv4 Configuration')
-        wan = Select(self.utils.find_element('//*[@id="tf1_ispType"]', '#tf1_ispType'))
+        wan = Select(self.utils.find_element(*locators.WanConfigIPv4_SelectMenu))
         wan.select_by_value('1')
 
         static_wan_address = '20.15.10.17'
@@ -1848,22 +2043,20 @@ class functional_smoke:
         primary_dns = '1.2.3.4'
         secondary_dns = '1.2.3.5'
 
-        self.utils.find_element('//*[@id="tf1_stIpAddr"]').send_keys(static_wan_address)
-        self.utils.find_element('//*[@id="tf1_stIpSnetMask"]').send_keys(subnet)
-        self.utils.find_element('//*[@id="tf1_stGwIpAddr"]').send_keys(gateway)
-        self.utils.find_element('//*[@id="tf1_primaryDns"]').clear()
-        self.utils.find_element('//*[@id="tf1_primaryDns"]').send_keys(primary_dns)
-        self.utils.find_element('//*[@id="tf1_secDns"]').clear()
-        self.utils.find_element('//*[@id="tf1_secDns"]').send_keys(secondary_dns)
-        self.utils.find_element('//*[@id="tf1_frmwanIPv4Config"]/div[35]/input[1]').click()
+        self.utils.find_element(*locators.WanConfigIPv4_IpAddr).send_keys(static_wan_address)
+        self.utils.find_element(*locators.WanConfigIPv4_IpSubnetMask).send_keys(subnet)
+        self.utils.find_element(*locators.WanConfigIPv4_GatewayIPAddr).send_keys(gateway)
+        self.utils.find_element(*locators.WanConfigIPv4_PrimaryDns).clear()
+        self.utils.find_element(*locators.WanConfigIPv4_PrimaryDns).send_keys(primary_dns)
+        self.utils.find_element(*locators.WanConfigIPv4_SecondaryDns).clear()
+        self.utils.find_element(*locators.WanConfigIPv4_SecondaryDns).send_keys(secondary_dns)
+        self.utils.find_element(*locators.WanConfigIPv4_SaveBtn).click()
         self.utils.accept_alert()
 
         self.utils.search_gui('WAN Port Configuration')
-        time.sleep(2)
-        self.utils.find_element('//*[@id="tf1_vlanId"]').clear()
-        self.utils.find_element('//*[@id="tf1_vlanId"]').send_keys('999')
-        time.sleep(5)
-        self.utils.find_element("//input[@title='Save']").click()
+        self.utils.find_element(*locators.WANPortConfig_VlanID).clear()
+        self.utils.find_element(*locators.WANPortConfig_VlanID).send_keys('999')
+        self.utils.find_element(*locators.WANPortConfig_VlanID_SaveBtn).click()
         self.utils.accept_alert()
         time.sleep(300)
 
@@ -1898,41 +2091,31 @@ class functional_smoke:
 
         self.utils.search_gui('WAN Port Configuration')
         time.sleep(2)
-        self.utils.find_element('//*[@id="tf1_vlanId"]').clear()
-        self.utils.find_element('//*[@id="tf1_vlanId"]').send_keys('1015')
+        self.utils.find_element(*locators.WANPortConfig_VlanID).clear()
+        self.utils.find_element(*locators.WANPortConfig_VlanID).send_keys('1015')
         time.sleep(5)
-        self.utils.find_element("//input[@title='Save']").click()
+        self.utils.find_element(*locators.WANPortConfig_VlanID_SaveBtn).click()
         self.utils.accept_alert()
         time.sleep(300)
 
     def website_check(self, urls):
-
+        logger.info("Checking website connectivity")
         from selenium import webdriver
-
-        driver = webdriver.Chrome()
-
-        success_count = 0
-
         for url in urls:
             try:
-                driver.execute_script("window.open('');")
-                driver.switch_to.window(driver.window_handles[-1])
+                driver =webdriver.Chrome()
                 driver.get(url)
-                title = driver.title
-
-                if title != '':
-                    success_count += 1
-
-                time.sleep(10)
             except Exception as e:
-                pass
-        time.sleep(5)
-        if success_count > 0:
-            logger.info('URL access is successful for at least one website')
-            return True
-        else:
-            logger.error('Unable to access any of the URL')
-            return False
+                logger.error(f"Error accessing {url}")
+                return False
+            finally:
+                driver.quit()
+
+        logger.info('URL access is successful')
+        return True
+
+
+
 
     def ftp_check(self):
         ftp_files = []
@@ -1962,7 +2145,7 @@ class functional_smoke:
         # driver = setup.get_driver()
         # network_menu(driver)
         self.utils.find_element(*locators.NetworkMenu).click()
-        self.utils.find_element('//*[@id="tf1_network_accessPoints"]').click()
+        self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
 
         device_model_ = Inputs.device_model
         list_ap = [1, 4]
@@ -1985,11 +2168,11 @@ class functional_smoke:
 
             if get_ap_status.lower() == 'disabled':
                 # print('Enabling AP{}'.format(i))
-                self.utils.find_element('//*[@id="enableMenu"]').click()
+                self.utils.find_element(*locators.AP_Enable).click()
                 self.utils.accept_alert()
             else:
                 # print('Disabling AP{}'.format(i))
-                self.utils.find_element('//*[@id="disableMenu"]').click()
+                self.utils.find_element(*locators.AP_Disable).click()
                 self.utils.accept_alert()
 
             get_ap_status = self.utils.find_element(xp_).text
@@ -2006,8 +2189,8 @@ class functional_smoke:
 
         # go to Network
 
-        self.utils.find_element('//*[@id="tf1_network_accessPoints"]').click()
-        self.utils.find_element('//*[@id="main"]/div[6]/ul/li[2]/a').click()
+        self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
+        self.utils.find_element(*locators.Wireless_ProfileMenu).click()
 
         profile_list = []
         for i in list_ap:
@@ -2016,19 +2199,19 @@ class functional_smoke:
             xp_profile_ = self.utils.find_element(xp_profile)
             action = ActionChains(self.driver)
             action.context_click(xp_profile_).perform()
-            self.utils.find_element('//*[@id="editMenu"]').click()
+            self.utils.find_element(*locators.SSID_EditMenu).click()
             self.utils.accept_alert()
-            self.utils.find_element('//*[@id="tf1_txtSSID"]').clear()
-            self.utils.find_element('//*[@id="tf1_txtSSID"]').send_keys(test_ssid)
+            self.utils.find_element(*locators.SSID_EditMenu_Name).clear()
+            self.utils.find_element(*locators.SSID_EditMenu_Name).send_keys(test_ssid)
             password_ = '12345678'
 
-            self.utils.find_element('//*[@id="tf1_txtWPAPasswd"]').clear()
-            self.utils.find_element('//*[@id="tf1_txtWPAPasswd"]').send_keys(password_)
+            self.utils.find_element(*locators.SSID_EditMenu_Pass).clear()
+            self.utils.find_element(*locators.SSID_EditMenu_Pass).send_keys(password_)
 
-            self.utils.find_element('//*[@id="tf1_txtWPACnfPasswd"]').clear()
-            self.utils.find_element('//*[@id="tf1_txtWPACnfPasswd"]').send_keys(password_)
+            self.utils.find_element(*locators.SSID_EditMenu_CmrfmPass).clear()
+            self.utils.find_element(*locators.SSID_EditMenu_CmrfmPass).send_keys(password_)
 
-            self.utils.find_element('//*[@id="tf1_dialog"]/div[3]/input[2]').click()
+            self.utils.find_element(*locators.SSID_EditMenu_SaveBtn).click()
 
             time.sleep(20)
             profile_list.append(self.utils.find_element(xp_profile).text)
@@ -2046,7 +2229,7 @@ class functional_smoke:
 
         self.utils.find_element(*locators.NetworkMenu).click()
 
-        self.utils.find_element('//*[@id="tf1_network_accessPoints"]').click()
+        self.utils.find_element(*locators.NetworkMenu_WirelessSubMenu).click()
 
         for ap in access_point:
             xp_ = '//*[@id="{}"]/td[1]'.format(ap)

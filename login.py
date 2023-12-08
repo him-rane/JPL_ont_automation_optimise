@@ -98,8 +98,8 @@ class login:
         self.driver.find_element(by=By.ID, value="txtPassword").send_keys(Inputs.acs_pwd)
         if self.driver.find_element(by=By.ID, value="btnLogin_btn"):
             self.driver.find_element(by=By.ID, value="btnLogin_btn").click()
-        print("Logged into ACS successfully")
-        print("searching for ONT serial number : " + Inputs.serial_number)
+        logger.info("Logged into ACS successfully")
+        logger.debug("searching for ONT serial number : " + Inputs.serial_number)
         time.sleep(10)
         self.driver.find_element(by=By.XPATH, value='//*[@id="lmi1"]').click()
         try:

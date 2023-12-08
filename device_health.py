@@ -18,7 +18,6 @@ class device_health:
         self.login=login(self.driver)
 
     def health_check(self):
-
         self.login.webgui_login()
 
         logger.debug("Performing device health check")
@@ -85,7 +84,10 @@ class device_health:
             time.sleep(30)
 
             for number in range(5):
-                self.utils.find_element('//*[@id="btnReCheck_btn"]','#btnReCheck_btn').click()
+                try:
+                    self.utils.find_element('//*[@id="btnReCheck_btn"]','#btnReCheck_btn').click()
+                except:
+                    pass
                 time.sleep(30)
                 new_time=self.get_last_connection_time()
                 logger.info(f"New Connection Time - {new_time}")
@@ -97,6 +99,13 @@ class device_health:
             logger.error("ONT is offline on ACS")
             return False
         except Exception as E:
+            self.driver.close()
+            self.driver.switch_to.window(self.driver.window_handles[0])
+            self.driver.refresh()
+            try:
+                self.utils.find_element("/html/body/div/div/h1/a").click()
+            except:
+                pass
             logger.error(f"Error occurred while performing ACS health check +{E}")
             return False
 
